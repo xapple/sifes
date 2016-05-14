@@ -22,10 +22,11 @@ repos_dir = os.path.abspath(module_dir + '/../') + '/'
 git_repo  = GitRepo(repos_dir, empty=True)
 
 # Output directories #
-view_dir    = home     + 'SIFES/views/'
-project_dir = view_dir + 'projects/'
-samples_dir = view_dir + 'samples/'
-reports_dir = home     + 'SIFES/reports/'
+view_dir     = home     + 'SIFES/views/'
+project_dir  = view_dir + 'projects/'
+samples_dir  = view_dir + 'samples/'
+clusters_dir = view_dir + 'clusters/'
+reports_dir  = home     + 'SIFES/reports/'
 
 # Internal modules #
 from sifes.groups.projects import Projects, Project
@@ -41,6 +42,10 @@ projects   = Projects(_projects)
 def load(json_dir_path):
     """Will load all the JSON files found in the given json_dir_path.
     If all the files are from the same project, return that project."""
+
+    # Expand the tilda #
+    if "~" in json_dir_path: json_dir_path = os.path.expanduser(json_dir_path)
+    if not json_dir_path.endswith('/'): json_dir_path += '/'
 
     # Load all found JSON files #
     json_paths  = glob.glob(json_dir_path + '*.json')

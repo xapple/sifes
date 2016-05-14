@@ -26,12 +26,12 @@ class Collection(object):
     def first(self): return self.children[0]
 
     def __getitem__(self, key):
-        if isinstance(key, basestring):
-            return [c for c in self.children if c.name == key.lower()][0]
+        if   isinstance(key, basestring):  return [c for c in self.children if str(c) == key][0]
         elif isinstance(key, int):
             if hasattr(self.first, 'num'): return [c for c in self.children if c.num == key][0]
-            else: return self.children[key]
-        else: raise TypeError('key')
+            else:                          return self.children[key]
+        elif isinstance(key, slice):       return self.children[key]
+        else:                              raise TypeError('key')
 
 ###############################################################################
 class Aggregate(object):
@@ -52,10 +52,12 @@ class Aggregate(object):
     def __len__(self): return len(self.children)
 
     def __getitem__(self, key):
-        if   isinstance(key, basestring): return [c for c in self.children if str(c) == key][0]
-        elif isinstance(key, int):        return self.children[key]
-        elif isinstance(key, slice):      return self.children[key]
-        else:                             raise TypeError('key')
+        if   isinstance(key, basestring):  return [c for c in self.children if str(c) == key][0]
+        elif isinstance(key, int):
+            if hasattr(self.first, 'num'): return [c for c in self.children if c.num == key][0]
+            else:                          return self.children[key]
+        elif isinstance(key, slice):       return self.children[key]
+        else:                              raise TypeError('key')
 
     @property
     def first(self): return self.children[0]
@@ -65,6 +67,9 @@ class Aggregate(object):
         self.name     = name
         self.samples  = samples
         self.children = samples
+        # Check names are unique #
+        names = [s.short_name for s in self.samples]
+        assert len(names) == len(set(names))
         # Dir #
         self.base_dir = out_dir + self.name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)

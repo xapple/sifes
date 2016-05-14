@@ -2,8 +2,10 @@
 
 # Internal modules #
 import sifes
-from sifes.diversity.alpha import AlphaDiversity
-from sifes.report.samples  import SampleReport
+from sifes.diversity.alpha      import AlphaDiversity
+from sifes.report.samples       import SampleReport
+from sifes.joining.pandaseq     import Pandaseq
+from sifes.filtering.seq_filter import SeqFilter
 
 # First party modules #
 from plumbing.autopaths import FilePath, DirectoryPath, AutoPaths
@@ -80,20 +82,20 @@ class Sample(object):
             self.pair.rev.count = self.info['reverse_read_count']
         # Automatic paths #
         self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Maybe we have an Illumina report XML #
-        #self.illumina_info = IlluminaInfo(self)
         # Change location of first FastQC, we don't want to modify the INBOX #
         if self.pair.format == 'fastq':
             self.pair.fwd.fastqc = FastQC(self.pair.fwd, self.p.fastqc_fwd_dir)
             self.pair.rev.fastqc = FastQC(self.pair.rev, self.p.fastqc_rev_dir)
         # Composition #
-        self.diversity = AlphaDiversity(self) # For basic measures
-        self.report    = SampleReport(self)   # The PDF report
+        self.joiner    = Pandaseq(self, self.pair, self.p.joined)  # For joining reads
+        self.filter    = SeqFilter(self, self.pair, self.p.joined) # For joining reads
+        self.diversity = AlphaDiversity(self)                      # For basic measures
+        self.report    = SampleReport(self)                        # The PDF report
 
     @property
     def seq_len(self):
         """The length of the first read."""
-        return len(self.fwd.first_read)
+        return len(self.pair.fwd.first_read)
 
     @property_cached
     def uncompressed_pair(self):

@@ -6,11 +6,11 @@ import os, socket, shutil
 from collections import OrderedDict
 
 # Internal modules #
-import illumitag
-from illumitag.reporting import ReportTemplate
+import sifes
+from sifes.reporting import ReportTemplate
 
 # First party modules #
-from plumbing.common    import split_thousands, pretty_now, andify
+from plumbing.common    import split_thousands, andify
 from plumbing.autopaths import FilePath
 from pymarktex          import Document, HeaderTemplate, FooterTemplate
 from pymarktex.figures  import ScaledFigure
@@ -48,20 +48,7 @@ class ClusterReport(Document):
         # Return #
         return self.output_path
 
-    copy_base = property(lambda self: illumitag.reports_dir + self.cluster.project.name + '/' + self.cluster.name + '.pdf')
-
-    def web_export(self):
-        """Copy the report to the webexport directory where it can be viewed by anyone"""
-        destination = "/proj/%s/webexport/ILLUMITAG/projects/%s/%s.pdf"
-        destination = destination % (self.cluster.first.account, self.cluster.name, self.cluster.name)
-        destination = FilePath(destination)
-        destination.directory.create(safe=True)
-        shutil.copy(self.output_path, destination)
-
-    @property
-    def url(self):
-        link = "https://export.uppmax.uu.se/%s/ILLUMITAG/projects/%s/%s.pdf"
-        return link % (self.cluster.first.account, self.cluster.name, self.cluster.name)
+    copy_base = property(lambda self: sifes.reports_dir + self.cluster.project.name + '/' + self.cluster.name + '.pdf')
 
 ###############################################################################
 class ClusterTemplate(ReportTemplate):
