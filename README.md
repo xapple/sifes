@@ -1,6 +1,6 @@
 # `sifes` version 2.0.0
 
-The acronym `gefes` stands for **S**pieces **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
+The acronym `sifes` stands for **S**pieces **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
 
 This project is a python pipeline handling the analysis -- from start to finish -- of 16S rRNA microbial amplicon sequencing data.
 

@@ -1,6 +1,6 @@
 """
 Check here for the list of estimators:
-http://scikit-bio.org/docs/0.1.4/math.diversity.alpha.html
+http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html
 """
 
 # Built-in modules #
@@ -11,13 +11,13 @@ from plumbing.graphs import Graph
 
 # Third party modules #
 from skbio.diversity import alpha_diversity
-from skbio.stats import subsample_counts as subsample
-from matplotlib import pyplot
-from numpy import linspace
+from skbio.stats     import subsample_counts as subsample
+from matplotlib      import pyplot
+from numpy           import linspace
 
 ###############################################################################
 class AlphaDiversity(object):
-    """All the alpha diversity to be calculated on an OTU table."""
+    """All the alpha diversity estimates to be calculated on an OTU table."""
 
     def __init__(self, parent):
         self.sample, self.parent = parent, parent
@@ -33,8 +33,8 @@ class AlphaDiversity(object):
 ###############################################################################
 class AlphaDiversityGraph(Graph):
     bottom = 0.10
-    right = 0.96
-    sep = ('x')
+    right  = 0.96
+    sep    = 'x'
 
     @property
     def x(self):
@@ -46,14 +46,18 @@ class AlphaDiversityGraph(Graph):
         except ValueError: return [0 for k in self.x]
 
     def plot(self, **kwargs):
-        fig = pyplot.figure()
+        # Plot #
+        fig  = pyplot.figure()
         axes = fig.add_subplot(111)
         axes.plot(self.x, self.y, 'ro')
+        # Labels #
         axes.set_title("Rarefaction curve of the " + self.title + " diversity estimate")
         axes.set_xlabel('Sequences rarefied down to this many')
         axes.set_ylabel(self.title + " diversity estimate")
+        # Options #
         axes.yaxis.grid(True)
         axes.set_xlim(0, axes.get_xlim()[1])
+        # Save #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
 

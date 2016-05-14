@@ -1,0 +1,70 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Senior forskningsledare",
+        "name":     "Karsten Pedersen",
+        "email":    "kap@micans.se"
+    },
+    "contact_two": {
+        "function": "PhD",
+        "name":     "Ellen Hanson",
+        "email":    "ellen.hanson@tataa.com"
+    }
+},
+
+"project_short_name":   "micans_v6_exp1",
+"sample_short_name":    "run2_lane1",
+"sample_num":           "5",
+
+
+
+
+"fwd_filename":         "2-4-5_S2_L001_R1_001.fastq.gz",
+"rev_filename":         "2-4-5_S2_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
