@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sifes version 2.0.0 &mdash; sifes 2.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="sifes 2.0.0 documentation" href="#" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          sifes</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">sifes</span></code> version 2.0.0</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#installing">Installing</a><ul>
+<li><a class="reference internal" href="#step-1-cloning-the-repository">Step 1: Cloning the repository</a></li>
+<li><a class="reference internal" href="#step-2-modify-your-search-paths">Step 2: Modify your search paths</a></li>
+<li><a class="reference internal" href="#step-3-install-your-own-version-of-python">Step 3: Install your own version of python</a></li>
+<li><a class="reference internal" href="#step-4-install-all-required-python-packages">Step 4: Install all required python packages</a></li>
+<li><a class="reference internal" href="#step-5-check-you-have-all-the-required-executables">Step 5: Check you have all the required executables</a></li>
+<li><a class="reference internal" href="#step-6-check-you-have-all-the-required-r-dependencies">Step 6: Check you have all the required R dependencies</a></li>
+<li><a class="reference internal" href="#step-7-make-a-working-directory-with-the-raw-data-linked">Step 7: Make a working directory with the raw data linked</a></li>
+<li><a class="reference internal" href="#step-8-start-typing-python-commands-to-analyze-your-data">Step 8: Start typing python commands to analyze your data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flowchart">Flowchart</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/index.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="sifes-version-2-0-0">
+<h1><code class="docutils literal"><span class="pre">sifes</span></code> version 2.0.0<a class="headerlink" href="#sifes-version-2-0-0" title="Permalink to this headline">¶</a></h1>
+<p>The acronym <code class="docutils literal"><span class="pre">sifes</span></code> stands for <strong>S</strong>pieces <strong>I</strong>​dentification
+<strong>F</strong>​rom <strong>E</strong>​nvironmental <strong>S</strong>​equencing.</p>
+<p>This project is a python pipeline handling the analysis &#8211; from start to
+finish &#8211; of 16S rRNA microbial amplicon sequencing data.</p>
+<p>This source code is propriety of Lucas Sinclair <a class="reference external" href="mailto:lucas&#37;&#52;&#48;envonautics&#46;com">lucas<span>&#64;</span>envonautics<span>&#46;</span>com</a>,
+co-founder of Envonautics Ltd. (<a class="reference external" href="https://www.envonautics.com">https://www.envonautics.com</a>)</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>At first, the main focus when developing <code class="docutils literal"><span class="pre">sifes</span></code> was to test the
+functioning of the new protocol we developed in our lab when switching
+from 454 to Illumina sequencers and to check the coherence and validity
+of the results obtained. Thus, the pipeline built fits our current needs
+and is designed to be easily used by the bioinformaticians in our
+company to quickly analyze the 16S experiments that lots of researchers
+are generating.</p>
+<p>The previous version of this pipeline was published under the name
+<code class="docutils literal"><span class="pre">illumitag</span></code> here:</p>
+<p><a class="reference external" href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0116955">Microbial Community Composition and Diversity via 16S rRNA Gene
+Amplicons: Evaluating the Illumina
+Platform</a></p>
+<p>Hence, the <code class="docutils literal"><span class="pre">sifes</span></code> project is <em>not</em> a biologist-oriented tool that
+supports all the possible use cases one could have with 16S rRNA
+sequence reads out of the box. For instance, it does not have a
+graphical interface to operate, nor any bash/sh/csh commands. Indeed, as
+each sequencing experiment will have different goals and different
+scientific questions associated to it, there cannot be a standard set of
+procedures to apply to every dataset. To illustrate this, one could asks
+ourselves what should the following command do ?</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ sifes --forward reads_fwd.fasta --reverse reads_rev.fasta
+</pre></div>
+</div>
+<p>Hard to say. To solve all the underlying questions, the scientist would
+have to specify an endless list of options and the design of a tool
+supporting so many different cases would be greatly complicated.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ sifes --forward reads_fwd.fasta --reverse reads_rev.fasta --barcode_single TRUE --barcode_only_in_reverse_reads TRUE --discard_missmatch_barcode 2 --remove_sequences_from &quot;Plastid, Mitochondrion, Thaumarchaeota&quot; --seperate_phyla_in_graph_when_larger_than 3000 --version_of_silva_to_use SSURef111 etc...
+</pre></div>
+</div>
+<p>Instead, the <code class="docutils literal"><span class="pre">sifes</span></code> project <em>is</em> a flexible and modular collections
+of packages written in proper, clean and commented object-oriented
+python which enables the user to survey, modify and extend the code-base
+easily &#8211; provided he has a sufficient knowledge in programming. It is a
+basis upon which the scientist can set up the processing and analysis
+that he sees fit for his own data sparing him from having to develop
+lots of the infrastructure needed himself.</p>
+<p>Many objects common to any analysis are provided such as a &#8220;FASTQ file
+pair&#8221;, a &#8220;Sample&#8221;, a &#8220;Collection of Samples&#8221;, a &#8220;Cluster of sequences&#8221;,
+a &#8220;Collection of OTUs&#8221;, and so on. In addition you will find routines
+for sending these objects through well-known algorithms such as UCLUST,
+UPARSE, PandaSEQ, CREST classifier, Vegan NMDS, and so on. Lots of extra
+functionality is also present such as a multitude of visualizations in
+<code class="docutils literal"><span class="pre">matplotlib</span></code> and other things such as the ability to automatically
+distribute the computation on a network of computers (via SLURM). But
+here again, every cluster varies between each university and it would
+make no sense to provide all possible options in the list of command
+line arguments. Once again, this is why <code class="docutils literal"><span class="pre">sifes</span></code> is not a command-line
+tool.</p>
+</div>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<p>No automated installation has been developed for the <code class="docutils literal"><span class="pre">sifes</span></code> package
+yet. In the meantime, following this document and typing these commands
+on your bash prompt should get you started. It is designed so you don&#8217;t
+need super user privileges at any step. If you cannot get a functional
+installation set up, contact the authors.</p>
+<div class="section" id="step-1-cloning-the-repository">
+<h3>Step 1: Cloning the repository<a class="headerlink" href="#step-1-cloning-the-repository" title="Permalink to this headline">¶</a></h3>
+<p>Here you will download a copy of the code from github and place it
+somewhere in your home directory.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd ~
+$ mkdir repos
+$ cd repos
+$ git clone https://github.com/xapple/sifes.git
+</pre></div>
+</div>
+<p>NB: The access to this repository is not public.</p>
+</div>
+<div class="section" id="step-2-modify-your-search-paths">
+<h3>Step 2: Modify your search paths<a class="headerlink" href="#step-2-modify-your-search-paths" title="Permalink to this headline">¶</a></h3>
+<p>Here you will edit either your <code class="docutils literal"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal"><span class="pre">~/.bash_profile</span></code> to
+add a reference to the code you just downloaded.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ vim ~/.bash_profile
+export PYTHONPATH=&quot;$HOME/repos/sifes/&quot;:$PYTHONPATH
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-install-your-own-version-of-python">
+<h3>Step 3: Install your own version of python<a class="headerlink" href="#step-3-install-your-own-version-of-python" title="Permalink to this headline">¶</a></h3>
+<p>Your system probably comes with a version of python installed. But the
+variations from system to system are too great to rely on any available
+python. We strongly suggest to just install our own version in your home
+directory.</p>
+<p>For this we will be using this excellent project:
+<a class="reference external" href="https://github.com/yyuu/pyenv">https://github.com/yyuu/pyenv</a></p>
+<p>To install it you may use this sister project:
+<a class="reference external" href="https://github.com/yyuu/pyenv-installer">https://github.com/yyuu/pyenv-installer</a></p>
+<p>Basically you just need to type this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+</pre></div>
+</div>
+<p>These lines go into your <code class="docutils literal"><span class="pre">.bash_profile</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ vim ~/.bash_profile
+export PYENV_ROOT=&quot;$HOME/.pyenv&quot;
+export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;
+eval &quot;$(pyenv init -)&quot;
+</pre></div>
+</div>
+<p>Relaunch your shell and type these commands to get the right version of
+python now:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyenv</span> <span class="n">install</span> <span class="mf">2.7</span><span class="o">.</span><span class="mi">11</span>
+<span class="n">pyenv</span> <span class="n">rehash</span>
+<span class="n">pyenv</span> <span class="k">global</span> <span class="mf">2.7</span><span class="o">.</span><span class="mi">11</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-install-all-required-python-packages">
+<h3>Step 4: Install all required python packages<a class="headerlink" href="#step-4-install-all-required-python-packages" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">sifes</span></code> uses many third party python libraries. You can get them by
+running these commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install sh
+$ pip install decorator
+$ pip install biopython
+$ pip install threadpool
+$ pip install patsy
+$ pip install scipy
+$ pip install matplotlib
+$ pip install pandas
+$ pip install statsmodels
+$ pip install ipython
+$ pip install scikit-learn
+$ pip install rpy2
+$ pip install brewer2mpl
+$ pip install regex
+$ pip install ftputil
+$ pip install names
+$ pip install shell_command
+$ pip install pystache
+$ pip install tabulate
+$ pip install tqdm
+$ pip install humanfriendly
+$ pip install biom-format
+$ pip install future
+$ pip install scikit-bio
+</pre></div>
+</div>
+<p>Don&#8217;t forget to rehash the binary links at the end:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pyenv rehash
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-5-check-you-have-all-the-required-executables">
+<h3>Step 5: Check you have all the required executables<a class="headerlink" href="#step-5-check-you-have-all-the-required-executables" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">sifes</span></code> will search for several different binaries as it processes
+your data. Please check all of these are available in your <code class="docutils literal"><span class="pre">$PATH</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ which pandaseq27
+$ which usearch7
+$ which usearch6
+$ which fastqc
+$ which blastn
+$ which classify
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-6-check-you-have-all-the-required-r-dependencies">
+<h3>Step 6: Check you have all the required R dependencies<a class="headerlink" href="#step-6-check-you-have-all-the-required-r-dependencies" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">sifes</span></code> will use some R packages that need to be installed. If you do
+not have them already, please install them:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ R install &#39;vegan&#39;
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-7-make-a-working-directory-with-the-raw-data-linked">
+<h3>Step 7: Make a working directory with the raw data linked<a class="headerlink" href="#step-7-make-a-working-directory-with-the-raw-data-linked" title="Permalink to this headline">¶</a></h3>
+<p>By default, <code class="docutils literal"><span class="pre">sifes</span></code> will search for the sequence data in a directory
+called <code class="docutils literal"><span class="pre">SIFES</span></code> placed in your home directory. This can be modified of
+course for your own setup. Each specific collection of sequence data
+should have an associated <code class="docutils literal"><span class="pre">json</span></code> file placed in the <code class="docutils literal"><span class="pre">metadata/json</span></code>
+directory of the repository telling <code class="docutils literal"><span class="pre">sifes</span></code> exactly what the name of
+the raw input files are.</p>
+</div>
+<div class="section" id="step-8-start-typing-python-commands-to-analyze-your-data">
+<h3>Step 8: Start typing python commands to analyze your data<a class="headerlink" href="#step-8-start-typing-python-commands-to-analyze-your-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ipython -i -c &quot;import sifes&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="flowchart">
+<h2>Flowchart<a class="headerlink" href="#flowchart" title="Permalink to this headline">¶</a></h2>
+<p>Below is drawn the flowchart describing the data processing along all
+the steps of <code class="docutils literal"><span class="pre">sifes</span></code>:</p>
+<div class="figure" id="id1">
+<img alt="Flowchart" src="_images/flowchart.png" />
+<p class="caption"><span class="caption-text">Flowchart</span></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Lucas Sinclair.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
