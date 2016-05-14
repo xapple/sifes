@@ -1,0 +1,20 @@
+# Temporary files #
+.DS_Store
+*.pyc
+*.swp
+*.swo
+*~
+\#*
+.#*
+._*
+~$*
+.~lock*
+
+# Build #
+illumitag.egg-info/
+
+# PyCharm #
+/.idea/
+
+# Pandaseq specific #
+bin/linux/.libs
