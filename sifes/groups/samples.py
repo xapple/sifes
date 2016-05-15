@@ -5,6 +5,8 @@ import sifes
 from sifes.diversity.alpha      import AlphaDiversity
 from sifes.report.samples       import SampleReport
 from sifes.joining.pandaseq     import Pandaseq
+from sifes.joining.qiime_join   import QiimeJoin
+from sifes.joining.mothur_join  import MothurJoin
 from sifes.filtering.seq_filter import SeqFilter
 
 # First party modules #
@@ -13,6 +15,7 @@ from plumbing.common    import load_json_path
 from plumbing.cache     import property_cached
 from fasta              import PairedFASTA, PairedFASTQ
 from fasta.fastqc       import FastQC
+from fasta.primers      import TwoPrimers
 
 # Third party modules #
 
@@ -88,6 +91,11 @@ class Sample(object):
         if self.pair.format == 'fastq':
             self.pair.fwd.fastqc = FastQC(self.pair.fwd, self.p.fastqc_fwd_dir)
             self.pair.rev.fastqc = FastQC(self.pair.rev, self.p.fastqc_rev_dir)
+        # The primers #
+        self.primer_fwd = self.info.get('primers', {}).get('forward', {}).get('sequence')
+        self.primer_rev = self.info.get('primers', {}).get('reverse', {}).get('sequence')
+        if self.primer_fwd and self.primer_rev:
+            self.primers = TwoPrimers(self.primer_fwd, self.primer_rev)
         # Report in PDF #
         self.report = SampleReport(self)
 
@@ -108,12 +116,14 @@ class Sample(object):
     @property_cached
     def joiner(self):
         """Will put the forward and reverse reads together."""
-        return Pandaseq(self.pair, self.p.joined_dir)
+        return MothurJoin(self.uncompressed_pair, self.p.joined_dir)
+        return Pandaseq(self.pair,   self.p.joined_dir)
+        return QiimeJoin(self.pair,  self.p.joined_dir)
 
     @property_cached
     def filter(self):
         """Will filter out unwanted sequences."""
-        return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir)
+        return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir, self.primers)
 
     @property_cached
     def diversity(self):

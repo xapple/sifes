@@ -41,18 +41,24 @@
 
 
 
+"primers": {
+        "name":    "Short V6 primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "NNNNGAGACCTAACCGANGAACCTYACC"},
+        "reverse": {"name": "1046R", "sequence": "CNACGCGAAGAACCTTANC"}
+},
 
 
 
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
 
-
-
-
-
-
-
-
-
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
 
 
 

@@ -15,6 +15,7 @@ import sifes
 from tqdm import tqdm
 
 ###############################################################################
+# Load project #
 proj = sifes.load("~/repos/sifes/metadata/json/projects/micans_v6_exp1/")
 
 # Get information for excel file #
@@ -25,6 +26,8 @@ for s in proj: print s.pair.rev.md5
 for s in proj: print s.seq_len
 
 # Join reads #
+sifes.joining.pandaseq.Pandaseq.minimum_overlap = 40
+sifes.joining.pandaseq.Pandaseq.kmer_table_size = 4
 for s in tqdm(proj): s.joiner.run()
 
 # Filter #

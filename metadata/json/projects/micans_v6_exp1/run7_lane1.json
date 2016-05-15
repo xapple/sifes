@@ -44,8 +44,8 @@
 "primers": {
         "name":    "Short V6 primers",
         "sense":   "5' to 3'",
-        "forward": {"name": "967F", "sequence": "AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT"},
-        "reverse": {"name": "1046R", "sequence": "CAAGCAGAAGACGGCATACGAGATCGTGATGTGACTGGAGTTCAGACGTGTGCTCTTCCGATCTCGACRRCCATGCA"}
+        "forward": {"name": "967F", "sequence": "NNNNGAGACCTAACCGANGAACCTYACC"},
+        "reverse": {"name": "1046R", "sequence": "CNACGCGAAGAACCTTANC"}
 },
 
 

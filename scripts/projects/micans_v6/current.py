@@ -15,7 +15,3 @@ from tqdm import tqdm
 
 ###############################################################################
 proj = sifes.load("~/deploy/sifes/metadata/json/projects/micans_v6_exp1/")
-
-# Get information for excel file #
-for s in proj: print s.pair.fwd.count
-for s in proj: print s.pair.rev.count
