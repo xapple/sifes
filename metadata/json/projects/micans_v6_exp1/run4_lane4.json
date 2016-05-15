@@ -7,9 +7,9 @@
         "email":    "kap@micans.se"
     },
     "contact_two": {
-        "function": "PhD",
-        "name":     "Ellen Hanson",
-        "email":    "ellen.hanson@tataa.com"
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
     }
 },
 
@@ -29,6 +29,8 @@
 
 
 
+"fwd_md5":              "ef09e416d25196b2f69066cfcbfa794f",
+"rev_md5":              "57c95d19a5c0615b3ec7a641ec50ab15",
 
 
 
@@ -39,8 +41,12 @@
 
 
 
-
-
+"primers": {
+        "name":    "Short V6 primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT"},
+        "reverse": {"name": "1046R", "sequence": "CAAGCAGAAGACGGCATACGAGATCGTGATGTGACTGGAGTTCAGACGTGTGCTCTTCCGATCTCGACRRCCATGCA"}
+},
 
 
 
@@ -49,10 +55,10 @@
 "library_selection":    "PCR",
 "library_layout":       "Paired",
 "platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
 
-
-
-
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
 
 
 

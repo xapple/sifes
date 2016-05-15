@@ -32,6 +32,7 @@ class Sample(object):
     /uncompressed/fwd.fastq
     /uncompressed/rev.fastq
     /joined/
+    /filtered/
     /report/report.pdf
     """
 
@@ -56,19 +57,19 @@ class Sample(object):
         self.project_long_name  = self.info.get('project_long_name')
         # Check the short name is only ASCII #
         assert all(ord(c) < 128 for c in self.short_name)
-        #TODO: Check that the first character is not a number
+        assert self.short_name[0] not in "1234567890"
         # Automatic paths #
         self.base_dir = DirectoryPath(sifes.samples_dir + self.short_name + '/')
         self.p        = AutoPaths(self.base_dir, self.all_paths)
-         # Make an alias to the json #
+        # Make an alias to the json #
         self.p.info_json.link_from(self.json_path, safe=True)
         # Get the directory #
         prefix    = self.info.get('prefix',    '')
         directory = self.info.get('directory', '')
         suffix    = self.info.get('suffix',    '')
         # Get the file paths #
-        self.fwd_path = prefix + directory + suffix + self.info['fwd_filename']
-        self.rev_path = prefix + directory + suffix + self.info['rev_filename']
+        self.fwd_path = FilePath(prefix + directory + suffix + self.info['fwd_filename'])
+        self.rev_path = FilePath(prefix + directory + suffix + self.info['rev_filename'])
         # Is it a FASTA pair or a FASTQ pair ? #
         if "fastq" in self.fwd_path: self.pair = PairedFASTQ(self.fwd_path, self.rev_path)
         else:                        self.pair = PairedFASTA(self.fwd_path, self.rev_path)
@@ -87,11 +88,8 @@ class Sample(object):
         if self.pair.format == 'fastq':
             self.pair.fwd.fastqc = FastQC(self.pair.fwd, self.p.fastqc_fwd_dir)
             self.pair.rev.fastqc = FastQC(self.pair.rev, self.p.fastqc_rev_dir)
-        # Composition #
-        self.joiner    = Pandaseq(self, self.pair, self.p.joined)  # For joining reads
-        self.filter    = SeqFilter(self, self.pair, self.p.joined) # For joining reads
-        self.diversity = AlphaDiversity(self)                      # For basic measures
-        self.report    = SampleReport(self)                        # The PDF report
+        # Report in PDF #
+        self.report = SampleReport(self)
 
     @property
     def seq_len(self):
@@ -103,6 +101,21 @@ class Sample(object):
         """Useful for a few stupid programs that don't take fastq.gz files such as mothur."""
         result = PairedFASTQ(self.p.uncompressed_fwd_fastq, self.p.uncompressed_rev_fastq)
         if not result.exists:
-            self.fwd.ungzip_to(result.fwd)
-            self.rev.ungzip_to(result.rev)
+            self.pair.fwd.ungzip_to(result.fwd)
+            self.pair.rev.ungzip_to(result.rev)
         return result
+
+    @property_cached
+    def joiner(self):
+        """Will put the forward and reverse reads together."""
+        return Pandaseq(self.pair, self.p.joined_dir)
+
+    @property_cached
+    def filter(self):
+        """Will filter out unwanted sequences."""
+        return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir)
+
+    @property_cached
+    def diversity(self):
+        """For all alpha diversity measures."""
+        return AlphaDiversity(self)

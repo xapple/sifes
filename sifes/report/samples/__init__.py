@@ -7,7 +7,7 @@ from collections import OrderedDict
 
 # Internal modules #
 import sifes
-from sifes.reporting import ReportTemplate
+from sifes.report import ReportTemplate
 
 # First party modules #
 from plumbing.common import split_thousands
@@ -17,9 +17,6 @@ from pymarktex.figures import ScaledFigure, DualFigure
 # Third party modules #
 import pandas
 from tabulate import tabulate
-
-# Constants #
-ssh_header = "ssh://" + os.environ.get("FILESYSTEM_HOSTNAME", socket.getfqdn())
 
 ###############################################################################
 class SampleReport(Document):

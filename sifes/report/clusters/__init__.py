@@ -7,20 +7,15 @@ from collections import OrderedDict
 
 # Internal modules #
 import sifes
-from sifes.reporting import ReportTemplate
+from sifes.report import ReportTemplate
 
 # First party modules #
 from plumbing.common    import split_thousands, andify
-from plumbing.autopaths import FilePath
 from pymarktex          import Document, HeaderTemplate, FooterTemplate
 from pymarktex.figures  import ScaledFigure
 
 # Third party modules #
 from tabulate import tabulate
-
-# Constants #
-ssh_header = "ssh://" + os.environ.get("FILESYSTEM_HOSTNAME", socket.getfqdn())
-
 ###############################################################################
 class ClusterReport(Document):
     """A full report generated in PDF for every Cluster object."""

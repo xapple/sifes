@@ -49,13 +49,14 @@ def load(json_dir_path):
 
     # Load all found JSON files #
     json_paths  = glob.glob(json_dir_path + '*.json')
+    if not json_paths: raise Exception("Dit not find any json files at '%s'" % json_dir_path)
     new_samples = [Sample(j) for j in json_paths]
-    samples.append(new_samples)
+    samples.extend(new_samples)
 
     # Compose into projects #
     proj_names = sorted(list(set([s.project_short_name for s in samples])))
     new_projs  = [Project(name, [s for s in samples if s.project_short_name==name]) for name in proj_names]
-    _projects.append(new_projs)
+    _projects.extend(new_projs)
 
     # Link the samples to their project #
     for s in samples: s.project = projects[s.project_short_name]
