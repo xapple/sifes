@@ -6,7 +6,9 @@
 
 ###############################################################################
 class SeqFilter(object):
-    """A collection of aggregates."""
+    """Lorem."""
+
+    primer_mismatches = "TODO"
 
     def __init__(self, children):
         self.children = children

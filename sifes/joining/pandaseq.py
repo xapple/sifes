@@ -45,7 +45,7 @@ class Pandaseq(object):
         # Call it #
         shell_call(command)
         # Check #
-        assert self.assembled.path.exists
+        assert self.p.assembled
 
     @property_cached
     def results(self):
@@ -60,7 +60,12 @@ class PandaseqResults(object):
     def __nonzero__(self): return bool(self.pandaseq.p.assembled)
 
     def __init__(self, pandaseq):
-        self.pandaseq = pandaseq
+        self.pandaseq    = pandaseq
+        self.p           = pandaseq.p
+        self.assembled   = self.p.assembled
+        self.unassembled = self.p.unassembled
+
+#TODO: stats['lowqual']
 
 ###############################################################################
 #sh.pandaseq28('-T', 1,        # direct output to file <f>, not stdout

@@ -56,6 +56,7 @@ class Sample(object):
         self.project_long_name  = self.info.get('project_long_name')
         # Check the short name is only ASCII #
         assert all(ord(c) < 128 for c in self.short_name)
+        #TODO: Check that the first character is not a number
         # Automatic paths #
         self.base_dir = DirectoryPath(sifes.samples_dir + self.short_name + '/')
         self.p        = AutoPaths(self.base_dir, self.all_paths)

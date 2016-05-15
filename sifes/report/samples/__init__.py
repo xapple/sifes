@@ -59,82 +59,85 @@ class SampleTemplate(ReportTemplate):
 
     def __init__(self, report):
         # Attributes #
-        self.report, self.parent = report, report
-        self.sample     = self.parent.sample
-        self.project       = self.sample.project
+        self.report  = report
+        self.sample  = self.parent.sample
+        self.project = self.sample.project
 
-    # General information #
+    ############## General information ##############
     def sample_short_name(self):     return self.sample.short_name
     def sample_long_name(self):      return self.sample.short_name
     def project_short_name(self):    return self.sample.project_short_name
     def project_long_name(self):     return self.sample.project_long_name
     def project_other_samples(self): return len(self.project) - 1
 
-    # JSON #
-    def json_url(self):
-        url = "https://github.com/limno/sifes/tree/master/json/samples"
-        url += "/run%03d/run%03d-sample%03d.json"
-        return url % (self.sample.run_num, self.sample.run_num, self.sample.num)
+    ############## JSON ##############
     def json_content(self):
         content = self.sample.json_path.read('utf-8')
+        #TODO: remove blank lines
+        # Remove the contacts #
         content = re.sub('\A(.+?)^    },$', '', content, flags=re.M|re.DOTALL)
+        # Remove the last brace #
         return content.strip('\n }')
 
-    # Process info #
-    def results_directory(self): return ssh_header + self.sample.base_dir
-
-    # Raw data #
+    ############## Raw data ##############
     def fwd_size(self):  return str(self.sample.fwd.size)
     def fwd_count(self): return split_thousands(self.sample.fwd.count)
     def fwd_qual(self):  return "%.2f" % self.sample.fwd.avg_quality
     def rev_size(self):  return str(self.sample.rev.size)
     def rev_count(self): return split_thousands(self.sample.rev.count)
     def rev_qual(self):  return "%.2f" % self.sample.rev.avg_quality
-    def illumina_report(self): return self.sample.run.html_report_path
+
     def per_base_qual(self):
-        params = [self.sample.fastq.fwd.fastqc.results.per_base_qual,
-                  self.sample.fastq.rev.fastqc.results.per_base_qual]
+        params = [self.sample.pair.fwd.fastqc.results.per_base_qual,
+                  self.sample.pair.rev.fastqc.results.per_base_qual]
         params += ["Forward", "Reverse"]
         params += ["fwd_per_base_qual", "rev_fwd_per_base_qual"]
         params += ["Per base quality", "per_base_qual"]
         return str(DualFigure(*params))
+
     def per_seq_qual(self):
-        params = [self.sample.fastq.fwd.fastqc.results.per_seq_qual,
-                  self.sample.fastq.rev.fastqc.results.per_seq_qual]
+        params = [self.sample.pair.fwd.fastqc.results.per_seq_qual,
+                  self.sample.pair.rev.fastqc.results.per_seq_qual]
         params += ["Forward", "Reverse"]
         params += ["fwd_per_seq_qual", "rev_per_seq_qual"]
         params += ["Per sequence quality", "per_seq_qual"]
         return str(DualFigure(*params))
 
-    # Joining #
-    def joiner_version(self, val): self.sample.joiner.long_name
+    ############## Joining ##############
+    def joiner_version(self): self.sample.joiner.long_name
     def values_with_percent(self, val):
         percentage = lambda x,y: (len(x)/len(y))*100 if len(y) != 0 else 0
-        percent = percentage(val, self.sample)
+        percent    = percentage(val, self.sample)
         return "%s (%.1f%%)" % (split_thousands(len(val)), percent)
-    def assembled_count(self): return self.values_with_percent(self.sample.assembled)
-    def unassembled_count(self): return self.values_with_percent(self.sample.unassembled)
+
+    def assembled_count(self):
+        return self.values_with_percent(self.sample.joining.results.assembled)
+    def unassembled_count(self):
+        return self.values_with_percent(self.sample.joining.results.unassembled)
     def low_qual_count(self):
-        count = self.sample.assembled.stats['lowqual']
+
+        count = self.sample.joining.results.stats['lowqual']
         return "%s (%.1f%%)" % (split_thousands(count), (count/len(self.sample))*100)
+
     def assembly_len_dist(self):
         caption = "Distribution of sequence lengths after joining"
-        path = self.sample.assembled.length_dist.path
-        label = "assembly_len_dist"
+        path    = self.sample.joining.results.assembled.graphs.length_dist()
+        label   = "assembly_len_dist"
         return str(ScaledFigure(path, caption, label))
+
     def joined_quality(self):
-        params = [self.sample.assembled.fastqc.results.per_base_qual,
-                  self.sample.assembled.fastqc.results.per_seq_qual]
+        params = [self.sample.joining.results.assembled.fastqc.results.per_base_qual,
+                  self.sample.joining.results.assembled.fastqc.results.per_seq_qual]
         params += ["Per base", "Per sequence"]
         params += ["joined_per_base_qual", "joined_per_seq_qual"]
         params += ["Joined sequence quality", "joined_quality"]
         return str(DualFigure(*params))
 
-    # Filtering #
-    def mismatches_allowed(self): return self.sample.assembled.primer_mismatches
+    ############## Filtering ##############
+    def mismatches_allowed(self): return self.sample.filter.primer_mismatches
     def primer_discard(self):
-        before = self.sample.assembled
-        after  = self.sample.assembled.good_primers.orig_reads
+        before = self.joining.results.assembled
+        after  = self.sample.filter.results.clean
         return split_thousands(len(before) - len(after))
     def primer_left(self):
         return split_thousands(len(self.sample.assembled.good_primers.orig_reads))
@@ -164,7 +167,7 @@ class SampleTemplate(ReportTemplate):
         good = self.sample.assembled.good_primers
         return "%.1f%%" % ((len(good.len_filtered)/len(self.sample))*100)
 
-    # Taxonomy #
+    ############## Taxonomy ##############
     def abundant_table(self):
         # The data #
         row = self.sample.counts
@@ -179,7 +182,7 @@ class SampleTemplate(ReportTemplate):
         # Add caption #
         return table + "\n\n   : The 20 most abundant species in this sample."
 
-    # Diversity #
+    ############## Diversity ##############
     def total_otu_sum(self): return split_thousands(sum(self.sample.counts))
     def total_otu_count(self): return split_thousands(len(self.sample.counts))
     def chao1_curve(self):

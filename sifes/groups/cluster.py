@@ -7,7 +7,6 @@ from sifes.groups.aggregate      import Aggregate
 from sifes.clustering.otu.uparse import UparseOTUs
 
 # First party modules #
-from plumbing.autopaths import AutoPaths
 from fasta import FASTA
 
 # Third party modules #
