@@ -17,11 +17,15 @@
 "sample_short_name":    "run8_lane4",
 "sample_num":           "32",
 
-
-
-
 "fwd_filename":         "8-27-30_S8_L004_R1_001.fastq.gz",
 "rev_filename":         "8-27-30_S8_L004_R2_001.fastq.gz",
+
+"prefix":               "~/SIFES/raw/projects/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "8_27_30-34690726/",
+
+
+
 
 
 

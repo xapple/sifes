@@ -17,11 +17,15 @@
 "sample_short_name":    "run6_lane2",
 "sample_num":           "22",
 
-
-
-
 "fwd_filename":         "6-17-21_S6_L002_R1_001.fastq.gz",
 "rev_filename":         "6-17-21_S6_L002_R2_001.fastq.gz",
+
+"prefix":               "~/SIFES/raw/projects/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "6_17_21-34686763/",
+
+
+
 
 
 
