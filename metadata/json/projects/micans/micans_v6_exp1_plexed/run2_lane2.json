@@ -16,6 +16,7 @@
 "project_short_name":   "micans_v6_exp1_plexed",
 "sample_short_name":    "run2_lane2",
 "sample_num":           "6",
+"used":                 "yes",
 
 "fwd_filename":         "2-4-5_S2_L002_R1_001.fastq.gz",
 "rev_filename":         "2-4-5_S2_L002_R2_001.fastq.gz",
@@ -29,8 +30,8 @@
 "multiplex_group":               "micans_2_4_5_34692717",
 
 "organization":               "micans",
-"prefix":               "~/SIFES/raw/projects/",
-"directory":            "micans_v6/experiment_1_plexed/",
+"prefix":               "~/SIFES/raw/projects/micans/",
+"directory":            "micans_v6/experiment_1/plexed/",
 "suffix":               "2_4_5-34692717/",
 
 

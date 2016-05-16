@@ -16,6 +16,7 @@
 "project_short_name":   "pseud_fluo",
 "sample_short_name":    "pseud_fluo_dnaxntc",
 "sample_num":           "13",
+"used":                 "yes",
 
 "fwd_filename":         "fwd.fastq.gz",
 "rev_filename":         "rev.fastq.gz",
@@ -29,7 +30,7 @@
 
 
 "organization":               "micans",
-"prefix":               "~/SIFES/raw/projects/",
+"prefix":               "~/SIFES/raw/projects/micans/",
 "directory":            "micans_v6/experiment_1/",
 "suffix":               "160012/",
 

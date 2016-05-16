@@ -51,6 +51,9 @@ for i, row in df.iterrows():
     # Using the column names, make a dict with the ascii names as keys instead #
     content = dict((corr[x], '"'+str(row[x])+'"') for x in row.index if x in corr and row[x] is not numpy.nan)
 
+    # Skip the case where the sample is not used #
+    if content.get('used') == '"no"': continue
+
     # Figure out the path #
     path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
     path = path % (content['organization'].strip('"'),

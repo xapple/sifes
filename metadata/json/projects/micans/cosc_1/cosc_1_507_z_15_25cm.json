@@ -16,6 +16,7 @@
 "project_short_name":   "cosc_1",
 "sample_short_name":    "cosc_1_507_z_15_25cm",
 "sample_num":           "32",
+"used":                 "yes",
 
 "fwd_filename":         "fwd.fastq.gz",
 "rev_filename":         "rev.fastq.gz",
@@ -29,7 +30,7 @@
 
 
 "organization":               "micans",
-"prefix":               "~/SIFES/raw/projects/",
+"prefix":               "~/SIFES/raw/projects/micans/",
 "directory":            "micans_v6/experiment_1/",
 "suffix":               "140189/",
 

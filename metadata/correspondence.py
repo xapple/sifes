@@ -8,6 +8,7 @@ corr = {
     u'Sample short name\n(no spaces and only ascii)':  'sample_short_name',
     u'Sample long name (free text)':                   'sample_long_name',
     u'Sample #':                                       'sample_num',
+    u'Used':                                           'used',
 
     u'Organization':                         'organization',
     u'Prefix':                               'prefix',

@@ -19,7 +19,10 @@ class Project(Aggregate):
 
     def __init__(self, name, samples):
         """Please specify the name of the project and the samples it must contain."""
-        super(self.__class__,self).__init__(name, samples, sifes.project_dir)
+        # Base dir #
+        out_dir = sifes.project_dir + samples[0].info.get('organization', '') + '/'
+        # Super #
+        super(self.__class__,self).__init__(name, samples, out_dir)
 
     @property
     def long_name(self): return self.first.project_long_name
