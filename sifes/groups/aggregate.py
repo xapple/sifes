@@ -39,6 +39,7 @@ class Aggregate(object):
 
     all_paths = """
     /graphs/
+    /lane_cat/
     /logs/
     /cluster/
     /results/slurm_report.csv

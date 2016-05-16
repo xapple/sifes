@@ -10,14 +10,23 @@ The code is: micans_v6_exp1
 
 # Internal modules #
 import sifes.filtering.seq_filter
+from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # Third party modules #
 from tqdm import tqdm
 
 ###############################################################################
-# Load project #
+# Load multiplexed project #
+plexed = sifes.load("~/repos/sifes/metadata/json/projects/micans_v6_exp1_plexed/")
+
+# Load real project #
 proj = sifes.load("~/repos/sifes/metadata/json/projects/micans_v6_exp1/")
 
+# Demultiplex #
+demultipler = Demultiplexer(plexed, proj)
+demultipler.run()
+
+###############################################################################
 # Get information for excel file #
 for s in proj: print s.pair.fwd.count
 for s in proj: print s.pair.rev.count

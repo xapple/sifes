@@ -20,6 +20,14 @@ corr = {
     u'Contact 2 name':                       'contact_two_name',
     u'Contact 2 email':                      'contact_two_email',
 
+    u'Custom barcode':                       'custom_barcode',
+    u'Multiplexed in':                       'multiplexed_in',
+    u'Pool barcode':                         'pool_barcode',
+
+    u'Header barcode':                       'header_barcode',
+    u'Header rev. comp.':                    'header_rev_comp',
+    u'Multiplex group reference':            'multiplex_group',
+
     u'Forward index #':                      'forward_num',
     u'Forward index sequence':               'forward_mid',
     u'Reverse index #':                      'reverse_num',
