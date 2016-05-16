@@ -42,10 +42,10 @@
 
 
 "primers": {
-        "name":    "Short V6 primers",
+        "name":    "VAMPS Illumina V8",
         "sense":   "5' to 3'",
-        "forward": {"name": "967F", "sequence": "NNNNGAGACCTAACCGANGAACCTYACC"},
-        "reverse": {"name": "1046R", "sequence": "CNACGCGAAGAACCTTANC"}
+        "forward": {"name": "967F", "sequence": "MNAMSCGMNRAACCTYANC"},
+        "reverse": {"name": "1046R", "sequence": "CGACRRCCATGCANCACCT"}
 },
 
 
