@@ -32,7 +32,7 @@ for s in proj: print s.pair.fwd.count
 for s in proj: print s.pair.rev.count
 for s in proj: print s.pair.fwd.md5
 for s in proj: print s.pair.rev.md5
-for s in proj: print s.seq_len
+for s in proj: print len(s.pair.fwd.first_read)
 
 # Join reads #
 for s in tqdm(proj): s.joiner.run(cpus=1)

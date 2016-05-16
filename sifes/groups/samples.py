@@ -99,14 +99,21 @@ class Sample(object):
         # Report in PDF #
         self.report = SampleReport(self)
 
-    @property
-    def seq_len(self):
-        """The length of the first read."""
-        return len(self.pair.fwd.first_read)
-
     @property_cached
     def uncompressed_pair(self):
         """Useful for a few stupid programs that don't take fastq.gz files such as mothur."""
+        result = PairedFASTQ(self.p.uncompressed_fwd_fastq, self.p.uncompressed_rev_fastq)
+        if not result.exists:
+            self.pair.fwd.ungzip_to(result.fwd)
+            self.pair.rev.ungzip_to(result.rev)
+        return result
+
+    @property_cached
+    def single_barcode(self):
+        """Useful when samples are actually combined lanes and you need to find the
+        barcodes yourself."""
+        if self.info.get('custom_barcode'):
+            return Barcode(self.info['custom_barcode'])
         result = PairedFASTQ(self.p.uncompressed_fwd_fastq, self.p.uncompressed_rev_fastq)
         if not result.exists:
             self.pair.fwd.ungzip_to(result.fwd)
