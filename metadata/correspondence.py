@@ -9,6 +9,7 @@ corr = {
     u'Sample long name (free text)':                   'sample_long_name',
     u'Sample #':                                       'sample_num',
 
+    u'Organization':                         'organization',
     u'Prefix':                               'prefix',
     u'Directory':                            'directory',
     u'Suffix':                               'suffix',

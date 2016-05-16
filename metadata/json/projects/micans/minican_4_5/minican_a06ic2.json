@@ -1,0 +1,89 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Senior forskningsledare",
+        "name":     "Karsten Pedersen",
+        "email":    "kap@micans.se"
+    },
+    "contact_two": {
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
+    }
+},
+
+"project_short_name":   "minican_4_5",
+"sample_short_name":    "minican_a06ic2",
+"sample_num":           "3",
+
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+"custom_barcode":               "GAGAC",
+"multiplexed_in":            "micans_2_4_5_34692717",
+"pool_barcode":               "GCCTAA",
+
+
+
+
+
+"organization":               "micans",
+"prefix":               "~/SIFES/raw/projects/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "150125/",
+
+"project_long_name":    "MINICAN_4_5 (Minican)",
+"sample_long_name":     "A06IC2 (150125)",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "VAMPS Illumina V6",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "MNAMSCGMNRAACCTYANC"},
+        "reverse": {"name": "1046R", "sequence": "CGACRRCCATGCANCACCT"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
+
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

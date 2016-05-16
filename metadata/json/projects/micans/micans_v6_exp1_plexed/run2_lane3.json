@@ -1,0 +1,89 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Senior forskningsledare",
+        "name":     "Karsten Pedersen",
+        "email":    "kap@micans.se"
+    },
+    "contact_two": {
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
+    }
+},
+
+"project_short_name":   "micans_v6_exp1_plexed",
+"sample_short_name":    "run2_lane3",
+"sample_num":           "7",
+
+"fwd_filename":         "2-4-5_S2_L003_R1_001.fastq.gz",
+"rev_filename":         "2-4-5_S2_L003_R2_001.fastq.gz",
+
+
+
+
+
+"header_barcode":               "TTAGGC",
+"header_rev_comp":               "GCCTAA",
+"multiplex_group":               "micans_2_4_5_34692717",
+
+"organization":               "micans",
+"prefix":               "~/SIFES/raw/projects/",
+"directory":            "micans_v6/experiment_1_plexed/",
+"suffix":               "2_4_5-34692717/",
+
+
+
+
+
+
+"fwd_md5":              "5ff8b1c2826377a96a172cd031579081",
+"rev_md5":              "49609c7d5cf37b45e78f523c0b170056",
+
+"header_barcode":          "TTAGGC",
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "VAMPS Illumina V6",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "MNAMSCGMNRAACCTYANC"},
+        "reverse": {"name": "1046R", "sequence": "CGACRRCCATGCANCACCT"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
+
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

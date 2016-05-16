@@ -1,0 +1,89 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Senior forskningsledare",
+        "name":     "Karsten Pedersen",
+        "email":    "kap@micans.se"
+    },
+    "contact_two": {
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
+    }
+},
+
+"project_short_name":   "posmic_olk",
+"sample_short_name":    "olkr57_310_312",
+"sample_num":           "6",
+
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+"custom_barcode":               "TCAGC",
+"multiplexed_in":            "micans_3_6_9_34697670",
+"pool_barcode":               "TGGTCA",
+
+
+
+
+
+"organization":               "micans",
+"prefix":               "~/SIFES/raw/projects/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "140011/",
+
+"project_long_name":    "POSMIC (Olkiluoto)",
+"sample_long_name":     "OLKR57.310.312mglass (140011)",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "VAMPS Illumina V6",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "MNAMSCGMNRAACCTYANC"},
+        "reverse": {"name": "1046R", "sequence": "CGACRRCCATGCANCACCT"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
+
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

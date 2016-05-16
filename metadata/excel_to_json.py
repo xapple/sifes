@@ -52,12 +52,14 @@ for i, row in df.iterrows():
     content = dict((corr[x], '"'+str(row[x])+'"') for x in row.index if x in corr and row[x] is not numpy.nan)
 
     # Figure out the path #
-    path = home + "repos/sifes/metadata/json/projects/%s/%s.json"
-    path = path % (content['project_short_name'].strip('"'), content['sample_short_name'].strip('"'))
+    path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
+    path = path % (content['organization'].strip('"'),
+                   content['project_short_name'].strip('"'),
+                   content['sample_short_name'].strip('"'))
 
     # Create directory if it doesn't exist #
     dir_path = os.path.dirname(path)
-    if not os.path.exists(dir_path): os.mkdir(dir_path)
+    if not os.path.exists(dir_path): os.makedirs(dir_path)
 
     # Get the template and a renderer #
     template = JsonTemplate(content)
