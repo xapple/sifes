@@ -6,15 +6,17 @@ import os, re
 from collections import defaultdict
 
 # Internal modules #
-import illumitag
+import sifes
+from sifes.clustering.otu import OTUs
+from sifes.clustering.taxonomy.crest import CrestTaxonomy
+from sifes.clustering.taxonomy.rdp import RdpTaxonomy
+from sifes.clustering.source.seqenv_wrapper import Seqenv
+
+# First party modules #
 from plumbing.common import natural_sort
 from plumbing.autopaths import AutoPaths, FilePath
 from plumbing.cache import property_cached, LazyString
 from fasta import FASTA, SizesFASTA
-from illumitag.clustering.otu import OTUs
-from illumitag.clustering.taxonomy.crest import CrestTaxonomy
-from illumitag.clustering.taxonomy.rdp import RdpTaxonomy
-from illumitag.clustering.source.seqenv_wrapper import Seqenv
 
 # Third party modules #
 import sh, pandas
@@ -27,11 +29,14 @@ class UparseOTUs(OTUs):
     """Will use uparse to create OTU clusters from a given FASTA file
     http://www.nature.com/doifinder/10.1038/nmeth.2604"""
 
+    # Attributes #
     short_name = 'uparse'
-    title = 'UPARSE denovo picking'
-    article = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
-    version = uparse_version
-    threshold = 3.0
+    title      = 'UPARSE denovo picking'
+    article    = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
+    version    = uparse_version
+
+    # Parameters
+    threshold  = 3.0
 
     all_paths = """
     /derep.fasta
@@ -142,12 +147,12 @@ class UClusterFile(FilePath):
             nums = re.findall("run([0-9]+)_pool([0-9]+)_sample([0-9]+)_read([0-9]+)", query)
             if nums:
                 run_num, pool_num, sample_num, read_num = map(int, nums[0])
-                sample = illumitag.runs[run_num][pool_num-1][sample_num-1]
+                sample = sifes.runs[run_num][pool_num-1][sample_num-1]
                 name = sample.short_name
             else:
                 nums = re.findall("run([0-9]+)_sample([0-9]+)_read([0-9]+)", query)
                 run_num, sample_num, read_num = map(int, nums[0])
-                sample = [s for s in illumitag.presamples+illumitag.pyrosamples if s.run_num==run_num and s.num==sample_num][0]
+                sample = [s for s in sifes.presamples+sifes.pyrosamples if s.run_num==run_num and s.num==sample_num][0]
                 name = sample.short_name
             # Count #
             result[target][name] += 1

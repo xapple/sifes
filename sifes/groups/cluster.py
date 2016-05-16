@@ -2,9 +2,9 @@
 
 # Internal modules #
 import sifes
-from sifes.report.clusters       import ClusterReport
-from sifes.groups.aggregate      import Aggregate
-from sifes.clustering.otu.uparse import UparseOTUs
+from sifes.report.clusters  import ClusterReport
+from sifes.groups.aggregate import Aggregate
+from sifes.otu.uparse       import UparseOTUs
 
 # First party modules #
 from fasta import FASTA
@@ -36,20 +36,14 @@ class Cluster(Aggregate):
         self.reads = FASTA(self.p.all_reads)
         # OTU picking #
         self.otus_uparse = UparseOTUs(self)
-        self.otus        = self.otu_uparse
+        self.otus        = self.otus_uparse(self.reads, self.p.otus_dir)
         # Composing #
         self.report = ClusterReport(self)
-
-    @property
-    def first(self): return self.children[0]
-
-    @property
-    def count_seq(self):
-        return sum([len(sample) for sample in self])
 
     def combine_reads(self):
         """This is the first function you should call. It will combine all the
         reads of all the samples of this cluster into one big FASTA file."""
         paths = [sample.filter.results.clean for sample in self]
         shell_output('cat %s > %s' % (' '.join(paths), self.reads))
+        assert sum([len(sample) for sample in self]) == self.reads.count
         return self.reads

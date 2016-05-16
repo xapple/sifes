@@ -70,9 +70,9 @@ class SeqFilter(object):
         def good_primer_iterator(reads):
             for r in reads:
                 if r.fwd_start_pos is None or r.rev_start_pos is None: continue
-                if r.fwd_start_pos < self.primer_max_dist:
-                    if r.rev_start_pos > -self.primer_max_dist:
-                        yield r[r.fwd_end_pos:r.rev_end_pos]
+                if r.fwd_start_pos > self.primer_max_dist:             continue
+                if r.rev_start_pos < -self.primer_max_dist:            continue
+                yield r[r.fwd_end_pos:r.rev_end_pos]
         self.primers_fasta.write(good_primer_iterator(self.parse_primers()))
 
     # N base #
@@ -118,9 +118,11 @@ class SeqFilterResults(object):
     def __nonzero__(self): return bool(self.length_fasta)
 
     def __init__(self, parent):
-        self.parent    = parent
+        self.parent        = parent
         self.primers_fasta = parent.primers_fasta
         self.n_base_fasta  = parent.n_base_fasta
         self.length_fasta  = parent.length_fasta
+        # The final result #
+        self.clean         = self.length_fasta
 
 ###############################################################################
