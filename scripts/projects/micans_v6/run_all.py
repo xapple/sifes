@@ -9,7 +9,7 @@ The code is: micans_v6_exp1
 # Built-in modules #
 
 # Internal modules #
-import sifes
+import sifes.filtering.seq_filter
 
 # Third party modules #
 from tqdm import tqdm
@@ -26,11 +26,13 @@ for s in proj: print s.pair.rev.md5
 for s in proj: print s.seq_len
 
 # Join reads #
-sifes.joining.pandaseq.Pandaseq.minimum_overlap = 40
-sifes.joining.pandaseq.Pandaseq.kmer_table_size = 4
-for s in tqdm(proj): s.joiner.run()
+for s in tqdm(proj): s.joiner.run(cpus=1)
 
 # Filter #
+sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
+sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 100
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 160
 for s in tqdm(proj): s.filter.run()
 
 # Cluster #

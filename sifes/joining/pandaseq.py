@@ -14,7 +14,12 @@ from shell_command import shell_call
 
 ###############################################################################
 class Pandaseq(object):
-    """Use PANDAseq to join read pairs together."""
+    """Use PANDAseq to join read pairs together.
+
+    You can adjust parameters like this:
+        sifes.joining.pandaseq.Pandaseq.minimum_overlap = 40
+        sifes.joining.pandaseq.Pandaseq.kmer_table_size = 4
+    """
 
     # Attributes #
     short_name = 'pandaseq'
@@ -26,8 +31,8 @@ class Pandaseq(object):
     dependencies = []
 
     # Parameters #
-    minimum_overlap = 40
-    kmer_table_size = 4
+    minimum_overlap = 2
+    kmer_table_size = 3
 
     all_paths = """
     /assembled.fasta

@@ -1,7 +1,7 @@
 # Built-in modules #
 
 # Internal modules #
-import os, shutil
+import os, multiprocessing
 
 # First party modules #
 from plumbing.autopaths import AutoPaths
@@ -23,8 +23,8 @@ class MothurJoin(object):
     executable = 'mothur'
 
     all_paths = """
-    /fwd.fastq.gz
-    /rev.fastq.gz
+    /fwd.fastq
+    /rev.fastq
     /stdout.txt
     /stderr.txt
     /assembled.fasta"""
@@ -43,9 +43,11 @@ class MothurJoin(object):
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
-    def run(self):
+    def run(self, cpus=None):
         """The make contigs command.
         http://www.mothur.org/wiki/Make.contigs"""
+        # Number of cores #
+        if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check input #
         assert hasattr(self.pair, 'fwd') and hasattr(self.pair, 'rev')
         # Prepare #
@@ -54,7 +56,8 @@ class MothurJoin(object):
         current_dir = os.getcwd()
         os.chdir(self.base_dir)
         # Run #
-        sh.mothur("#make.contigs(ffastq=%s, rfastq=%s);" % (self.p.fwd, self.p.rev),
+        command = "#make.contigs(ffastq=%s, rfastq=%s, processors=%s);"
+        sh.mothur(command % (self.p.fwd, self.p.rev, cpus),
                   _out=self.p.stdout.path,_err=self.p.stderr.path)
         # Check output #
         if "ERROR" in self.p.stdout.contents:
@@ -79,16 +82,16 @@ class MothurJoin(object):
 ###############################################################################
 class MothurJoinResults(object):
 
-    def __nonzero__(self): return bool(self.p.assembled)
+    def __nonzero__(self): return bool(self.p.stdout)
     def __len__(self):     return len(self.p.assembled)
 
     def __init__(self, parent):
         # Attributes #
         self.parent      = parent
+        self.base_dir    = parent.base_dir
         self.p           = parent.p
-        self.pair        = parent.pair
-        self.joined      = FASTA(   self.p.fwd.prefix_path + '.trim.contigs.fasta')
-        self.report      = FilePath(self.p.fwd.prefix_path + '.contigs.report')
-        self.scrap       = FASTA(   self.p.fwd.prefix_path + '.scrap.contigs.fasta')
+        self.joined      = FASTA(   self.base_dir + 'fwd.trim.contigs.fasta')
+        self.report      = FilePath(self.base_dir + 'fwd.contigs.report')
+        self.scrap       = FASTA(   self.base_dir + 'fwd.scrap.contigs.fasta')
         self.outputs     = (self.joined, self.report, self.scrap)
         self.assembled   = FASTA(self.p.assembled)
