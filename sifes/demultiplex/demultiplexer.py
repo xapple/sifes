@@ -56,8 +56,8 @@ class Demultiplexer(object):
             for f,r in tqdm(lane.pair.parse_primers(s.primers, 2)):
                 if f.fwd_start_pos:
                     start_pos, end_pos = barcode.search(f.read)
-                        if end_pos == f.fwd_start_pos:
-                            s.pair.add(f.read, r.read)
+                    if end_pos == f.fwd_start_pos:
+                        s.pair.add(f.read, r.read)
             s.pair.close()
 
     @property_cached
