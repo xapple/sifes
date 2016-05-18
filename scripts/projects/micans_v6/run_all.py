@@ -29,6 +29,10 @@ samples  = [s for p in projects for s in p]
 demultiplexer = Demultiplexer(plexed, samples)
 demultiplexer.run()
 
+# Guess barcodes #
+barcodes_guessed = demultiplexer.pools[1].guess_barcodes(stop_at=40000)
+for k,v in barcodes_guessed.most_common(20): print k, ':', v
+
 # Demultiplex Report #
 demultiplexer.report.generate()
 

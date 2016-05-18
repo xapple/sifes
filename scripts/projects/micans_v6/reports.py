@@ -21,8 +21,4 @@ samples  = [s for p in projects for s in p]
 from sifes.demultiplex.demultiplexer import Demultiplexer
 demultiplexer = Demultiplexer(plexed, samples)
 #demultiplexer.run()
-#demultiplexer.report.generate()
-
-###############################################################################
-barcodes_guessed = demultiplexer.pools[1].guess_barcodes(stop_at=40000)
-for k,v in barcodes_guessed.most_common(20): print k, ':', v
+demultiplexer.report.generate()

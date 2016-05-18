@@ -3,6 +3,7 @@ Special module to demultiplex samples.
 """
 
 # Built-in modules #
+from collections import Counter
 import multiprocessing
 
 # Internal modules #
@@ -25,6 +26,9 @@ from Bio.Seq import Seq
 
 ###############################################################################
 class Demultiplexer(object):
+    # Attributes #
+    short_name = "demultiplexer"
+
     # Parameters #
     barcode_mismatches = 0
 
@@ -38,9 +42,10 @@ class Demultiplexer(object):
         assert all([s.info.get('multiplex_group') for s in self.plexed])
         assert all([s.info.get('multiplexed_in')  for s in self.samples])
         # Pools #
-        get_samples = lambda name: [s for s in self.plexed if s.info['multiplex_group'] == name]
+        get_inputs  = lambda name: [i for i in self.plexed if i.info['multiplex_group'] == name]
+        get_samples = lambda name: [s for s in self.samples if s.info['multiplexed_in'] == name]
         self.pools = sorted(list(set([s.info['multiplex_group'] for s in self.plexed])))
-        self.pools = [Pool(name, get_samples(name)) for name in self.pools]
+        self.pools = [Pool(name, get_inputs(name), get_samples(name)) for name in self.pools]
         # Report #
         self.report = MultiplexReport(self)
 
@@ -85,12 +90,14 @@ class Pool(object):
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
     def __nonzero__(self): return bool(self.pair)
 
-    def __init__(self, name, inputs):
+    def __init__(self, name, inputs, samples):
         # Check #
         assert all([s.info.get('multiplex_group') == name for s in inputs])
         # Attributes #
         self.name      = name
         self.inputs    = inputs
+        self.samples   = samples
+        self.primers   = inputs[0].primers
         self.project   = inputs[0].project
         self.base_dir  = DirectoryPath(self.project.p.lane_cat_dir + self.name + '/')
         self.fwd_path  = self.base_dir + 'fwd.fastq.gz'
@@ -111,6 +118,17 @@ class Pool(object):
         shell_output("zcat %s |gzip > %s" % (' '.join(self.rev_files), self.pair.rev))
         # Check #
         assert self.pair.fwd.first.id == self.pair.rev.first.id
+
+    def guess_barcodes(self, stop_at=4000):
+        """Usefull when barcodes seem wrong within a multiplexed pool"""
+        barcodes = Counter()
+        for i, pair in enumerate(tqdm(self.pair.parse_primers(self.primers, 2), total=stop_at)):
+            fwd = pair[0]
+            if fwd.fwd_start_pos:
+                barcode = fwd.read.seq[fwd.fwd_start_pos-5:fwd.fwd_start_pos]
+                barcodes[str(barcode)] += 1
+                if i == stop_at: break
+        return barcodes
 
 ###############################################################################
 class SingleBarcode(object):

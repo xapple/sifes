@@ -4,8 +4,8 @@ b"""This module needs Python 2.7.x"""
 import os, sys, glob
 
 # Constants #
-url         = 'http://github.com/xapple/sifes/'
-repo_url    = 'http://xapple.github.io/sifes/'
+url         = 'http://xapple.github.io/sifes/'
+repo_url    = 'http://github.com/xapple/sifes/'
 __version__ = '2.0.0'
 home        = os.environ.get('HOME', '~') + '/'
 

@@ -10,6 +10,7 @@ import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
+from plumbing.autopaths import FilePath
 from plumbing.common import split_thousands
 from pymarktex import Document
 
@@ -30,6 +31,9 @@ class MultiplexReport(Document):
         # Automatic paths #
         self.base_dir    = self.plexed.p.report_dir
         self.output_path = self.plexed.p.report_pdf
+        # Copy path #
+        self.copy_base = sifes.reports_dir + self.plexed.short_name + '/' + self.parent.short_name + '.pdf'
+        self.copy_base = FilePath(self.copy_base)
 
     def generate(self):
         # Dynamic templates #
@@ -37,14 +41,13 @@ class MultiplexReport(Document):
         self.markdown = unicode(self.main)
         # Render to latex #
         self.make_body()
-        self.make_latex()
-        self.make_pdf(safe=True)
+        self.make_latex(params={'title': 'Demultiplexing report'})
+        self.make_pdf(safe=True, include_src=True)
         # Copy to reports directory #
+        self.copy_base.directory.create()
         shutil.copy(self.output_path, self.copy_base)
         # Return #
         return self.output_path
-
-    copy_base = property(lambda self: sifes.reports_dir + self.plexed.short_name + '/' + self.parent.short_name + '.pdf')
 
 ###############################################################################
 class MultiplexTemplate(ReportTemplate):
@@ -78,7 +81,7 @@ class MultiplexTemplate(ReportTemplate):
             ('Name',  lambda p: "**" + p.name + "**"),
             ('Files', lambda p: "`" + str(len(p.inputs)) + "`"),
             ('Reads', lambda p: split_thousands(p.pair.count)),
-            ('Loss',  lambda p: "%.1f%%" % (100 * sum(map(len, p.inputs)) / p.pair.count)),
+            ('Loss',  lambda p: "%.1f%%" % (100.0 * (1 - sum(map(len, p.samples)) / p.pair.count))),
         ))
         # The table #
         table = [[i+1] + [f(self.pools[i]) for f in info.values()] for i in range(len(self.pools))]
@@ -91,7 +94,7 @@ class MultiplexTemplate(ReportTemplate):
     def count_real_samples(self): return len(self.samples)
     def count_loss(self):
         reads_lost = sum(map(len, self.plexed.samples)) - sum(map(len, self.samples))
-        percent = 100 * reads_lost / sum(map(len, self.plexed.samples))
+        percent = 100.0 * reads_lost / sum(map(len, self.plexed.samples))
         return "%s (%.1f%%)" % (reads_lost, percent)
 
     def output_table(self):
