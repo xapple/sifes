@@ -4,12 +4,17 @@
 """
 A script to run all the procedure on Mican's first data job.
 The code is: micans_v6_exp1
+
+To first generate the JSON files:
+
+    $ 
+    $
+
 """
 
 # Built-in modules #
 
 # Internal modules #
-import sifes
 import sifes.filtering.seq_filter
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
@@ -28,10 +33,6 @@ samples  = [s for p in projects for s in p]
 # Demultiplex #
 demultiplexer = Demultiplexer(plexed, samples)
 demultiplexer.run()
-
-# Guess barcodes #
-barcodes_guessed = demultiplexer.pools[1].guess_barcodes(stop_at=40000)
-for k,v in barcodes_guessed.most_common(20): print k, ':', v
 
 # Demultiplex Report #
 demultiplexer.report.generate()

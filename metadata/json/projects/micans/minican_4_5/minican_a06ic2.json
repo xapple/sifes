@@ -21,7 +21,7 @@
 "fwd_filename":         "fwd.fastq.gz",
 "rev_filename":         "rev.fastq.gz",
 
-"custom_barcode":               "GAGAC",
+"custom_barcode":               "TCAGC",
 "multiplexed_in":            "micans_2_4_5_34692717",
 "pool_barcode":               "GCCTAA",
 
