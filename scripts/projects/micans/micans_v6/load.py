@@ -7,6 +7,9 @@ A script to load the basic objects.
 
 # Built-in modules #
 
+# First party modules #
+from plumbing.processes import prll_map
+
 # Internal modules #
 import sifes
 from sifes.demultiplex.demultiplexer import Demultiplexer
@@ -22,3 +25,10 @@ samples  = [s for p in projects for s in p]
 
 # Demultiplex #
 demultiplexer = Demultiplexer(plexed, samples)
+
+# Parameters #
+sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
+sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 100
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 160
+

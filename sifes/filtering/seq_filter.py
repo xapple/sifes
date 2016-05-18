@@ -36,43 +36,51 @@ class SeqFilter(object):
     /primers.fasta
     /n_base.fasta
     /length.fasta
+    /renamed.fasta
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.input)
     def __nonzero__(self): return bool(self.length_fasta)
 
-    def __init__(self, input, result_dir, primers):
+    def __init__(self, input, result_dir, sample_name, primers):
         # Save attributes #
-        self.input      = input
-        self.result_dir = result_dir
-        self.primers    = primers
+        self.input       = input
+        self.result_dir  = result_dir
+        self.sample_name = sample_name
+        self.primers     = primers
         # Auto paths #
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Parsing the primers, returns a GenWithLength #
-        self.parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches)
         # The different files #
         self.primers_fasta = FASTA(self.p.primers)
         self.n_base_fasta  = FASTA(self.p.n_base)
         self.length_fasta  = FASTA(self.p.length)
+        self.renamed_fasta = FASTA(self.p.renamed)
 
     def run(self):
+        # Message #
+        print "Filtering sample '%s'" % self.sample_name
         # Primers #
         self.primer_filter()
         # N bases #
         self.n_base_filter()
         # Length #
         self.len_filter()
+        # Rename wit number #
+        self.length_fasta.rename_with_num(self.sample_name + ':', self.renamed_fasta)
 
     # Primers #
     def primer_filter(self):
-        """Will take only reads that have both primers and will trim the primers"""
+        """Will take only reads that have both primers and will trim the primers."""
         def good_primer_iterator(reads):
             for r in reads:
                 if r.fwd_start_pos is None or r.rev_start_pos is None: continue
                 if r.fwd_start_pos > self.primer_max_dist:             continue
                 if r.rev_start_pos < -self.primer_max_dist:            continue
-                yield r[r.fwd_end_pos:r.rev_end_pos]
+                yield r.read[r.fwd_end_pos:r.rev_end_pos]
+        # Parsing the primers, returns a GenWithLength #
+        self.parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches)
+        # Do it #
         self.primers_fasta.write(good_primer_iterator(self.parse_primers()))
 
     # N base #
@@ -87,10 +95,10 @@ class SeqFilter(object):
     def len_filter(self):
         def good_len_iterator(reads):
             for r in reads:
-                if self.min_length > 0:
-                    if len(r) < self.min_length: continue
-                if self.max_length > 0:
-                    if len(r) > self.max_length: continue
+                if self.min_read_length > 0:
+                    if len(r) < self.min_read_length: continue
+                if self.max_read_length > 0:
+                    if len(r) > self.max_read_length: continue
                 yield r
         self.length_fasta.write(good_len_iterator(self.n_base_fasta))
 
@@ -122,7 +130,8 @@ class SeqFilterResults(object):
         self.primers_fasta = parent.primers_fasta
         self.n_base_fasta  = parent.n_base_fasta
         self.length_fasta  = parent.length_fasta
+        self.renamed_fasta = parent.renamed_fasta
         # The final result #
-        self.clean         = self.length_fasta
+        self.clean         = self.renamed_fasta
 
 ###############################################################################

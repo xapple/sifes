@@ -5,11 +5,6 @@
         "function": "Co-founder",
         "name":     "Lucas Sinclair",
         "email":    "lucas@envonautics.com"
-    },
-    "contact_two": {
-        "function": ,
-        "name":     ,
-        "email":    
     }
 },
 
@@ -29,7 +24,7 @@
 
 
 
-"organization":               "envonautics",
+"organization":         "envonautics",
 "prefix":               "~/SIFES/raw/projects/envonautics/",
 "directory":            "test_proj/",
 "suffix":               "bt5/",

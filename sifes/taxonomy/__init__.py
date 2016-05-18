@@ -2,12 +2,10 @@
 from __future__ import division
 
 # Built-in modules #
-from collections import Counter
 
 # Internal modules #
 from plumbing.common import prepend_to_file
 from plumbing.cache import property_cached
-from plumbing.autopaths import AutoPaths
 from fasta import FASTA
 
 # Third party modules #
@@ -16,6 +14,8 @@ import pandas, numpy
 ###############################################################################
 class Taxonomy(object):
     """Can assign taxonomy to a FASTA file of 16S sequences."""
+
+    # Parameters #
     unwanted = ['Plastid', 'Mitochondrion', 'Thaumarchaeota', 'Crenarchaeota', 'Euryarchaeota']
 
     def __repr__(self): return '<%s object of %s>' % (self.__class__.__name__, self.parent)
@@ -61,21 +61,3 @@ class Taxonomy(object):
             for seq in f:
                 if seq.id in self.otus_to_keep: yield seq
         self.centers.write(filter_otus(self.otu.centers))
-
-###############################################################################
-class SimpleTaxonomy(object):
-
-    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.fasta)
-
-    def __init__(self, fasta, base_dir):
-        # Base params #
-        self.fasta = fasta if isinstance(fasta, FASTA) else FASTA(fasta)
-        self.base_dir = base_dir
-        self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Extra simple composition #
-        from illumitag.clustering.composition import SimpleComposition
-        self.composition = SimpleComposition(self, self.base_dir + 'comp_' + self.short_name + '/')
-
-    @property_cached
-    def phyla(self):
-        return Counter(taxa[2] if len(taxa) > 2 else taxa[-1] for taxa in self.assignments.values())

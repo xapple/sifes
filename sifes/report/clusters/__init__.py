@@ -10,9 +10,9 @@ import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
-from plumbing.common    import split_thousands, andify
-from pymarktex          import Document
-from pymarktex.figures  import ScaledFigure
+from pymarktex         import Document
+from plumbing.common   import split_thousands, andify
+from pymarktex.figures import ScaledFigure
 
 # Third party modules #
 from tabulate import tabulate

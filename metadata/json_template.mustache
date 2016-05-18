@@ -5,12 +5,15 @@
         "function": {{contact_one_function}},
         "name":     {{contact_one_name}},
         "email":    {{contact_one_email}}
-    },
+    }
+    {{#contact_two}}
+    ,
     "contact_two": {
         "function": {{contact_two_function}},
         "name":     {{contact_two_name}},
         "email":    {{contact_two_email}}
     }
+    {{/contact_two}}
 },
 
 "project_short_name":   {{project_short_name}},
@@ -29,7 +32,7 @@
 {{#header_rev_comp}}"header_rev_comp":               {{header_rev_comp}},{{/header_rev_comp}}
 {{#multiplex_group}}"multiplex_group":               {{multiplex_group}},{{/multiplex_group}}
 
-{{#organization}}"organization":               {{organization}},{{/organization}}
+{{#organization}}"organization":         {{organization}},{{/organization}}
 {{#prefix}}"prefix":               {{prefix}},{{/prefix}}
 {{#directory}}"directory":            {{directory}},{{/directory}}
 {{#suffix}}"suffix":               {{suffix}},{{/suffix}}

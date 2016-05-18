@@ -83,4 +83,4 @@ class Aggregate(object):
     @property_cached
     def cluster(self):
         from sifes.groups.cluster import Cluster # To avoid circular import
-        return Cluster(self.samples, self.name, self.p.cluster_dir)
+        return Cluster(self.name, self.samples[:], self.p.cluster_dir)

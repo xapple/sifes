@@ -35,10 +35,11 @@ class MothurJoin(object):
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
     def __nonzero__(self): return bool(self.p.assembled)
 
-    def __init__(self, pair, result_dir):
+    def __init__(self, pair, result_dir, sample_name):
         # Save attributes #
-        self.pair       = pair
-        self.result_dir = result_dir
+        self.pair        = pair
+        self.result_dir  = result_dir
+        self.sample_name = sample_name
         # Auto paths #
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
@@ -46,6 +47,8 @@ class MothurJoin(object):
     def run(self, cpus=None):
         """The make contigs command.
         http://www.mothur.org/wiki/Make.contigs"""
+        # Message #
+        print "Joining sample '%s'" % self.sample_name
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check input #

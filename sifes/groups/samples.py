@@ -109,14 +109,14 @@ class Sample(object):
     @property_cached
     def joiner(self):
         """Will put the forward and reverse reads together."""
-        return MothurJoin(self.uncompressed_pair, self.p.joined_dir)
+        return MothurJoin(self.uncompressed_pair, self.p.joined_dir, self.short_name)
         return Pandaseq(self.pair,   self.p.joined_dir)
         return QiimeJoin(self.pair,  self.p.joined_dir)
 
     @property_cached
     def filter(self):
         """Will filter out unwanted sequences."""
-        return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir, self.primers)
+        return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir, self.short_name, self.primers)
 
     @property_cached
     def diversity(self):

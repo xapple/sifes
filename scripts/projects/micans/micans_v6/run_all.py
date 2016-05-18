@@ -18,6 +18,9 @@ To first generate the JSON files:
 import sifes.filtering.seq_filter
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
+# First party modules #
+from plumbing.processes import prll_map
+
 # Third party modules #
 from tqdm import tqdm
 
@@ -47,6 +50,7 @@ for s in samples: print len(s.pair.fwd.first_read)
 
 # Join reads #
 for s in tqdm(samples): s.joiner.run(cpus=1)
+prll_map(lambda s: s.joiner.run(cpus=1), samples)
 
 # Filter #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
@@ -54,6 +58,7 @@ sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 100
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 160
 for s in tqdm(samples): s.filter.run()
+prll_map(lambda s: s.filter.run(), samples)
 
 # Cluster #
 for proj in projects:

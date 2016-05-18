@@ -59,7 +59,7 @@ class Pandaseq(object):
                to a file as concatenated pairs.
            -o: Miniumum overlap.
            -k: K-mer table size."""
-        command = 'pandaseq28 -T 1 -f %s -r %s -u %s -o %s -k %s -F -N 1> %s 2> %s'
+        command = 'pandaseq28 -T 1 -f %s -r %s -u %s -o %s -k %s -F 1> %s 2> %s'
         command = command % (self.pair.fwd, self.pair.rev,
                              self.p.unassembled,
                              self.minimum_overlap,

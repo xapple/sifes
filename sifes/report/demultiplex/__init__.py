@@ -10,9 +10,9 @@ import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
+from pymarktex          import Document
 from plumbing.autopaths import FilePath
-from plumbing.common import split_thousands
-from pymarktex import Document
+from plumbing.common    import split_thousands
 
 # Third party modules #
 from tabulate import tabulate

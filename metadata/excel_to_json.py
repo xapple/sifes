@@ -54,6 +54,12 @@ for i, row in df.iterrows():
     # Skip the case where the sample is not used #
     if content.get('used') == '"no"': continue
 
+    # Special case for missing second contact #
+    second_contact = {"contact_two_function": content['contact_two_function'],
+                      "contact_two_name":     content['contact_two_name'],
+                      "contact_two_email":    content['contact_two_email'],
+                     } if content.get('contact_two_name') else None
+
     # Figure out the path #
     path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
     path = path % (content['organization'].strip('"'),

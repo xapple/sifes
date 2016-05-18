@@ -7,36 +7,33 @@ from collections import defaultdict
 
 # Internal modules #
 import sifes
-from sifes.clustering.otu import OTUs
-from sifes.clustering.taxonomy.crest import CrestTaxonomy
-from sifes.clustering.taxonomy.rdp import RdpTaxonomy
-from sifes.clustering.source.seqenv_wrapper import Seqenv
+from sifes.otu import OTUs
 
 # First party modules #
-from plumbing.common import natural_sort
+from plumbing.common    import natural_sort
 from plumbing.autopaths import AutoPaths, FilePath
-from plumbing.cache import property_cached, LazyString
-from fasta import FASTA, SizesFASTA
+from plumbing.cache     import property_cached, LazyString
+from fasta              import FASTA, SizesFASTA
 
 # Third party modules #
 import sh, pandas
 
 # Constants #
-uparse_version = LazyString(lambda: sh.usearch7('-version').stdout[8:].strip('\n'))
+uparse_version = LazyString(lambda: sh.usearch8('-version').stdout[8:].strip('\n'))
 
 ###############################################################################
-class UparseOTUs(OTUs):
-    """Will use uparse to create OTU clusters from a given FASTA file
-    http://www.nature.com/doifinder/10.1038/nmeth.2604"""
+class Uparse(OTUs):
+    """Will use uparse to create OTU clusters from a given FASTA file."""
 
     # Attributes #
     short_name = 'uparse'
-    title      = 'UPARSE denovo picking'
+    long_name  = 'UPARSE denovo picking'
+    executable = 'usearch8'
     article    = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
     version    = uparse_version
 
     # Parameters
-    threshold  = 3.0
+    threshold = 3.0
 
     all_paths = """
     /derep.fasta
@@ -52,59 +49,63 @@ class UparseOTUs(OTUs):
     """
 
     def __repr__(self): return '<%s object of %s>' % (self.__class__.__name__, self.parent)
-    def __len__(self): return 0
+    def __nonzero__(self): return bool(self.p.readmap)
 
-    def __init__(self, cluster):
-        # Save parent #
-        self.cluster, self.parent = cluster, cluster
-        # Inherited #
-        self.samples = self.parent.samples
+    def __init__(self, reads, out_dir):
+        # Attributes #
+        self.reads = reads
         # Paths #
-        self.base_dir = self.parent.p.otus_dir + self.short_name + '/'
+        self.base_dir = out_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Main FASTA file #
-        self.reads = self.parent.reads
         # Files #
-        self.derep = SizesFASTA(self.p.derep)
-        self.sorted = SizesFASTA(self.p.sorted)
+        self.derep   = SizesFASTA(self.p.derep)
+        self.sorted  = SizesFASTA(self.p.sorted)
         self.centers = FASTA(self.p.centers)
         self.readmap = UClusterFile(self.p.readmap)
-        # Taxonomy #
-        self.taxonomy_silva = CrestTaxonomy(self.centers, self, 'silvamod',   self.p.silva_dir)
-        self.taxonomy_fw    = CrestTaxonomy(self.centers, self, 'freshwater', self.p.fw_dir)
-        self.taxonomy_unite = CrestTaxonomy(self.centers, self, 'unite',      self.p.unite_dir)
-        self.taxonomy_rdp   = RdpTaxonomy(self.centers, self)
-        # Preferred one #
-        self.taxonomy = self.taxonomy_silva
-        # Source tracking #
-        self.seqenv = Seqenv(self)
 
     def run(self, threshold=None):
         # Optional threshold #
         if threshold is None: threshold = self.threshold
+        # Identity #
         identity = (100 - threshold) / 100
         # Dereplicate (uparse version 32-bit version runs out of memory) #
-        if False: sh.usearch7("--derep_fulllength", self.reads, '-output', self.derep, '-sizeout')
-        sh.fasta_make_unique(self.reads, self.derep)
-        # Order by size and kill singeltons #
-        sh.usearch7("--sortbysize", self.derep, '-output', self.sorted, '-minsize', 2)
+        sh.usearch8("--derep_fulllength", self.reads, '-fastaout', self.derep, '-sizeout')
+        if False: sh.fasta_make_unique(self.reads, self.derep)
+        # Order by size and kill singletons #
+        sh.usearch8("--sortbysize", self.derep, '-fastaout', self.sorted, '-minsize', 2)
         # Compute the centers #
-        sh.usearch7("--cluster_otus", self.sorted, '-otus', self.centers, '-otu_radius_pct', threshold)
+        sh.usearch8("--cluster_otus", self.sorted, '-otus', self.centers, '-otu_radius_pct', threshold)
         # Rename the centers #
         self.centers.rename_with_num('OTU-')
         # Check that we don't have a file size problem at this point #
         # assert self.reads.count_bytes < 2**32
         # Map the reads back to the centers #
-        sh.usearch7("-usearch_global", self.reads, '-db', self.centers, '-strand', 'plus', '-id', identity, '-uc', self.readmap)
-
-    def checks(self):
+        sh.usearch8("-usearch_global", self.reads, '-db', self.centers, '-strand', 'plus', '-id', identity, '-uc', self.readmap)
+        # Check #
         assert len(self.reads) == len(self.derep)
         assert len(self.reads) == len(self.readmap)
 
     @property_cached
+    def results(self):
+        results = UparseResults(self)
+        message = "You can't access results from UPARSE before running the algorithm."
+        if not results: raise Exception(message)
+        return results
+
+###############################################################################
+class UparseResults(object):
+
+    def __nonzero__(self): return bool(self.p.readmap)
+
+    def __init__(self, parent):
+        self.parent  = parent
+        self.p       = parent.p
+        self.centers = parent.centers
+
+    @property_cached
     def cluster_counts_table(self):
-        """Parse that custom output for creating the unfiltered OTU table"""
-        result = pandas.DataFrame(self.readmap.otu_sample_counts)
+        """Parse that custom output for creating the unfiltered OTU table."""
+        result = pandas.DataFrame(self.parent.readmap.otu_sample_counts)
         result = result.fillna(0)
         result = result.astype(int)
         result = result.reindex_axis(sorted(result.columns, key=natural_sort), axis=1)
@@ -143,18 +144,9 @@ class UClusterFile(FilePath):
             kind, num, length, similarity, strand, start, seed, alignment, query, target = line.split()
             # Skip no hits (the target is the OTU name) #
             if target == '*': continue
-            # Parse the hit #
-            nums = re.findall("run([0-9]+)_pool([0-9]+)_sample([0-9]+)_read([0-9]+)", query)
-            if nums:
-                run_num, pool_num, sample_num, read_num = map(int, nums[0])
-                sample = sifes.runs[run_num][pool_num-1][sample_num-1]
-                name = sample.short_name
-            else:
-                nums = re.findall("run([0-9]+)_sample([0-9]+)_read([0-9]+)", query)
-                run_num, sample_num, read_num = map(int, nums[0])
-                sample = [s for s in sifes.presamples+sifes.pyrosamples if s.run_num==run_num and s.num==sample_num][0]
-                name = sample.short_name
+            # Remove read number to get sample name #
+            sample_name = query.split(':')[0]
             # Count #
-            result[target][name] += 1
+            result[target][sample_name] += 1
         # Return #
         return result
