@@ -7,8 +7,8 @@ The code is: micans_v6_exp1
 
 To first generate the JSON files:
 
-    $ 
-    $
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans/micans_v6_exp1_plexed/metadata_plexed.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx
 
 """
 

@@ -6,6 +6,7 @@ A script to run create a fake test project with a few sequences
 """
 
 # Built-in modules #
+from itertools import izip, islice
 
 # Internal modules #
 import sifes
@@ -23,6 +24,10 @@ illumi_proj = illumitag.projects['ice']
 illumi_proj.load()
 illumi_proj.cluster.load()
 
+# Samples #
+illumi_samples = illumi_proj[8:16]
+
 # Copy #
-for s in test_proj:
-    pass
+for i_s, s in izip(test_proj, illumi_samples):
+    s.pair.fwd.write(islice(i_s.fwd, 10000))
+    s.pair.rev.write(islice(i_s.fwd, 10000))
