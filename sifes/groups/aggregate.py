@@ -38,6 +38,7 @@ class Aggregate(object):
     """An arbitrary aggregate of several samples."""
 
     all_paths = """
+    /report/report.pdf
     /graphs/
     /lane_cat/
     /logs/

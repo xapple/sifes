@@ -2,7 +2,7 @@
 from __future__ import division
 
 # Built-in modules #
-import os, socket, shutil
+import shutil
 from collections import OrderedDict
 
 # Internal modules #
@@ -11,11 +11,12 @@ from sifes.report import ReportTemplate
 
 # First party modules #
 from plumbing.common    import split_thousands, andify
-from pymarktex          import Document, HeaderTemplate, FooterTemplate
+from pymarktex          import Document
 from pymarktex.figures  import ScaledFigure
 
 # Third party modules #
 from tabulate import tabulate
+
 ###############################################################################
 class ClusterReport(Document):
     """A full report generated in PDF for every Cluster object."""
@@ -32,8 +33,6 @@ class ClusterReport(Document):
     def generate(self):
         # Dynamic templates #
         self.markdown = unicode(ClusterTemplate(self))
-        self.header = HeaderTemplate()
-        self.footer = FooterTemplate()
         # Render to latex #
         self.make_body()
         self.make_latex()

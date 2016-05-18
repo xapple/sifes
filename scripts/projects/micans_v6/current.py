@@ -20,4 +20,5 @@ projects = [sifes.load("~/deploy/sifes/metadata/json/projects/micans/" + p + '/'
 samples  = [s for p in projects for s in p]
 from sifes.demultiplex.demultiplexer import Demultiplexer
 demultiplexer = Demultiplexer(plexed, samples)
-demultiplexer.run()
+#demultiplexer.run()
+demultiplexer.report.generate()

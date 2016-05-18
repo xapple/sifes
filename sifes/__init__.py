@@ -5,6 +5,7 @@ import os, sys, glob
 
 # Constants #
 url         = 'http://github.com/xapple/sifes/'
+repo_url    = 'http://xapple.github.io/sifes/'
 __version__ = '2.0.0'
 home        = os.environ.get('HOME', '~') + '/'
 

@@ -29,6 +29,9 @@ samples  = [s for p in projects for s in p]
 demultiplexer = Demultiplexer(plexed, samples)
 demultiplexer.run()
 
+# Demultiplex Report #
+demultiplexer.report.generate()
+
 ###############################################################################
 # Get information for excel file #
 for s in samples: print s.pair.fwd.count
