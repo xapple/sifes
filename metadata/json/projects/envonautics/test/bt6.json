@@ -1,0 +1,90 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Co-founder",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@envonautics.com"
+    },
+    "contact_two": {
+        "function": ,
+        "name":     ,
+        "email":    
+    }
+},
+
+"project_short_name":   "test",
+"sample_short_name":    "bt6",
+"sample_num":           "6",
+"used":                 "yes",
+
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":               "envonautics",
+"prefix":               "~/SIFES/raw/projects/envonautics/",
+"directory":            "test_proj/",
+"suffix":               "bt6/",
+
+"project_long_name":    "A test project to go quickly",
+"sample_long_name":     "bt6am from under ice",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "General bacteria 16S primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "341F", "sequence": "NNNNCCTACGGGNGGCWGCAG"},
+        "reverse": {"name": "805R", "sequence": "GACTACHVGGGTATCTAATCC"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "v2.5.0.5",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
