@@ -3,6 +3,7 @@ Special module to demultiplex samples.
 """
 
 # Built-in modules #
+import sys
 from collections import Counter
 import multiprocessing
 
@@ -12,6 +13,7 @@ from sifes.report.demultiplex import MultiplexReport
 # First party modules #
 from plumbing.autopaths import DirectoryPath
 from plumbing.cache     import property_cached
+from plumbing.processes import prll_map
 from fasta              import PairedFASTQ
 from fasta.primers      import iupac
 
@@ -53,20 +55,21 @@ class Demultiplexer(object):
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Merge lanes together #
-        #thread_pool = multiprocessing.Pool(processes=cpus)
-        #thread_pool.map(lambda pool: pool.merge_lanes(), self.pools)
+        #prll_map(lambda pool: pool.merge_lanes(), self.pools, cpus)
         # Search for barcodes #
-        for i,s in enumerate(self.samples):
-            print "Demultiplexing sample %i out of %i" % (i+1, len(self.samples))
-            pool = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
-            s.pair.create()
-            barcode = SingleBarcode(s.info['custom_barcode'])
-            for f,r in tqdm(pool.pair.parse_primers(s.primers, 2)):
-                if f.fwd_start_pos:
-                    start_pos, end_pos = barcode.search(f.read)
-                    if end_pos == f.fwd_start_pos:
-                        s.pair.add(f.read, r.read)
-            s.pair.close()
+        prll_map(self.extract_sample, self.samples, cpus)
+
+    def extract_sample(self, s, verbose=True):
+        print "Demultiplexing sample '%s'" % s
+        pool = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
+        s.pair.create()
+        barcode = SingleBarcode(s.info['custom_barcode'])
+        for f,r in tqdm(pool.pair.parse_primers(s.primers, 2)):
+            if f.fwd_start_pos:
+                start_pos, end_pos = barcode.search(f.read)
+                if end_pos == f.fwd_start_pos:
+                    s.pair.add(f.read, r.read)
+        s.pair.close()
 
     @property_cached
     def results(self):
@@ -119,10 +122,10 @@ class Pool(object):
         # Check #
         assert self.pair.fwd.first.id == self.pair.rev.first.id
 
-    def guess_barcodes(self, stop_at=4000):
+    def guess_barcodes(self, stop_at=10000):
         """Usefull when barcodes seem wrong within a multiplexed pool"""
         barcodes = Counter()
-        for i, pair in enumerate(tqdm(self.pair.parse_primers(self.primers, 2), total=stop_at)):
+        for i, pair in enumerate(self.pair.parse_primers(self.primers, 2)):
             fwd = pair[0]
             if fwd.fwd_start_pos:
                 barcode = fwd.read.seq[fwd.fwd_start_pos-5:fwd.fwd_start_pos]

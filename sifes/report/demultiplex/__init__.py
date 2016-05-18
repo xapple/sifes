@@ -44,7 +44,7 @@ class MultiplexReport(Document):
         self.make_latex(params={'title': 'Demultiplexing report'})
         self.make_pdf(safe=True, include_src=True)
         # Copy to reports directory #
-        self.copy_base.directory.create()
+        self.copy_base.directory.create(safe=True)
         shutil.copy(self.output_path, self.copy_base)
         # Return #
         return self.output_path
@@ -95,7 +95,7 @@ class MultiplexTemplate(ReportTemplate):
     def count_loss(self):
         reads_lost = sum(map(len, self.plexed.samples)) - sum(map(len, self.samples))
         percent = 100.0 * reads_lost / sum(map(len, self.plexed.samples))
-        return "%s (%.1f%%)" % (reads_lost, percent)
+        return "%s (%.1f%%)" % (split_thousands(reads_lost), percent)
 
     def output_table(self):
         # The columns #
@@ -110,3 +110,12 @@ class MultiplexTemplate(ReportTemplate):
         table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
         # Add caption #
         return table + "\n\n   : Summary information for all final samples."
+
+    ############## Predictions ##############
+    def predictions_table(self):
+        output = ""
+        for i, p in enumerate(self.pools):
+            barcodes = p.guess_barcodes().most_common(len(p.samples)+2)
+            output += "\n%i. %s:\n\n" % (i+1, p.name)
+            output += "*\n".join("%s: %s" %(k, v) for k,v in barcodes)
+        return output

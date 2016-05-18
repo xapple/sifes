@@ -102,6 +102,10 @@ Don't forget to rehash the binary links at the end:
 
     $ pyenv rehash
 
+Special libraries:
+
+    $ pip install git+https://github.com/uqfoundation/pathos.git@master
+    
 #### Step 5: Check you have all the required executables
 `sifes` will search for several different binaries as it processes your data. Please check all of these are available in your `$PATH`:
 
