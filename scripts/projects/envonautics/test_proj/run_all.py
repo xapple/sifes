@@ -4,6 +4,11 @@
 """
 A script to run all the procedure on the test project.
 The code is: test_proj
+
+To first generate the JSON files:
+
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/envonautics/test_proj/metadata.xlsx
+
 """
 
 # Built-in modules #

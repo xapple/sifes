@@ -1,7 +1,8 @@
 # Built-in modules #
+import os, multiprocessing
 
 # Internal modules #
-import os, multiprocessing
+import sifes
 
 # First party modules #
 from plumbing.autopaths import AutoPaths
@@ -12,62 +13,58 @@ from fasta import FASTA
 # Third party modules #
 import sh
 
-###############################################################################
-class MothurJoin(object):
-    """A wrapper to mothur make contigs"""
+# Constants #
+silva_path    = sifes.home + 'databases/silva_mothur_v123/silva.nr_v123.fasta'
+taxonomy_path = sifes.home + 'databases/silva_mothur_v123/silva.nr_v123.tax'
 
-    short_name = 'mothur_join'
+###############################################################################
+class MothurClassify(object):
+    """A wrapper to mothur classify"""
+
+    short_name = 'mothur_classify'
     long_name  = 'Mothur Version 1.37.4'
     executable = 'mothur'
+    doc        = 'http://www.mothur.org/wiki/Classify.seqs'
 
     all_paths = """
-    /fwd.fastq
-    /rev.fastq
     /stdout.txt
     /stderr.txt
-    /assembled.fasta"""
-   #/fwd.trim.contigs.fasta
-   #/fwd.contigs.report
-   #/fwd.scrap.contigs.fasta
+    /centers.fasta
+    /assignment.txt
+    """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
-    def __nonzero__(self): return bool(self.p.assembled)
+    def __nonzero__(self): return bool(self.p.assignment)
 
-    def __init__(self, pair, result_dir, sample_name):
-        # Save attributes #
-        self.pair        = pair
-        self.result_dir  = result_dir
-        self.sample_name = sample_name
+    def __init__(self, centers, database, result_dir):
+        # Attributes #
+        self.centers    = centers
+        self.database   = database
+        self.result_dir = result_dir
         # Auto paths #
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self, cpus=None):
-        """The make contigs command.
-        http://www.mothur.org/wiki/Make.contigs"""
         # Message #
-        print "Joining sample '%s'" % self.sample_name
+        print "Classifying file '%s'" % self.centers
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
-        # Check input #
-        assert hasattr(self.pair, 'fwd') and hasattr(self.pair, 'rev')
         # Prepare #
-        self.p.fwd.link_from(self.pair.fwd)
-        self.p.rev.link_from(self.pair.rev)
+        self.p.centers.link_from(self.centers)
         current_dir = os.getcwd()
         os.chdir(self.base_dir)
         # Run #
-        command = "#make.contigs(ffastq=%s, rfastq=%s, processors=%s);"
-        sh.mothur(command % (self.p.fwd, self.p.rev, cpus),
+        command = "#classify.seqs(fasta=%s, template=%s, taxonomy=%s, processors=%s);"
+        sh.mothur(command % (self.p.centers, silva_path, taxonomy_path, cpus),
                   _out=self.p.stdout.path,_err=self.p.stderr.path)
         # Check output #
         if "ERROR" in self.p.stdout.contents:
-            raise Exception("Mothur make contigs didn't run correctly.")
+            raise Exception("Mothur classify didn't run correctly.")
         # Back #
         os.chdir(current_dir)
         # Check #
-        self.p.assembled.link_from(self.results.joined)
-        assert self.results.joined
+        pass
 
     def clean(self):
         self.p.stderr.remove()
@@ -75,13 +72,13 @@ class MothurJoin(object):
 
     @property_cached
     def results(self):
-        results = MothurJoinResults(self)
-        message = "You can't access results from MothurJoin before running the algorithm."
+        results = MothurClassifyResults(self)
+        message = "You can't access results from MothurClassify before running the algorithm."
         if not results: raise Exception(message)
         return results
 
 ###############################################################################
-class MothurJoinResults(object):
+class MothurClassifyResults(object):
 
     def __nonzero__(self): return bool(self.p.stdout)
     def __len__(self):     return len(self.p.assembled)

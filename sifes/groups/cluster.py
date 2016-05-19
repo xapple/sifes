@@ -2,11 +2,12 @@
 
 # Internal modules #
 import sifes
-from sifes.report.clusters  import ClusterReport
-from sifes.groups.aggregate import Aggregate
-from sifes.otu.uparse       import Uparse
-from sifes.taxonomy.crest   import Crest
-from sifes.taxonomy.rdp     import Rdp
+from sifes.report.clusters          import ClusterReport
+from sifes.groups.aggregate         import Aggregate
+from sifes.otu.uparse               import Uparse
+from sifes.taxonomy.crest           import Crest
+from sifes.taxonomy.rdp             import Rdp
+from sifes.taxonomy.mothur_classify import MothurClassify
 
 # Composition #
 #from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
@@ -75,5 +76,6 @@ class Cluster(Aggregate):
     @property_cached
     def taxonomy(self):
         """Will predict the taxonomy."""
+        return MothurClassify(self.otus.results.centers, 'internal', self.p.taxonomy_dir)
         return Rdp(self.otus.results.centers,   'internal', self.p.taxonomy_dir)
         return Crest(self.otus.results.centers, 'silva123', self.p.taxonomy_dir)

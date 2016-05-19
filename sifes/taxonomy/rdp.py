@@ -32,7 +32,7 @@ class Rdp(Taxonomy):
     def __nonzero__(self): return bool(self.p.assignments)
 
     def __init__(self, centers, database, result_dir):
-        # Parent #
+        # Attributes #
         self.centers    = centers
         self.database   = database
         self.result_dir = result_dir
