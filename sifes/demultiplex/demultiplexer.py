@@ -122,7 +122,7 @@ class Pool(object):
         # Check #
         assert self.pair.fwd.first.id == self.pair.rev.first.id
 
-    def guess_barcodes(self, stop_at=10000):
+    def guess_barcodes(self, stop_at=30000):
         """Usefull when barcodes seem wrong within a multiplexed pool"""
         barcodes = Counter()
         for i, pair in enumerate(self.pair.parse_primers(self.primers, 2)):

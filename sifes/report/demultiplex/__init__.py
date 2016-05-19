@@ -64,8 +64,8 @@ class MultiplexTemplate(ReportTemplate):
         self.report, self.parent = report, report
         self.plexer  = self.parent.plexer
         self.plexed  = self.parent.plexed
-        self.pools   = self.parent.parent.pools
-        self.samples = self.parent.parent.samples
+        self.pools   = self.parent.plexer.pools
+        self.samples = self.parent.plexer.samples
 
     ############## General information ##############
     def plex_short_name(self): return self.plexed.short_name
@@ -78,10 +78,11 @@ class MultiplexTemplate(ReportTemplate):
     def input_table(self):
         # The columns #
         info = OrderedDict((
-            ('Name',  lambda p: "**" + p.name + "**"),
-            ('Files', lambda p: "`" + str(len(p.inputs)) + "`"),
-            ('Reads', lambda p: split_thousands(p.pair.count)),
-            ('Loss',  lambda p: "%.1f%%" % (100.0 * (1 - sum(map(len, p.samples)) / p.pair.count))),
+            ('Name',    lambda p: "**" + p.name + "**"),
+            ('Files',   lambda p: "`" + str(len(p.inputs)) + "`"),
+            ('Samples', lambda p: "`" + str(len(p.samples)) + "`"),
+            ('Reads',   lambda p: split_thousands(p.pair.count)),
+            ('Loss',    lambda p: "%.1f%%" % (100.0 * (1 - sum(map(len, p.samples)) / p.pair.count))),
         ))
         # The table #
         table = [[i+1] + [f(self.pools[i]) for f in info.values()] for i in range(len(self.pools))]
@@ -116,6 +117,6 @@ class MultiplexTemplate(ReportTemplate):
         output = ""
         for i, p in enumerate(self.pools):
             barcodes = p.guess_barcodes().most_common(len(p.samples)+2)
-            output += "\n%i. %s:\n\n" % (i+1, p.name)
-            output += "*\n".join("%s: %s" %(k, v) for k,v in barcodes)
+            output += "\n\n### %s:\n\n" % p.name
+            for k,v in barcodes: output += "* %s: %s\n" % (k, v)
         return output

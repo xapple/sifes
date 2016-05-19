@@ -52,6 +52,10 @@ def load(json_dir_path, raw_files_must_exist=True):
     json_paths  = glob.glob(json_dir_path + '*.json')
     if not json_paths: raise Exception("Dit not find any json files at '%s'" % json_dir_path)
     new_samples = [Sample(j, raw_files_must_exist) for j in json_paths]
+    # Check names are unique #
+    names = [s.short_name for s in self.samples]
+    assert len(names) == len(set(names))
+    # Add them
     samples.extend(new_samples)
 
     # Compose into projects #

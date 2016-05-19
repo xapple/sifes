@@ -17,6 +17,12 @@ import sh
 ###############################################################################
 class Crest(Taxonomy):
 
+    short_name = 'crest'
+    long_name  = 'LCAClassifier/CREST version 2.0.4'
+    executable = 'classify'
+    url        = "https://github.com/lanzen/CREST"
+    article    = "http://dx.plos.org/10.1371/journal.pone.0049334"
+
     all_paths = """
     /otu_table.csv
     /otu_table_norm.csv
@@ -38,12 +44,6 @@ class Crest(Taxonomy):
     /crest/stdout.txt
     /crest/stderr.txt
     """
-
-    short_name = 'crest'
-    long_name  = 'LCAClassifier/CREST version 2.0.4'
-    executable = 'classify'
-    url        = "https://github.com/lanzen/CREST"
-    article    = "http://dx.plos.org/10.1371/journal.pone.0049334"
 
     def __nonzero__(self): return bool(self.p.assignments)
 
@@ -85,7 +85,7 @@ class Crest(Taxonomy):
                     '-o', self.base_dir + 'crest/',
                     '-d', self.database,
                     self.p.db_hits,
-                    out=self.p.crest_stdout, _err=self.p.crest_stderr)
+                    out=self.p.crest_stdout.path, _err=self.p.crest_stderr.path)
         # Move #
         shutil.move(self.p.db_hits.prefix_path + '_Composition.tsv', self.p.crest_composition)
         shutil.move(self.p.db_hits.prefix_path + '_Tree.txt', self.p.crest_tree)

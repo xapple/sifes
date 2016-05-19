@@ -6,6 +6,7 @@ from sifes.report.clusters  import ClusterReport
 from sifes.groups.aggregate import Aggregate
 from sifes.otu.uparse       import Uparse
 from sifes.taxonomy.crest   import Crest
+from sifes.taxonomy.rdp     import Rdp
 
 # Composition #
 #from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
@@ -15,6 +16,7 @@ from sifes.taxonomy.crest   import Crest
 
 # First party modules #
 from fasta import FASTA
+from plumbing.cache import property_cached
 
 # Third party modules #
 from shell_command import shell_output
@@ -42,10 +44,6 @@ class Cluster(Aggregate):
             self.project = self.first.project
         # FASTA #
         self.reads = FASTA(self.p.all_reads)
-        # OTU picking #
-        self.otus = Uparse(self.reads, self.p.otus_dir)
-        # Taxonomy #
-        self.taxonomy = Crest(self.otus.results.centers, 'silva123', self.p.taxonomy_dir)
         # Composition tables #
         #self.comp_phyla  = CompositionPhyla(self,  self.p.comp_phyla)
         #self.comp_order  = CompositionOrder(self,  self.p.comp_order)
@@ -68,3 +66,14 @@ class Cluster(Aggregate):
         shell_output('cat %s > %s' % (' '.join(paths), self.reads))
         assert sum([len(s.filter.results.clean) for s in self]) == self.reads.count
         return self.reads
+
+    @property_cached
+    def otus(self):
+        """Will put cluster the sequences at 97%."""
+        return Uparse(self.reads, self.p.otus_dir)
+
+    @property_cached
+    def taxonomy(self):
+        """Will predict the taxonomy."""
+        return Rdp(self.otus.results.centers,   'internal', self.p.taxonomy_dir)
+        return Crest(self.otus.results.centers, 'silva123', self.p.taxonomy_dir)

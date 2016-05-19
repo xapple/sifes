@@ -5,11 +5,6 @@
         "function": "Senior forskningsledare",
         "name":     "Karsten Pedersen",
         "email":    "kap@micans.se"
-    },
-    "contact_two": {
-        "function": "Project Manager",
-        "name":     "Johanna Edlund",
-        "email":    "jed@micans.se"
     }
 },
 
@@ -21,15 +16,15 @@
 "fwd_filename":         "fwd.fastq.gz",
 "rev_filename":         "rev.fastq.gz",
 
-"custom_barcode":               "GCTAC",
-"multiplexed_in":            "micans_3_6_9_34697670",
-"pool_barcode":               "TGGTCA",
+"custom_barcode":       "GCTAC",
+"multiplexed_in":       "micans_3_6_9_34697670",
+"pool_barcode":         "TGGTCA",
 
 
 
 
 
-"organization":               "micans",
+"organization":         "micans",
 "prefix":               "~/SIFES/raw/projects/micans/",
 "directory":            "micans_v6/experiment_1/",
 "suffix":               "150001/",
