@@ -2,9 +2,15 @@
 
 "contacts": {
     "contact_one": {
-        "function": ,
-        "name":     ,
-        "email":    
+        "function": "Senior forskningsledare",
+        "name":     "Karsten Pedersen",
+        "email":    "kap@micans.se"
+    }
+    ,
+    "contact_two": {
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
     }
 },
 
@@ -29,6 +35,8 @@
 "directory":            "micans_v6/experiment_1/",
 "suffix":               "mysterious/",
 
+"project_long_name":    "All mysterious samples",
+"sample_long_name":     "Unknown barcode "TCAGC" of last pool",
 
 
 
@@ -44,20 +52,24 @@
 
 
 
+"primers": {
+        "name":    "VAMPS Illumina V6",
+        "sense":   "5' to 3'",
+        "forward": {"name": "967F", "sequence": "MNAMSCGMNRAACCTYANC"},
+        "reverse": {"name": "1046R", "sequence": "CGACRRCCATGCANCACCT"}
+},
 
 
 
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "NextSeq 500",
 
-
-
-
-
-
-
-
-
-
-
+"forward_read_length":  "111",
+"reverse_read_length":  "111",
 
 
 
