@@ -5,7 +5,8 @@
         "function": "Senior forskningsledare",
         "name":     "Karsten Pedersen",
         "email":    "kap@micans.se"
-    },
+    }
+    ,
     "contact_two": {
         "function": "Project Manager",
         "name":     "Johanna Edlund",
@@ -29,7 +30,7 @@
 "header_rev_comp":               "ACATCG",
 "multiplex_group":               "micans_1_1_3_34678799",
 
-"organization":               "micans",
+"organization":         "micans",
 "prefix":               "~/SIFES/raw/projects/micans/",
 "directory":            "micans_v6/experiment_1/plexed/",
 "suffix":               "1_1_3-34678799/",

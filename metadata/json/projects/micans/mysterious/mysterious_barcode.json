@@ -1,0 +1,79 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": ,
+        "name":     ,
+        "email":    
+    }
+},
+
+"project_short_name":   "mysterious",
+"sample_short_name":    "mysterious_barcode",
+"sample_num":           "33",
+"used":                 "yes",
+
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+"custom_barcode":       "TCAGC",
+"multiplexed_in":       "micans_9_31_32_34680793",
+"pool_barcode":         "GTAGCC",
+
+
+
+
+
+"organization":         "micans",
+"prefix":               "~/SIFES/raw/projects/micans/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "mysterious/",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

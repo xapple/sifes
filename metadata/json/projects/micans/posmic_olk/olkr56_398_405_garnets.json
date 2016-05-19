@@ -14,36 +14,36 @@
     }
 },
 
-"project_short_name":   "micans_v6_exp1_plexed",
-"sample_short_name":    "run2_lane1",
-"sample_num":           "5",
+"project_short_name":   "posmic_olk",
+"sample_short_name":    "olkr56_398_405_garnets",
+"sample_num":           "8",
 "used":                 "yes",
 
-"fwd_filename":         "2-4-5_S2_L001_R1_001.fastq.gz",
-"rev_filename":         "2-4-5_S2_L001_R2_001.fastq.gz",
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+"custom_barcode":       "ACGCA",
+"multiplexed_in":       "micans_3_6_9_34697670",
+"pool_barcode":         "TGGTCA",
 
 
 
 
-
-"header_barcode":               "TTAGGC",
-"header_rev_comp":               "GCCTAA",
-"multiplex_group":               "micans_2_4_5_34692717",
 
 "organization":         "micans",
 "prefix":               "~/SIFES/raw/projects/micans/",
-"directory":            "micans_v6/experiment_1/plexed/",
-"suffix":               "2_4_5-34692717/",
+"directory":            "micans_v6/experiment_1/",
+"suffix":               "150060_garnets/",
 
-"project_long_name":    "Multiplexed samples recieved from BaseSpace by Micans on 15th of May 2016 (Experiment 1)",
+"project_long_name":    "POSMIC (Olkiluoto)",
+"sample_long_name":     "OLKR56.398.405mgarnets (150060_garnets)",
 
 
 
 
-"fwd_md5":              "e673a80262682938b903dd4d7ee1c3e8",
-"rev_md5":              "5536b5772c860b76e119dda9708fc1bf",
 
-"header_barcode":          "TTAGGC",
+
+
 
 
 

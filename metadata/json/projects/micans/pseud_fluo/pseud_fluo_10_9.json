@@ -6,6 +6,12 @@
         "name":     "Karsten Pedersen",
         "email":    "kap@micans.se"
     }
+    ,
+    "contact_two": {
+        "function": "Project Manager",
+        "name":     "Johanna Edlund",
+        "email":    "jed@micans.se"
+    }
 },
 
 "project_short_name":   "pseud_fluo",

@@ -58,7 +58,8 @@ for i, row in df.iterrows():
     second_contact = {"contact_two_function": content['contact_two_function'],
                       "contact_two_name":     content['contact_two_name'],
                       "contact_two_email":    content['contact_two_email'],
-                     } if content.get('contact_two_name') else None
+                     } if content.get('contact_two_name') else False
+    content['second_contact'] = second_contact
 
     # Figure out the path #
     path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
