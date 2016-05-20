@@ -1,4 +1,5 @@
 # Built-in modules #
+import warnings
 from collections import Counter
 
 # Internal modules #
@@ -40,7 +41,7 @@ class SeqFilter(object):
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.input)
-    def __nonzero__(self): return bool(self.length_fasta)
+    def __nonzero__(self): return bool(self.renamed_fasta)
 
     def __init__(self, input, result_dir, sample_name, primers):
         # Save attributes #
@@ -68,6 +69,11 @@ class SeqFilter(object):
         self.len_filter()
         # Rename wit number #
         self.length_fasta.rename_with_num(self.sample_name + ':', self.renamed_fasta)
+        # Check #
+        if len(self.length_fasta) == 0:
+            warnings.warn("No results left after filtering the sample '%s'" % self.sample_name)
+        # Return #
+        return self.results.clean
 
     # Primers #
     def primer_filter(self):
@@ -96,9 +102,9 @@ class SeqFilter(object):
         def good_len_iterator(reads):
             for r in reads:
                 if self.min_read_length > 0:
-                    if len(r) < self.min_read_length: continue
+                    if len(r.seq) < self.min_read_length: continue
                 if self.max_read_length > 0:
-                    if len(r) > self.max_read_length: continue
+                    if len(r.seq) > self.max_read_length: continue
                 yield r
         self.length_fasta.write(good_len_iterator(self.n_base_fasta))
 
@@ -123,7 +129,7 @@ class SeqFilter(object):
 ###############################################################################
 class SeqFilterResults(object):
 
-    def __nonzero__(self): return bool(self.length_fasta)
+    def __nonzero__(self): return bool(self.renamed_fasta)
 
     def __init__(self, parent):
         self.parent        = parent

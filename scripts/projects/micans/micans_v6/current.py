@@ -14,4 +14,4 @@ import sifes
 from tqdm import tqdm
 
 ###############################################################################
-execfile("~/deploy/sifes/scripts/projects/micans/load.py")
+execfile("~/deploy/sifes/scripts/projects/micans/micans_v6/load.py")

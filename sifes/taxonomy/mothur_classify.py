@@ -8,7 +8,6 @@ import sifes
 from plumbing.autopaths import AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.autopaths import FilePath
-from fasta import FASTA
 
 # Third party modules #
 import sh
@@ -25,16 +24,18 @@ class MothurClassify(object):
     long_name  = 'Mothur Version 1.37.4'
     executable = 'mothur'
     doc        = 'http://www.mothur.org/wiki/Classify.seqs'
+    database   = 'the non-redundant, no-gaps Silva v123 database'
 
     all_paths = """
     /stdout.txt
     /stderr.txt
     /centers.fasta
-    /assignment.txt
+    /assignments.txt
+    /summary.txt
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
-    def __nonzero__(self): return bool(self.p.assignment)
+    def __nonzero__(self): return bool(self.p.assignments)
 
     def __init__(self, centers, database, result_dir):
         # Attributes #
@@ -55,7 +56,7 @@ class MothurClassify(object):
         current_dir = os.getcwd()
         os.chdir(self.base_dir)
         # Run #
-        command = "#classify.seqs(fasta=%s, template=%s, taxonomy=%s, processors=%s);"
+        command = "#classify.seqs(fasta=%s, template=%s, taxonomy=%s, processors=%s, probs=F);"
         sh.mothur(command % (self.p.centers, silva_path, taxonomy_path, cpus),
                   _out=self.p.stdout.path,_err=self.p.stderr.path)
         # Check output #
@@ -63,6 +64,12 @@ class MothurClassify(object):
             raise Exception("Mothur classify didn't run correctly.")
         # Back #
         os.chdir(current_dir)
+        # Outputs #
+        self.assignments = FilePath(self.base_dir + "centers.nr_v123.wang.taxonomy")
+        self.summary     = FilePath(self.base_dir + "centers.nr_v123.wang.tax.summary")
+        # Move #
+        self.assignments.move_to(self.p.assignments)
+        self.summary.move_to(self.p.summary)
         # Check #
         pass
 
@@ -81,15 +88,26 @@ class MothurClassify(object):
 class MothurClassifyResults(object):
 
     def __nonzero__(self): return bool(self.p.stdout)
-    def __len__(self):     return len(self.p.assembled)
+    def __len__(self):     return len(self.p.assignments)
 
-    def __init__(self, parent):
+    def __init__(self, mothur):
         # Attributes #
-        self.parent      = parent
-        self.base_dir    = parent.base_dir
-        self.p           = parent.p
-        self.joined      = FASTA(   self.base_dir + 'fwd.trim.contigs.fasta')
-        self.report      = FilePath(self.base_dir + 'fwd.contigs.report')
-        self.scrap       = FASTA(   self.base_dir + 'fwd.scrap.contigs.fasta')
-        self.outputs     = (self.joined, self.report, self.scrap)
-        self.assembled   = FASTA(self.p.assembled)
+        self.mothur = mothur
+        self.p      = mothur.p
+
+    @property_cached
+    def assignments(self):
+        result = {}
+        with open(self.p.assignments, 'r') as handle:
+            for line in handle:
+                otu_name, species = line.split('\t')
+                result[otu_name]  = tuple(species.strip('\n').split(';'))[:8]
+        return result
+
+    def at_level(self, level):
+        return dict((k,v[level]) for k,v in self.assignments.items() if len(v) > level)
+
+    @property
+    def count_assigned(self):
+        """How many got a position"""
+        return len([s for s in self.assignments.values() if s != ('No hits',)])

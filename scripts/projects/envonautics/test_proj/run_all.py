@@ -40,8 +40,9 @@ for s in tqdm(test_proj): s.filter.run()
 
 # Cluster #
 test_proj.cluster.combine_reads()
-test_proj.cluster.otus.run()
-test_proj.cluster.taxonomy.run(cpus=8)
+test_proj.cluster.centering.run()
+test_proj.cluster.taxonomy.run()
+test_proj.cluster.otu_table.run()
 
 # Make report #
 for s in tqdm(test_proj): s.report.generate()

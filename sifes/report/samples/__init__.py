@@ -108,14 +108,14 @@ class SampleTemplate(ReportTemplate):
     def joiner_version(self): self.sample.joiner.long_name
 
     def assembled_count(self):
-        return self.values_with_percent(self.sample.joining.results.assembled)
+        return self.values_with_percent(self.sample.joiner.results.assembled)
     def unassembled_count(self):
-        return self.values_with_percent(self.sample.joining.results.unassembled)
+        return self.values_with_percent(self.sample.joiner.results.unassembled)
 
-    def assembly_len_dist(self):
+    def joined_len_dist(self):
         caption = "Distribution of sequence lengths after joining"
-        path    = self.sample.joining.results.assembled.graphs.length_dist()
-        label   = "assembly_len_dist"
+        path    = self.sample.joiner.results.assembled.graphs.length_dist()
+        label   = "joined_len_dist"
         return str(ScaledFigure(path, caption, label))
 
     ############## Filtering ##############
@@ -145,7 +145,7 @@ class SampleTemplate(ReportTemplate):
         return split_thousands(len(self.sample.filter.results.length_fasta))
 
     def percent_remaining(self):
-        return "%.1f%%" % ((len(self.sample.filter.results.length_fasta)/len(self.sample))*100)
+        return "%.1f%%" % ((len(self.sample.filter.results.clean)/len(self.sample))*100)
 
     ############## Taxonomy ##############
     def abundant_table(self):
@@ -156,7 +156,7 @@ class SampleTemplate(ReportTemplate):
         frame['Rank']  = range(1, len(row)+1)
         frame['Clade'] = row.index
         frame['Reads'] = [split_thousands(r) for r in row.values]
-        frame['OTUs'] = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
+        frame['OTUs']  = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
         frame = frame[0:20]
         # Make it as text #
         table = tabulate(OrderedDict(frame), headers="keys", numalign="right", tablefmt="pipe")
@@ -170,7 +170,7 @@ class SampleTemplate(ReportTemplate):
                   'ace_curve', 'shannon_curve', 'simpson_curve')
         return {p:getattr(self, p) for p in params}
 
-    def total_otu_sum(self): return split_thousands(sum(self.sample.counts))
+    def total_otu_sum(self):   return split_thousands(sum(self.sample.counts))
     def total_otu_count(self): return split_thousands(len(self.sample.counts))
     def chao1_curve(self):
         caption = "Chao1 rarefaction curve"

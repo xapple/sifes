@@ -42,7 +42,7 @@ class MothurJoin(object):
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
-    def run(self, cpus=None):
+    def run(self, cpus=1):
         """The make contigs command.
         http://www.mothur.org/wiki/Make.contigs"""
         # Message #
@@ -68,10 +68,8 @@ class MothurJoin(object):
         # Check #
         self.p.assembled.link_from(self.results.joined)
         assert self.results.joined
-
-    def clean(self):
-        self.p.stderr.remove()
-        self.p.assembled.remove()
+        # Return #
+        return self.results.assembled
 
     @property_cached
     def results(self):

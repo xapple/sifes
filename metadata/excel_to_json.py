@@ -49,10 +49,13 @@ df = df.drop(0)
 for i, row in df.iterrows():
 
     # Using the column names, make a dict with the ascii names as keys instead #
-    content = dict((corr[x], '"'+str(row[x])+'"') for x in row.index if x in corr and row[x] is not numpy.nan)
+    content = dict((corr[x], row[x]) for x in row.index if x in corr and row[x] is not numpy.nan)
 
     # Skip the case where the sample is not used #
-    if content.get('used') == '"no"': continue
+    if content.get('used') == 'no': continue
+
+    # Double quotes are used in JSON, replace them, and add quotes around #
+    for k,v in content.items(): content[k] = '"' + str(v).replace('"', "'") + '"'
 
     # Special case for missing second contact #
     second_contact = {"contact_two_function": content['contact_two_function'],

@@ -50,16 +50,19 @@ for s in samples: print s.pair.rev.md5
 for s in samples: print len(s.pair.fwd.first_read)
 
 # Join reads #
-for s in tqdm(samples): s.joiner.run(cpus=1)
 prll_map(lambda s: s.joiner.run(cpus=1), samples)
+for s in samples: print s, s.joiner.results.assembled.count
 
 # Filter #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 100
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 160
-for s in tqdm(samples): s.filter.run()
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 60
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 140
 prll_map(lambda s: s.filter.run(), samples)
+for s in samples: print s.short_name, s.filter.primers_fasta.count
+for s in samples: print s.short_name, s.filter.n_base_fasta.count
+for s in samples: print s.short_name, s.filter.length_fasta.count
+for s in samples: print s.short_name, s.filter.renamed_fasta.count
 
 # Cluster #
 for proj in projects:

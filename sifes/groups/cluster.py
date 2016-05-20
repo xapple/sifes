@@ -4,10 +4,11 @@
 import sifes
 from sifes.report.clusters          import ClusterReport
 from sifes.groups.aggregate         import Aggregate
-from sifes.otu.uparse               import Uparse
+from sifes.centering.uparse         import Uparse
 from sifes.taxonomy.crest           import Crest
 from sifes.taxonomy.rdp             import Rdp
 from sifes.taxonomy.mothur_classify import MothurClassify
+from sifes.otus.otu_table           import OtuTable, TaxaTable
 
 # Composition #
 #from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
@@ -29,7 +30,9 @@ class Cluster(Aggregate):
     all_paths = """
     /logs/
     /reads/all_reads.fasta
-    /otus/
+    /centers/
+    /otu_table/
+    /taxa_table/
     /taxonomy/
     /report/report.pdf
     """
@@ -61,7 +64,7 @@ class Cluster(Aggregate):
         self.report = ClusterReport(self)
 
     def combine_reads(self):
-        """This is the first function you should call. It will combine all the
+        """This is the first method you should call. It will combine all the
         reads of all the samples of this cluster into one big FASTA file."""
         paths = [sample.filter.results.clean for sample in self]
         shell_output('cat %s > %s' % (' '.join(paths), self.reads))
@@ -69,13 +72,23 @@ class Cluster(Aggregate):
         return self.reads
 
     @property_cached
-    def otus(self):
-        """Will put cluster the sequences at 97%."""
-        return Uparse(self.reads, self.p.otus_dir)
+    def centering(self):
+        """Will cluster the sequences at 97% and pick centers."""
+        return Uparse(self.reads, self.p.centers_dir)
 
     @property_cached
     def taxonomy(self):
         """Will predict the taxonomy."""
-        return MothurClassify(self.otus.results.centers, 'internal', self.p.taxonomy_dir)
-        return Rdp(self.otus.results.centers,   'internal', self.p.taxonomy_dir)
-        return Crest(self.otus.results.centers, 'silva123', self.p.taxonomy_dir)
+        return MothurClassify(self.centering.results.centers, 'silva123', self.p.taxonomy_dir)
+        return Rdp(           self.centering.results.centers, 'internal', self.p.taxonomy_dir)
+        return Crest(         self.centering.results.centers, 'silva123', self.p.taxonomy_dir)
+
+    @property_cached
+    def otu_table(self):
+        """Will produce the OTU table."""
+        return OtuTable(self.centering, self.taxonomy, self.p.otu_table_dir)
+
+    @property_cached
+    def taxa_table(self):
+        """Will produce the taxonomy-based table."""
+        return TaxaTable(self.centering, self.taxonomy, self.p.taxa_table_dir)

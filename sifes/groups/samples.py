@@ -52,7 +52,7 @@ class Sample(object):
         self.num                = self.info.get('sample_num')
         self.short_name         = self.info.get('sample_short_name')
         self.long_name          = self.info.get('sample_long_name')
-        self.num                = self.info.get('sample_num')
+        self.num                = int(self.info.get('sample_num'))
         # Project #
         self.project_short_name = self.info.get('project_short_name')
         self.project_long_name  = self.info.get('project_long_name')

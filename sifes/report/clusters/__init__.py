@@ -57,11 +57,13 @@ class ClusterTemplate(ReportTemplate):
         self.cluster = self.parent.cluster
         self.project = self.cluster.project
         # Convenience #
-        self.otus = self.cluster.otus
-        self.taxonomy = self.otus.taxonomy
+        self.centering  = self.cluster.centering
+        self.taxonomy   = self.cluster.taxonomy
+        self.otu_table  = self.cluster.otu_table
+        self.taxa_table = self.cluster.taxa_table
 
     # General information #
-    def cluster_name(self): return self.cluster.name
+    def cluster_name(self):  return self.cluster.name
     def count_samples(self): return len(self.cluster)
     def project_sentence(self):
         if self.cluster.project is None: return ""
@@ -72,11 +74,11 @@ class ClusterTemplate(ReportTemplate):
     def sample_table(self):
         # The columns #
         info = OrderedDict((
-            ('Name', lambda s: "**" + s.short_name + "**"),
-            ('Reference', lambda s: "`" + s.name + "`"),
+            ('Name',        lambda s: "**" + s.short_name + "**"),
+            ('Reference',   lambda s: "`" + s.name + "`"),
             ('Description', lambda s: s.long_name),
-            ('Reads lost', lambda s: "%.1f%%" % (100-((len(s.fasta)/len(s))*100))),
-            ('Reads left', lambda s: split_thousands(len(s.fasta))),
+            ('Reads lost',  lambda s: "%.1f%%" % (100 - ((len(s.filter.results.clean) / len(s))*100))),
+            ('Reads left',  lambda s: split_thousands(len(s.filter.results.clean))),
         ))
         # The table #
         table = [[i+1] + [f(self.cluster.samples[i]) for f in info.values()] for i in range(len(self.cluster))]
@@ -85,54 +87,51 @@ class ClusterTemplate(ReportTemplate):
         # Add caption #
         return table + "\n\n   : Summary information for all samples."
 
-    # Process info #
-    def results_directory(self): return ssh_header + self.cluster.base_dir
-
     # Input data #
     def count_sequences(self): return split_thousands(len(self.cluster.reads))
     def input_length_dist(self):
         caption = "Distribution of sequence lengths at input"
-        path = self.cluster.reads.length_dist.path
+        path = self.cluster.reads.graphs.length_dist()
         label = "input_length_dist"
         return str(ScaledFigure(path, caption, label))
 
     # Clustering #
-    def clustering_citation(self): return "the %s method (%s)" % (self.otus.title, self.otus.version)
-    def clustering_publication(self): return self.otus.article
-    def clustering_threshold(self): return "%.1f%%" % self.otus.threshold
-    def otus_total(self): return split_thousands(len(self.otus.centers))
+    def clustering_citation(self):    return "the %s method (%s)" % (self.centering.long_name, self.centering.version)
+    def clustering_publication(self): return self.centering.article
+    def clustering_threshold(self):   return "%.1f%%" % self.centering.threshold
+    def otus_total(self):             return split_thousands(len(self.centering.results.centers))
 
     # Classification #
-    def classification_citation(self): return "the %s method (%s)" % (self.taxonomy.title, self.taxonomy.version)
-    def classification_publication(self): return self.taxonomy.article
-    def otus_classified(self): return split_thousands(self.taxonomy.count_assigned)
-    def unwanted_phyla(self): return andify(self.taxonomy.unwanted)
-    def otus_filtered(self): return split_thousands(len(self.taxonomy.centers))
+    def classify_citation(self):    return "the %s method (%s)" % (self.taxonomy.long_name, self.taxonomy.version)
+    def classify_database(self):    return self.taxonomy.database
+    def otus_classified(self):      return split_thousands(self.taxonomy.results.count_assigned)
+    def unwanted_phyla(self):       return andify(self.otu_table.unwanted)
+    def otus_filtered(self):        return split_thousands(len(self.otu_table.results.centers))
     def otu_sizes_graph(self):
         caption = "Distribution of OTU sizes"
-        path = self.cluster.otus.taxonomy.graphs[0].path
+        path = self.otu_table.results.graphs.otu_sizes_dist()
         label = "otu_sizes_graph"
         return str(ScaledFigure(path, caption, label))
 
-    # OTU table #
+    # OTU table graphs #
     def otu_sums_graph(self):
         caption = "Distribution of OTU presence per OTU"
-        path = self.cluster.otus.taxonomy.graphs[2].path
+        path = self.cluster.otus.taxonomy.graphs.otu_sums_graph()
         label = "otu_sums_graph"
         return str(ScaledFigure(path, caption, label))
     def sample_sums_graph(self):
         caption = "Distribution of OTU presence per sample"
-        path = self.cluster.otus.taxonomy.graphs[1].path
+        path = self.cluster.otus.taxonomy.graphs.sample_sums_graph()
         label = "sample_sums_graph"
         return str(ScaledFigure(path, caption, label))
     def cumulative_presence(self):
         caption = "Cumulative number of reads by OTU presence"
-        path = self.cluster.otus.taxonomy.graphs[4].path
+        path = self.cluster.otus.taxonomy.graphs.cumulative_presence()
         label = "cumulative_presence"
         return str(ScaledFigure(path, caption, label))
 
     # Taxa table #
-    def count_taxa(self): return len(self.cluster.otus.taxonomy.comp_tips)
+    def count_taxa(self): return len(self.taxa_table.results.otus.taxonomy.comp_tips)
 
     # Composition #
     def phyla_composition(self):
@@ -154,4 +153,7 @@ class ClusterTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     # Diversity #
+    pass
+
+    # Betadispertion #
     pass

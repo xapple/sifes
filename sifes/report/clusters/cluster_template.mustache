@@ -32,7 +32,7 @@ Processing
 
 Input data
 ----------
-Summing the reads from all the samples, we have {{count_sequences}} sequences to work on. Sequence quality information is disregarded from this point on. Before starting the analysis we can look at the length distribution pattern that these reads form in figure \ref{input_length_dist}.
+Summing the reads from all the samples, we have {{count_sequences}} sequences to work on. Before starting the analysis we can look at the length distribution pattern that these reads form in figure \ref{input_length_dist}.
 
 {{input_length_dist}}
 
@@ -40,7 +40,7 @@ Summing the reads from all the samples, we have {{count_sequences}} sequences to
 
 Clustering
 ----------
-Two sequences that diverge by no more than a few nucleotides are probably not produced by ecological diversity. They are most likely produced by errors along the laboratory method. So we put them together in one unit, called an OTU. On the other hand, a sequence that does not have any such similar-looking brothers is most likely the product of a recombination (chimera) and is discarded. This process is done using {{clustering_citation}}. The publication is available at:
+Two sequences that diverge by no more than a few nucleotides are probably not produced by ecological diversity. They are most likely produced by errors along the laboratory method and the sequencing. Therefor, we place them together in one unit, called an OTU. On the other hand, a sequence that does not have any such similar-looking brothers is most likely the product of a recombination (chimera) and is discarded. This process is done using {{clustering_citation}}. The publication is available at:
 
 > <{{clustering_publication}}>
 
@@ -50,9 +50,7 @@ The similarity threshold chosen is {{clustering_threshold}}. Exactly {{otus_tota
 
 Classification
 --------------
-Relying on databases of ribosomal genes such as Silva, we can classify each OTU and give it an approximative affiliation. This provides a taxonomic name to each OTU. This is done using {{classification_citation}}. The publication is available at:
-
-> <{{classification_publication}}>
+Relying on databases of ribosomal genes such as Silva, we can classify each OTU and give it an approximative affiliation. This provides a taxonomic name to each OTU. This is done using {{classify_citation}} and {{classify_database}}.
 
 Out of our {{otus_total}} OTUs, exactly {{otus_classified}} of them are assigned to a position somewhere in the tree of life (not necessary on a tip though).
 
@@ -64,7 +62,7 @@ At this point we are going to remove some OTUs. All those pertaining to any of t
 
 OTU table
 ---------
-Now we check which sample each sequence of each OTU was coming from and make a count table with OTUs as rows ({{otus_filtered}}) and samples as columns ({{count_samples}}). Each cell tells us how many sequences are pertaining to this OTU from this sample. This table is too big to be viewed directly here. However we can plot some of its properties to better understand how sparse it is as seen in figures \ref{otu_sums_graph}, \ref{sample_sums_graph} and \ref{cumulative_presence}:
+Now we can take our OTUs and pick them apart, producing a table with OTUs as rows ({{otus_filtered}}) and samples as columns ({{count_samples}}). Each cell tells us how many sequences are participating in the given OTU originating from the given sample. This table is too big to be viewed directly here. However we can plot some of its properties to better understand how sparse it is as seen in figures \ref{otu_sums_graph}, \ref{sample_sums_graph} and \ref{cumulative_presence}:
 
 {{otu_sums_graph}}
 

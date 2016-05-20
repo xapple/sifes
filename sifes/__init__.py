@@ -17,7 +17,7 @@ matplotlib.use('Agg', warn=False)
 self       = sys.modules[__name__]
 module_dir = os.path.dirname(self.__file__)
 
-# The module is a maybe git repository #
+# The module is maybe a git repository #
 from plumbing.git import GitRepo
 repos_dir = os.path.abspath(module_dir + '/../') + '/'
 git_repo  = GitRepo(repos_dir, empty=True)

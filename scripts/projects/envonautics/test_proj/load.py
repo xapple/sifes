@@ -16,3 +16,9 @@ import sifes
 ###############################################################################
 # Load multiplexed project #
 test_proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/test/")
+
+# Parameters #
+sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 1
+sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 70
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 400
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 560
