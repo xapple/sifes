@@ -2,8 +2,6 @@
 import os, shutil, multiprocessing
 
 # Internal modules #
-from sifes.taxonomy import Taxonomy
-from sifes.taxonomy import plots
 
 # First party modules #
 from plumbing.autopaths import AutoPaths
@@ -15,7 +13,7 @@ from plumbing.csv_tables import TSVTable
 import sh
 
 ###############################################################################
-class Crest(Taxonomy):
+class Crest(object):
 
     short_name = 'crest'
     long_name  = 'LCAClassifier/CREST version 2.0.4'

@@ -31,11 +31,11 @@ class AlphaDiversityGraph(Graph):
 
     @property
     def x(self):
-        return map(int, linspace(0, sum(self.parent.sample.counts), 600))
+        return map(int, linspace(0, sum(self.parent.otu_counts), 600))
 
     @property
     def y(self):
-        try: return [self.div_fn(subsample(self.parent.sample.counts, k)) for k in self.x]
+        try: return [self.div_fn(subsample(self.parent.otu_counts, k)) for k in self.x]
         except ValueError: return [0 for k in self.x]
 
     def plot(self, **kwargs):
@@ -71,7 +71,7 @@ class Ace(AlphaDiversityGraph):
 
     @property
     def x(self):
-        total = sum(self.parent.sample.counts)
+        total = sum(self.parent.otu_counts)
         return map(int,linspace(total/2, total, 600))
 
 ###############################################################################

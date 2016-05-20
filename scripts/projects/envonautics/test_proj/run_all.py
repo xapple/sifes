@@ -43,7 +43,11 @@ test_proj.cluster.combine_reads()
 test_proj.cluster.centering.run()
 test_proj.cluster.taxonomy.run()
 test_proj.cluster.otu_table.run()
+test_proj.cluster.taxa_table.run()
+
+# Make graphs #
+pass
 
 # Make report #
-for s in tqdm(test_proj): s.report.generate()
-test_proj.report.generate()
+for s in test_proj: s.report.generate()
+test_proj.cluster.report.generate()

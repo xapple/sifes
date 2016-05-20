@@ -8,7 +8,7 @@ from collections import defaultdict
 from sifes.composition  import taxa_table_graphs
 
 # First party modules #
-from plumbing.autopaths import AutoPaths, FilePath
+from plumbing.autopaths import AutoPaths, FilePath, DirectoryPath
 from plumbing.cache     import property_cached
 from plumbing.common    import prepend_to_file
 
@@ -42,16 +42,16 @@ class TaxaTable(object):
         self.taxonomy   = taxonomy
         self.result_dir = result_dir
         # Auto paths #
-        self.base_dir = self.result_dir + '/'
+        self.base_dir = self.result_dir
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self):
         # Message #
         print "Making taxa tables with '%s'" % self.otu_table
         # Do it #
-        for i, rank_name in self.taxonomy.results.rank_names:
+        for i, rank_name in enumerate(self.taxonomy.results.rank_names):
             table = self.taxa_table_at_rank(i)
-            path = FilePath(self.base_dir + 'taxa_table_' + rank_name.lower() + '.tsv')
+            path  = self.base_dir + 'taxa_table_' + rank_name.lower() + '.tsv'
             table.to_csv(path, sep='\t', encoding='utf-8')
             prepend_to_file(path, 'X')
 
@@ -60,7 +60,7 @@ class TaxaTable(object):
         result = defaultdict(lambda: defaultdict(int))
         for sample_name, column in self.otu_table.results.otu_table.iterrows():
             for otu_name, count in column.iteritems():
-                assignment = self.parent.assignments[otu_name]
+                assignment = self.taxonomy.results.assignments[otu_name]
                 taxa_term = assignment[rank]
                 result[taxa_term][sample_name] += count
         # Fill the holes #
@@ -95,7 +95,6 @@ class TaxaTableResults(object):
     def load_table(self, path):
         return pandas.io.parsers.read_csv(path, sep='\t', index_col=0, encoding='utf-8')
 
-    @property_cached
     def taxa_table_domain(self):  return self.load_table(self.p.domain)
     def taxa_table_phylum(self):  return self.load_table(self.p.phylum)
     def taxa_table_class(self):   return self.load_table(self.p('class'))

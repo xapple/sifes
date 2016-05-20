@@ -21,6 +21,7 @@ __all__ = ['CompositionDomain',
 ################################################################################
 class TaxaBarstack(Graph):
     """Distribution of named taxa by sample (at different ranks)."""
+    base_rank  = -1
 
     short_name = 'taxa_barstack'
     width      = 24.0
@@ -33,13 +34,13 @@ class TaxaBarstack(Graph):
 
     def plot(self, **kwargs):
         # Data #
-        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]
+        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]()
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
         # Plot #
         axes = self.frame.plot(kind='bar', stacked=True, color=cool_colors)
         fig = pyplot.gcf()
         # Other #
-        title = 'Taxonomic relative abundances per sample at rank %i ().'
+        title = 'Taxonomic relative abundances per sample at rank %i (%s).'
         title = title % (self.base_rank, self.parent.taxonomy.results.rank_names[self.base_rank-1])
         axes.set_title(title)
         axes.set_ylabel('Relative abundances in percent')

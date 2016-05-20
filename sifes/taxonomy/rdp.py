@@ -3,7 +3,6 @@ import multiprocessing
 
 # Internal modules #
 import sifes
-from sifes.taxonomy import Taxonomy
 
 # First party modules #
 from plumbing.autopaths import AutoPaths
@@ -13,7 +12,7 @@ from plumbing.cache import property_cached
 import sh
 
 ###############################################################################
-class Rdp(Taxonomy):
+class Rdp(object):
 
     short_name = 'rdp'
     long_name  = 'RDP Classifier version 2.11'

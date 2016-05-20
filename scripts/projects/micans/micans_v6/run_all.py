@@ -87,17 +87,20 @@ for p in projects: p.cluster.taxa_table.run()
 
 # Make graphs #
 for s in samples:
+    s.pair.fwd.fastqc.run()
+    s.pair.rev.fastqc.run()
     s.graphs.chao1()
     s.graphs.ace()
     s.graphs.shannon()
     s.graphs.simpson()
 for p in projects:
-    p.cluster.otu_table.graphs.otu_sizes_dist()
-    p.cluster.otu_table.graphs.otu_sums_graph()
-    p.cluster.otu_table.graphs.sample_sums_graph()
-    p.cluster.otu_table.graphs.cumulative_presence()
-    for g in p.cluster.taxa_table.graphs.__dict__.values(): g()
-    p.cluster.nmds()
+    p.cluster.otu_table.results.graphs.otu_sizes_dist()
+    p.cluster.otu_table.results.graphs.otu_sums_graph()
+    p.cluster.otu_table.results.graphs.sample_sums_graph()
+    p.cluster.otu_table.results.graphs.cumulative_presence()
+    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g()
+    p.cluster.nmds_graph()
 
-# Make report #
-for p in projects: p.report.generate()
+# Make reports #
+for s in samples:  s.report.generate()
+for p in projects: p.cluster.report.generate()

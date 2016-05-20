@@ -72,10 +72,10 @@ class ClusterTemplate(ReportTemplate):
 
     # Dropped samples #
     def dropped_samples(self):
-        if not self.cluster.count_dropped_samples: return False
+        if not self.cluster.bad_samples: return False
         params = ('count_dropped_samples', 'read_count_cutoff', 'read_count_cutoff_percentile')
         return {p:getattr(self, p) for p in params}
-    def count_dropped_samples(self):        return self.cluster.count_dropped_samples
+    def count_dropped_samples(self):        return len(self.cluster.bad_samples)
     def read_count_cutoff(self):            return self.cluster.read_count_cutoff
     def read_count_cutoff_percentile(self): return self.cluster.read_count_cutoff_percentile
 

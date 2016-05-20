@@ -41,7 +41,7 @@ class OtuTable(object):
         self.taxonomy   = taxonomy
         self.result_dir = result_dir
         # Auto paths #
-        self.base_dir = self.result_dir + '/'
+        self.base_dir = self.result_dir
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self):
@@ -61,17 +61,17 @@ class OtuTable(object):
         # Remove unwanted #
         for otu_name in cluster_table:
             species = assignments[otu_name]
-            if self.unwanted_phyla in species[2]:
+            if any(bad in species[2] for bad in self.unwanted_phyla):
                 cluster_table = cluster_table.drop(otu_name, 1)
         # Convert to CSV #
-        cluster_table.to_csv(self.p.flat, sep='\t', encoding='utf-8')
+        cluster_table.to_csv(self.p.flat.path, sep='\t', encoding='utf-8')
         # Symbolic X in the corner #
         prepend_to_file(self.p.flat, 'X')
 
     def make_otu_table_norm(self):
         """Convert to CSV. OTUs are columns and sample names are rows."""
         normed = self.results.otu_table.apply(lambda x: x/x.sum(), axis=1).replace(numpy.inf, 0.0)
-        normed.to_csv(self.p.norm, sep='\t', float_format='%.5g', encoding='utf-8')
+        normed.to_csv(self.p.norm.path, sep='\t', float_format='%.5g', encoding='utf-8')
         # Symbolic X in the corner #
         prepend_to_file(self.p.norm, 'X')
 

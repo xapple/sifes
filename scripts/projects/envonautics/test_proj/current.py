@@ -15,4 +15,4 @@ from tqdm import tqdm
 
 ###############################################################################
 execfile(sifes.home + "deploy/sifes/scripts/projects/envonautics/test_proj/load.py")
-test_proj.first.filter.run()
+test_proj.cluster.report.generate()
