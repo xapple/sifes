@@ -57,6 +57,8 @@ class SeqFilter(object):
         self.n_base_fasta  = FASTA(self.p.n_base)
         self.length_fasta  = FASTA(self.p.length)
         self.renamed_fasta = FASTA(self.p.renamed)
+        # The final result #
+        self.clean = self.renamed_fasta
 
     def run(self):
         # Message #

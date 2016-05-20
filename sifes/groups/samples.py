@@ -119,6 +119,11 @@ class Sample(object):
         return SeqFilter(self.joiner.results.assembled, self.p.filtered_dir, self.short_name, self.primers)
 
     @property_cached
+    def clean(self):
+        """Convenience shortcut."""
+        return self.filter.clean
+
+    @property_cached
     def diversity(self):
         """For all alpha diversity measures."""
         return AlphaDiversity(self)

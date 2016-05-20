@@ -8,7 +8,7 @@ from sifes.centering.uparse         import Uparse
 from sifes.taxonomy.crest           import Crest
 from sifes.taxonomy.rdp             import Rdp
 from sifes.taxonomy.mothur_classify import MothurClassify
-from sifes.otus.otu_table           import OtuTable, TaxaTable
+from sifes.otus.otu_table           import OtuTable#, TaxaTable
 
 # Composition #
 #from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
@@ -21,11 +21,15 @@ from fasta import FASTA
 from plumbing.cache import property_cached
 
 # Third party modules #
+import numpy
 from shell_command import shell_output
 
 ###############################################################################
 class Cluster(Aggregate):
     """Analyzes a group of samples."""
+
+    # Parameters #
+    read_count_cutoff_percentile = 1
 
     all_paths = """
     /logs/
@@ -40,11 +44,18 @@ class Cluster(Aggregate):
     def __init__(self, name, samples, out_dir=None):
         # Directory #
         if out_dir is None: out_dir = sifes.clusters_dir
+        # Compute cutoff for throwing away samples #
+        read_counts            = [s.clean.count for s in samples]
+        self.read_count_cutoff = numpy.percentile(read_counts, self.read_count_cutoff_percentile)
+        # Auto-filter low read count samples #
+        self.good_samples = [s for s in samples if len(s.clean) >= self.read_count_cutoff]
+        self.bad_samples  = [s for s in samples if len(s.clean) < self.read_count_cutoff]
+        self.num_dropped_samples = len(self.bad_samples)
         # Super #
-        super(self.__class__,self).__init__(name, samples, out_dir)
-        # Figure out if it's a project #
+        super(self.__class__,self).__init__(name, self.good_samples, out_dir)
+        # Figure out if it's a subset of a project #
         self.project = None
-        if set(self.samples) == set(self.first.project.samples):
+        if set(self.samples) < set(self.first.project.samples):
             self.project = self.first.project
         # FASTA #
         self.reads = FASTA(self.p.all_reads)
@@ -66,6 +77,7 @@ class Cluster(Aggregate):
     def combine_reads(self):
         """This is the first method you should call. It will combine all the
         reads of all the samples of this cluster into one big FASTA file."""
+        print "Combining all reads for cluster '%s' (%i samples)" % (self.name, len(self.samples))
         paths = [sample.filter.results.clean for sample in self]
         shell_output('cat %s > %s' % (' '.join(paths), self.reads))
         assert sum([len(s.filter.results.clean) for s in self]) == self.reads.count
@@ -88,7 +100,7 @@ class Cluster(Aggregate):
         """Will produce the OTU table."""
         return OtuTable(self.centering, self.taxonomy, self.p.otu_table_dir)
 
-    @property_cached
-    def taxa_table(self):
-        """Will produce the taxonomy-based table."""
-        return TaxaTable(self.centering, self.taxonomy, self.p.taxa_table_dir)
+    #@property_cached
+    #def taxa_table(self):
+    #    """Will produce the taxonomy-based table."""
+    #    return TaxaTable(self.centering, self.taxonomy, self.p.taxa_table_dir)

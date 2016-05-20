@@ -47,9 +47,9 @@ The average quality per base can be seen in figure \ref{per_base_qual} and the a
 
 Joining
 --------
-The first step in processing is joining the forward and reverse reads together. This is done with a program called {{joiner_version}}. Exactly {{assembled_count}} reads were joined, {{unassembled_count}} where unable to be joined and subsequently discarded. The size of the overlapping region varies for every read, hence a distribution of sequence lengths is produced after this step and can be seen in figure \ref{assembly_len_dist}. The joining operation removes the quality information from the reads, as scores in the overlapping region would not be conceptually the same as the other scores.
+The first step in processing is joining the forward and reverse reads together. This is done with a program called {{joiner_version}}. Exactly {{assembled_count}} reads were joined, {{unassembled_count}} where unable to be joined and subsequently discarded. The size of the overlapping region varies for every read, hence a distribution of sequence lengths is produced after this step and can be seen in figure \ref{joined_len_dist}. The joining operation removes the quality information from the reads, as scores in the overlapping region would not be conceptually the same as the other scores.
 
-{{assembly_len_dist}}
+{{joined_len_dist}}
 
 -------
 

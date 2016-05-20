@@ -51,7 +51,7 @@ for s in samples: print len(s.pair.fwd.first_read)
 
 # Join reads #
 prll_map(lambda s: s.joiner.run(cpus=1), samples)
-for s in samples: print s, s.joiner.results.assembled.count
+for s in samples: print s.short_name, s.joiner.results.assembled.count
 
 # Filter #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
@@ -65,9 +65,18 @@ for s in samples: print s.short_name, s.filter.length_fasta.count
 for s in samples: print s.short_name, s.filter.renamed_fasta.count
 
 # Cluster #
-for proj in projects:
-    proj.cluster.combine_reads()
-    proj.cluster.otus.run()
+for p in projects: print p.short_name, p.cluster.num_dropped_samples
+for p in projects: print p.short_name, [s.clean.count for s in p.cluster.good_samples]
+for p in projects: print p.short_name, [s.clean.count for s in p.cluster.bad_samples]
+for p in projects: print p.short_name, p.cluster.reads.count
+for proj in projects: proj.cluster.combine_reads()
+
+# Make centers #
+for proj in projects: p.cluster.centering.run(cpus=32)
+for p in projects: print p.short_name, p.cluster.centering.results.centers.count
+
+# Taxonomy assignment #
+for proj in projects: p.cluster.taxonomy.run(cpus=32)
 
 # Make report #
 for s in tqdm(proj): s.report.generate()
