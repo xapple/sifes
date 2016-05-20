@@ -23,12 +23,13 @@ class OtuTable(object):
     short_name = 'otu_table'
 
     # Properties #
-    unwanted = ['Plastid', 'Mitochondrion', 'Thaumarchaeota', 'Crenarchaeota', 'Euryarchaeota']
+    unwanted_phyla = ['Plastid', 'Mitochondrion'] #, 'Thaumarchaeota', 'Crenarchaeota', 'Euryarchaeota']
 
     all_paths = """
     /otu_table_flat.tsv
     /otu_table_norm.tsv
     /centers_filtered.fasta
+    /graphs/
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.centering.results.centers)
@@ -54,12 +55,13 @@ class OtuTable(object):
     def make_otu_table(self):
         """Ask the counts from the OTU class and do some modifications.
         OTUs are columns and sample names are rows."""
-        # Remove unwanted #
+        # Main objects #
         cluster_table = self.centering.results.cluster_counts_table.copy()
         assignments   = self.taxonomy.results.assignments
+        # Remove unwanted #
         for otu_name in cluster_table:
             species = assignments[otu_name]
-            if len(species) > 2 and species[2] in self.unwanted:
+            if self.unwanted_phyla in species[2]:
                 cluster_table = cluster_table.drop(otu_name, 1)
         # Convert to CSV #
         cluster_table.to_csv(self.p.flat, sep='\t', encoding='utf-8')
@@ -114,8 +116,8 @@ class OtuTableResults(object):
     @property_cached
     def graphs(self):
         """Sorry for the black magic. The result is an object whose attributes
-        are all the graphs found in graphs.py initialized with this instance as
-        only argument."""
+        are all the graphs found in otu_table_graphs.py initialized with this
+        instance as only argument."""
         class Graphs(object): pass
         result = Graphs()
         for graph in otu_table_graphs.__all__:

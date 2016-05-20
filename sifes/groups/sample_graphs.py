@@ -15,26 +15,19 @@ from skbio.stats     import subsample_counts as subsample
 from matplotlib      import pyplot
 from numpy           import linspace
 
-###############################################################################
-class AlphaDiversity(object):
-    """All the alpha diversity estimates to be calculated on an OTU table."""
-
-    def __init__(self, parent):
-        self.sample, self.parent = parent, parent
-        self.chao1   = Chao1(self, base_dir=self.sample.p.graphs_dir)
-        self.ace     = Ace(self, base_dir=self.sample.p.graphs_dir)
-        self.shannon = Shannon(self, base_dir=self.sample.p.graphs_dir)
-        self.simpson = Simpson(self, base_dir=self.sample.p.graphs_dir)
-        self.graphs  = [self.chao1, self.ace, self.shannon, self.simpson]
-
-    def plot_all_graphs(self):
-        for graph in self.graphs: graph.plot()
+# Constants #
+__all__ = ['Chao1',
+           'Ace',
+           'Shannon',
+           'Simpson',]
 
 ###############################################################################
 class AlphaDiversityGraph(Graph):
     bottom = 0.10
     right  = 0.96
     sep    = 'x'
+    y_grid = True
+    x_min  = 0
 
     @property
     def x(self):
@@ -51,12 +44,9 @@ class AlphaDiversityGraph(Graph):
         axes = fig.add_subplot(111)
         axes.plot(self.x, self.y, 'ro')
         # Labels #
-        axes.set_title("Rarefaction curve of the " + self.title + " diversity estimate")
+        axes.set_title("Rarefaction curve of the '" + self.title + "' diversity estimate")
         axes.set_xlabel('Sequences rarefied down to this many')
         axes.set_ylabel(self.title + " diversity estimate")
-        # Options #
-        axes.yaxis.grid(True)
-        axes.set_xlim(0, axes.get_xlim()[1])
         # Save #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)

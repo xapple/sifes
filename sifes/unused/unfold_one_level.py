@@ -95,3 +95,8 @@ class CompositionGenus(CustomRank):
     base_rank = 6
     high_abundance_threshold = 500
     low_abundance_threshold  = 10
+
+################################################################################
+class TaxaBarstackTips(TaxaBarstack):
+    bottom = 0.5
+

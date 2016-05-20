@@ -57,6 +57,7 @@ class SampleTemplate(ReportTemplate):
         self.report  = report
         self.sample  = self.parent.sample
         self.project = self.sample.project
+        self.cluster = self.sample.project.cluster
 
     def values_with_percent(self, val):
         percentage = lambda x,y: (len(x)/len(y))*100 if len(y) != 0 else 0
@@ -148,30 +149,37 @@ class SampleTemplate(ReportTemplate):
         return "%.1f%%" % ((len(self.sample.filter.results.clean)/len(self.sample))*100)
 
     ############## Taxonomy ##############
-    def abundant_table(self):
-        if not self.project.otus: return False
+    def taxonomy_table(self):
+        if not self.cluster.taxa_table: return False
+        else: return {'genera_table': self.genera_table()}
+
+    def genera_table(self):
+        # Check #
+        if not self.cluster.taxa_table: return False
         # The data #
-        row = self.sample.counts
-        frame = pandas.DataFrame(index=range(len(row)))
-        frame['Rank']  = range(1, len(row)+1)
-        frame['Clade'] = row.index
-        frame['Reads'] = [split_thousands(r) for r in row.values]
-        frame['OTUs']  = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
+        row             = self.cluster.taxa_table.results.taxa_table_genus.loc[self.sample.short_name]
+        frame           = pandas.DataFrame(index=range(len(row)))
+        frame['#']      = range(1, len(row)+1)
+        frame['Genera'] = row.index
+        frame['Reads']  = [split_thousands(r) for r in row.values]
+        #frame['OTUs']   = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
         frame = frame[0:20]
         # Make it as text #
         table = tabulate(OrderedDict(frame), headers="keys", numalign="right", tablefmt="pipe")
         # Add caption #
-        return table + "\n\n   : The 20 most abundant predicted species in this sample."
+        return table + "\n\n   : The 20 most abundant predicted genera in this sample."
 
     ############## Diversity ##############
     def diversity(self):
-        if not self.project.otus: return False
+        if not self.cluster.otu_table: return False
         params = ('total_otu_sum', 'total_otu_count', 'chao1_curve',
                   'ace_curve', 'shannon_curve', 'simpson_curve')
         return {p:getattr(self, p) for p in params}
 
-    def total_otu_sum(self):   return split_thousands(sum(self.sample.counts))
-    def total_otu_count(self): return split_thousands(len(self.sample.counts))
+    def total_otu_sum(self):
+        return split_thousands(sum(self.sample.otu_counts))
+    def total_otu_count(self):
+        return split_thousands(len(self.sample.otu_counts))
     def chao1_curve(self):
         caption = "Chao1 rarefaction curve"
         path = self.sample.diversity.chao1.path

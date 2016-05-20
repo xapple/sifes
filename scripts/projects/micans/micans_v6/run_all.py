@@ -76,7 +76,28 @@ for proj in projects: p.cluster.centering.run(cpus=32)
 for p in projects: print p.short_name, p.cluster.centering.results.centers.count
 
 # Taxonomy assignment #
-for proj in projects: p.cluster.taxonomy.run(cpus=32)
+for p in projects: p.cluster.taxonomy.run(cpus=32)
+for p in projects: print p.short_name, len(p.cluster.taxonomy.results.assignments)
+
+# Make the OTU table #
+for p in projects: p.cluster.otu_table.run()
+
+# Make the taxa tables #
+for p in projects: p.cluster.taxa_table.run()
+
+# Make graphs #
+for s in samples:
+    s.graphs.chao1()
+    s.graphs.ace()
+    s.graphs.shannon()
+    s.graphs.simpson()
+for p in projects:
+    p.cluster.otu_table.graphs.otu_sizes_dist()
+    p.cluster.otu_table.graphs.otu_sums_graph()
+    p.cluster.otu_table.graphs.sample_sums_graph()
+    p.cluster.otu_table.graphs.cumulative_presence()
+    for g in p.cluster.taxa_table.graphs.__dict__.values(): g()
+    p.cluster.nmds()
 
 # Make report #
-for s in tqdm(proj): s.report.generate()
+for p in projects: p.report.generate()

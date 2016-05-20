@@ -16,7 +16,7 @@ __all__ = ['OtuSizesDist', 'OtuSumsPerSample', 'SampleSumsPerOtu', 'CumulativePr
 
 ################################################################################
 class OtuSizesDist(Graph):
-    """Distribution of OTU cluster sizes in loglog."""
+    """Distribution of OTU cluster sizes in log-log."""
 
     short_name = 'otu_sizes_dist'
     x_grid     = True
@@ -88,7 +88,7 @@ class CumulativePresence(Graph):
     """Cumulative graph of cluster presence in samples. This means something such as:
     - 0% of OTUs appear in 100% of the samples,
     - 10% of OTUs appear in 90% of the samples,
-    - 90% of OTUs appear in 1% of the samples"""
+    - 90% of OTUs appear in 1% of the samples."""
 
     short_name = 'cumulative_presence'
 

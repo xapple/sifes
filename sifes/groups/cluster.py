@@ -8,7 +8,9 @@ from sifes.centering.uparse         import Uparse
 from sifes.taxonomy.crest           import Crest
 from sifes.taxonomy.rdp             import Rdp
 from sifes.taxonomy.mothur_classify import MothurClassify
-from sifes.otus.otu_table           import OtuTable#, TaxaTable
+from sifes.otus.otu_table           import OtuTable
+from sifes.composition.taxa_table   import TaxaTable
+from sifes.statistics.nmds          import GraphNMDS
 
 # Composition #
 #from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
@@ -38,6 +40,7 @@ class Cluster(Aggregate):
     /otu_table/
     /taxa_table/
     /taxonomy/
+    /graphs/
     /report/report.pdf
     """
 
@@ -100,7 +103,14 @@ class Cluster(Aggregate):
         """Will produce the OTU table."""
         return OtuTable(self.centering, self.taxonomy, self.p.otu_table_dir)
 
-    #@property_cached
-    #def taxa_table(self):
-    #    """Will produce the taxonomy-based table."""
-    #    return TaxaTable(self.centering, self.taxonomy, self.p.taxa_table_dir)
+    @property_cached
+    def taxa_table(self):
+        """Will produce the taxonomy-based tables."""
+        return TaxaTable(self.otu_table, self.taxonomy, self.p.taxa_table_dir)
+
+    @property_cached
+    def nmds_graph(self):
+        """Non-metric multidimensional scaling. Using the information in the OTU table and a
+         distance metric such as the Horn 1966 (adapted from Morisita 1959)" one,
+         will place every sample on an ordination plot."""
+        return GraphNMDS(self, self.p.graphs_dir)

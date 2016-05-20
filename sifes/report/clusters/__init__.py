@@ -100,8 +100,8 @@ class ClusterTemplate(ReportTemplate):
     def count_sequences(self): return split_thousands(len(self.cluster.reads))
     def input_length_dist(self):
         caption = "Distribution of sequence lengths at input"
-        path = self.cluster.reads.graphs.length_dist()
-        label = "input_length_dist"
+        path    = self.cluster.reads.graphs.length_dist()
+        label   = "input_length_dist"
         return str(ScaledFigure(path, caption, label))
 
     # Clustering #
@@ -113,56 +113,66 @@ class ClusterTemplate(ReportTemplate):
     # Classification #
     def classify_citation(self):    return "the %s method (%s)" % (self.taxonomy.long_name, self.taxonomy.version)
     def classify_database(self):    return self.taxonomy.database
-    def otus_classified(self):      return split_thousands(self.taxonomy.results.count_assigned)
-    def unwanted_phyla(self):       return andify(self.otu_table.unwanted)
+    def otu_classified_table(self):
+        info = OrderedDict((('Rank',         lambda i: "**" + self.taxonomy.results.rank_names[i] + "**"),
+                            ('Classified',   lambda i:        self.taxonomy.results.count_assigned[i]),
+                            ('Unclassified', lambda i:        self.taxonomy.results.count_unassigned[i])))
+        table = [[i+1] + [f(i) for f in info.values()] for i in range(len(self.taxonomy.results.rank_names))]
+        table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
+        return table + "\n\n   : Summary information for all samples."
+
+    # OTU table filtering #
+    def unwanted_phyla(self):       return andify(self.otu_table.unwanted_phyla)
     def otus_filtered(self):        return split_thousands(len(self.otu_table.results.centers))
     def otu_sizes_graph(self):
         caption = "Distribution of OTU sizes"
-        path = self.otu_table.results.graphs.otu_sizes_dist()
-        label = "otu_sizes_graph"
+        path    = self.otu_table.results.graphs.otu_sizes_dist()
+        label   = "otu_sizes_graph"
         return str(ScaledFigure(path, caption, label))
 
     # OTU table graphs #
     def otu_sums_graph(self):
         caption = "Distribution of OTU presence per OTU"
-        path = self.cluster.otus.taxonomy.graphs.otu_sums_graph()
-        label = "otu_sums_graph"
+        path    = self.otu_table.results.graphs.otu_sums_graph()
+        label   = "otu_sums_graph"
         return str(ScaledFigure(path, caption, label))
     def sample_sums_graph(self):
         caption = "Distribution of OTU presence per sample"
-        path = self.cluster.otus.taxonomy.graphs.sample_sums_graph()
-        label = "sample_sums_graph"
+        path    = self.otu_table.results.graphs.sample_sums_graph()
+        label   = "sample_sums_graph"
         return str(ScaledFigure(path, caption, label))
     def cumulative_presence(self):
         caption = "Cumulative number of reads by OTU presence"
-        path = self.cluster.otus.taxonomy.graphs.cumulative_presence()
-        label = "cumulative_presence"
+        path    = self.otu_table.results.graphs.cumulative_presence()
+        label   = "cumulative_presence"
         return str(ScaledFigure(path, caption, label))
 
-    # Taxa table #
-    def count_taxa(self): return len(self.taxa_table.results.otus.taxonomy.comp_tips)
-
     # Composition #
-    def phyla_composition(self):
-        caption = "Species relative abundances per sample on the phyla and class levels"
-        path = self.cluster.otus.taxonomy.comp_phyla.graphs[0].path
-        label = "phyla_composition"
+    def phyla_barstack(self):
+        caption = "Relative abundances per sample on the phyla level"
+        path    = self.taxa_table.results.graphs.taxa_barstack_phyla
+        label   = "phyla_barstack"
+        return str(ScaledFigure(path, caption, label))
+    def class_barstack(self):
+        caption = "Relative abundances per sample on the class level"
+        path    = self.taxa_table.results.graphs.taxa_barstack_class
+        label   = "class_barstack"
+        return str(ScaledFigure(path, caption, label))
+    def order_barstack(self):
+        caption = "Relative abundances per sample on the order level"
+        path    = self.taxa_table.results.graphs.taxa_barstack_order
+        label   = "order_barstack"
         return str(ScaledFigure(path, caption, label))
 
     # Comparison #
     def otu_nmds(self):
         caption = "NMDS using the OTU table for %i samples" % len(self.cluster)
-        path = self.cluster.otus.taxonomy.stats.nmds.graph.path
-        label = "otu_nmds"
-        return str(ScaledFigure(path, caption, label))
-    def taxa_nmds(self):
-        caption = "NMDS using the taxa table for %i samples" % len(self.cluster)
-        path = self.cluster.otus.taxonomy.comp_tips.stats.nmds.graph.path
-        label = "taxa_nmds"
+        path    = self.cluster.nmds_graph()
+        label   = "otu_nmds"
         return str(ScaledFigure(path, caption, label))
 
     # Diversity #
     pass
 
-    # Betadispertion #
+    # Beta-dispersion #
     pass

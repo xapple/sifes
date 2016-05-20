@@ -2,12 +2,12 @@
 
 # Internal modules #
 import sifes
-from sifes.diversity.alpha      import AlphaDiversity
 from sifes.report.samples       import SampleReport
 from sifes.joining.pandaseq     import Pandaseq
 from sifes.joining.qiime_join   import QiimeJoin
 from sifes.joining.mothur_join  import MothurJoin
 from sifes.filtering.seq_filter import SeqFilter
+from sifes.groups               import sample_graphs
 
 # First party modules #
 from plumbing.autopaths import FilePath, DirectoryPath, AutoPaths
@@ -34,6 +34,7 @@ class Sample(object):
     /uncompressed/rev.fastq
     /joined/
     /filtered/
+    /graphs/
     /report/report.pdf
     """
 
@@ -124,6 +125,18 @@ class Sample(object):
         return self.filter.clean
 
     @property_cached
-    def diversity(self):
-        """For all alpha diversity measures."""
-        return AlphaDiversity(self)
+    def otu_counts(self):
+        """Convenience shortcut."""
+        return self.project.cluster.otu_table.results.otu_table.loc[self.short_name]
+
+    @property_cached
+    def graphs(self):
+        """Sorry for the black magic. The result is an object whose attributes
+        are all the graphs found in taxa_table_graphs.py initialized with this
+        instance as only argument."""
+        class Graphs(object): pass
+        result = Graphs()
+        for graph in sample_graphs.__all__:
+            cls = getattr(sample_graphs, graph)
+            setattr(result, cls.short_name, cls(self))
+        return result

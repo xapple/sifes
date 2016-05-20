@@ -1,25 +1,29 @@
 # Internal modules #
-from plumbing.autopaths import AutoPaths
-from plumbing.dataframes import r_matrix_to_dataframe, pandas_df_to_r_df
-from plumbing.graphs import Graph
+from plumbing.dataframes import r_matrix_to_dataframe
+from plumbing.graphs     import Graph
 
 # Third party modules #
 from matplotlib import pyplot
 
 ################################################################################
 class GraphNMDS(Graph):
-    """Non-metric dimensional scaling plot"""
-    short_name = 'nmds'
-    bottom = 0.03
-    top = 0.97
+    """Non-metric dimensional scaling plot."""
+
+    short_name = 'nmds_horn'
+    bottom     = 0.03
+    top        = 0.97
 
     def plot(self, **kwargs):
-        # Coord #
-        x = self.parent.coords['NMDS1'].values
-        y = self.parent.coords['NMDS2'].values
-        names = self.parent.coords['NMDS1'].keys()
+        # The otu table path #
+        self.tsv = self.parent.otu_table.p.otu_table_flat
+        # Run via R #
+        self.run_via_R()
+        # Data #
+        x     = self.coords['NMDS1'].values
+        y     = self.coords['NMDS2'].values
+        names = self.coords['NMDS1'].keys()
         # Make scatter #
-        fig = pyplot.figure()
+        fig  = pyplot.figure()
         axes = fig.add_subplot(111)
         axes.plot(x, y, 'ro')
         axes.set_title('Non-Metric Multidimensional scaling')
@@ -34,58 +38,16 @@ class GraphNMDS(Graph):
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
 
-###############################################################################
-class NMDS(object):
-    """Non-metric dimensional scaling"""
-
-    all_paths = """
-    /lorem
-    """
-
-    def __init__(self, parent, csv, calc_distance=True):
-        # Save parent #
-        self.stat, self.parent = parent, parent
-        self.csv = csv
-        # Options #
-        self.calc_distance = calc_distance
-        # Paths #
-        self.base_dir = self.parent.p.nmds_dir
-        self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Graph #
-        self.graph = GraphNMDS(self, base_dir=self.base_dir)
-
-    def run(self):
+    def run_via_R(self):
         # Module on demand #
         from rpy2 import robjects as ro
         # Load dataframe #
         ro.r("library(vegan)")
-        ro.r("table = read.table('%s', sep='\t', header=TRUE, row.names='X')" % (self.csv))
+        ro.r("table = read.table('%s', sep='\t', header=TRUE, row.names='X')" % (self.tsv))
         # Run computation #
-        if self.calc_distance: ro.r("nmds = metaMDS(table, distance='horn', trymax=200)")
-        else:                  ro.r("nmds = metaMDS(table, trymax=200)")
+        ro.r("nmds = metaMDS(table, distance='horn', trymax=200)")
         # Extract result #
         ro.r("coord = scores(nmds)")
         ro.r("loadings = nmds$species")
         # Retrieve values #
         self.coords = r_matrix_to_dataframe(ro.r.coord)
-        # No loadings without distance #
-        if self.calc_distance: self.loadings = r_matrix_to_dataframe(ro.r.loadings)
-        else:                  self.loadings = False
-        # Plot it #
-        self.graph.plot()
-
-    def run_df(self):
-        """Unfortunately this doesn't seem to work (yet)"""
-        # Module on demand #
-        from rpy2 import robjects as ro
-        # Get frame #
-        self.frame = self.parent.parent.frame
-        # Call R #
-        rframe = pandas_df_to_r_df(self.frame)
-        ro.r("library(vegan)")
-        nmds = ro.r['metaMDS'](rframe, distance='horn', trymax=200)
-        # Retrieve values #
-        self.coords = r_matrix_to_dataframe(ro.r['scores'](nmds))
-        self.loadings = list(nmds.rx2('species'))
-        # Plot it #
-        self.graph.plot()

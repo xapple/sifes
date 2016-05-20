@@ -2,16 +2,13 @@
 from collections import defaultdict
 
 # Internal modules #
-from illumitag.clustering.composition import Composition
 from plumbing.cache import property_cached
-from illumitag.clustering.composition.plots import TaxaBarstack
 
 # Third party modules #
 import pandas
 
 ###############################################################################
-class CompositionTips(Composition):
-    """This taxa are composed of the lowest level"""
+class TaxonomicRank(object):
 
     @property_cached
     def taxa_table(self):
@@ -33,6 +30,24 @@ class CompositionTips(Composition):
         # Return #
         return result
 
+################################################################################
+class CompositionPhyla(TaxonomicRank):
+    base_rank = 2
+
+class CompositionClass(TaxonomicRank):
+    base_rank = 3
+
+class CompositionOrder(TaxonomicRank):
+    base_rank = 4
+
+class CompositionFamily(TaxonomicRank):
+    base_rank = 5
+
+class CompositionGenus(TaxonomicRank):
+    base_rank = 6
+
+class CompositionSpecies(TaxonomicRank):
+
     @property_cached
     def graphs(self):
         return [TaxaBarstackTips(self)]
@@ -40,7 +55,3 @@ class CompositionTips(Composition):
     def count_otus(self, speices):
         """How many OTUs got this classification"""
         return len([1 for s in self.taxonomy.assignments.values() if s[-1] == speices])
-
-################################################################################
-class TaxaBarstackTips(TaxaBarstack):
-    bottom = 0.5

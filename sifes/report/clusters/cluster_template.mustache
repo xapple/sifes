@@ -56,8 +56,14 @@ Classification
 --------------
 Relying on databases of ribosomal genes such as Silva, we can classify each OTU and give it an approximative affiliation. This provides a taxonomic name to each OTU. This is done using {{classify_citation}} and {{classify_database}}.
 
-Out of our {{otus_total}} OTUs, exactly {{otus_classified}} of them are assigned to a position somewhere in the tree of life (not necessary on a tip though).
+Out of our {{otus_total}} OTUs, some are totally unclassified while others have predictions at different positions in the tree of life. Summarized below is the proportion of classified OTUs:
 
+{{otu_classified_table}}
+
+-------
+
+OTU filtering
+-------------
 At this point we are going to remove some OTUs. All those pertaining to any of the following phyla are discarded: {{unwanted_phyla}}. This leaves us with {{otus_filtered}} 'good' OTUs. As OTUs contain a varying number of sequences in them, we can plot this distribution in figure \ref{otu_sizes_graph}.
 
 {{otu_sizes_graph}}
@@ -66,7 +72,7 @@ At this point we are going to remove some OTUs. All those pertaining to any of t
 
 OTU table
 ---------
-Now we can take our OTUs and pick them apart, producing a table with OTUs as rows ({{otus_filtered}}) and samples as columns ({{count_samples}}). Each cell tells us how many sequences are participating in the given OTU originating from the given sample. This table is too big to be viewed directly here. However we can plot some of its properties to better understand how sparse it is as seen in figures \ref{otu_sums_graph}, \ref{sample_sums_graph} and \ref{cumulative_presence}:
+Now we can take our good OTUs and pick them apart, producing a table with OTUs as rows ({{otus_filtered}}) and samples as columns ({{count_samples}}). Each cell tells us how many sequences are participating in the given OTU originating from the given sample. This table is too big to be viewed directly here. However we can plot some of its properties to better understand how sparse it is as seen in figures \ref{otu_sums_graph}, \ref{sample_sums_graph} and \ref{cumulative_presence}:
 
 {{otu_sums_graph}}
 
@@ -76,42 +82,42 @@ Now we can take our OTUs and pick them apart, producing a table with OTUs as row
 
 -------
 
-Taxa table
-----------
-If we modify the rows of our table to become taxonomic names instead of OTUs, some rows will have the same affiliations and will be merged together by summation. This produces the taxa table which has {{count_samples}} samples and {{count_taxa}} named taxa. It's important to consider the difference between an OTU table and a taxa table.
+Taxa tables
+-----------
+If we modify the rows of our table to become taxonomic names instead of OTUs, some rows will have the same affiliations and will be merged together by summation. This procedure enables us to create taxa tables, which resemble OTU table somewhat. Such names can be made at several levels. It's important to consider the difference between an OTU table and a taxa table.
 
 -------
 
 Composition
 -----------
-At this point, one of the most obvious graphs to produce is a bar-chart detailing the composition in terms of taxonomy of every one of our samples. To keep things simple we will only consider the 'phyla' taxonomic level and only divide phyla into their composing classes when they contain a very large proportion of reads (going deeper while still including everything would yield an unreadable graph). This can be seen in figure \ref{phyla_composition}.
+At this point, one of the most obvious graphs to produce is a bar-chart detailing the composition in terms of taxonomy of every one of our samples. Once again, this can be done at several levels or ranks of classification ranging from Domain to Species. At levels that are too deep such visualization become too crowded and unreadable. This of course depends on the complexity of the samples. Here is piloted the 'phylum', 'class' and 'order' taxonomic levels in figures \ref{phylum_barstack}, \ref{class_barstack} and \ref{order_barstack}:
 
-{{phyla_composition}}
+{{phylum_barstack}}
+
+{{class_barstack}}
+
+{{order_barstack}}
 
 -------
 
 Comparison
 ----------
-We now would like to start comparing samples amongst each other to determine which ones are similar or if any clear groups can be observed. A first means of doing that is by using the information in the OTU table and a distance metric such as the "Horn 1966" one to place them on an ordination plot. This can be seen in figure \ref{otu_nmds}.
+We now would like to start comparing samples amongst each other to determine which ones are similar or if any clear groups can be observed. A first means of doing that is by using the information in the OTU table and a distance metric such as the "Horn 1966 (adapted from Morisita 1959)" one to place them on an ordination plot. This can be seen in figure \ref{otu_nmds}.
 
 {{otu_nmds}}
 
-These kind of graphs have a random component to them and can be easily influenced by one or two differently looking samples. If one uses the taxa table instead, already one gets a different result as seen in figure \ref{taxa_nmds}.
-
-{{taxa_nmds}}
-
-One can also make NMDS plots with more complicated distance measures such as phylogenetic ones. More about that later.
+These kind of graphs have a random component to them and can be easily influenced by one or two differently looking samples.
 
 -------
 
 Distances
 ---------
-To compute beta diversity, other distance measures are possible of course. Bray-Curtis and Jaccard distance matrices are available. We can also explore phylogenetic distance measures such as the UniFrac one. This is also implemented and a UniFrac distance matrix can easily be computed. One can also build a hierarchical clustering of the samples from it (not included).
+To compute beta diversity, other distance measures are possible of course. Bray-Curtis and Jaccard distance matrices can be created. We can also explore phylogenetic distance measures such as the UniFrac one. This is also possible and a UniFrac distance matrix can easily be computed. One can also build a hierarchical clustering of the samples from it (not included).
 
 -------
 
 Environmental tags
 ------------------
-Relying on the same kind of databases and their meta-data, we can try to infer a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This method is also implemented in the pipeline (results on demand):
+Relying on the same kind of databases and their meta-data, we can try to infer and assign a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This method is also available upon request:
 
-> <http://environments.hcmr.gr/seqenv.html>
+> <https://github.com/xapple/seqenv>
