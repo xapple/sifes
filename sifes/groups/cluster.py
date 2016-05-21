@@ -25,7 +25,7 @@ class Cluster(Aggregate):
     """Analyzes a group of samples."""
 
     # Parameters #
-    read_count_cutoff_percentile = 1
+    read_count_cutoff_factor = 0.01
 
     all_paths = """
     /logs/
@@ -43,7 +43,7 @@ class Cluster(Aggregate):
         if out_dir is None: out_dir = sifes.clusters_dir
         # Compute cutoff for throwing away samples #
         read_counts            = [s.clean.count for s in samples]
-        self.read_count_cutoff = numpy.percentile(read_counts, self.read_count_cutoff_percentile)
+        self.read_count_cutoff = numpy.mean(read_counts) * self.read_count_cutoff_factor
         # Auto-filter low read count samples #
         self.good_samples = [s for s in samples if len(s.clean) >= self.read_count_cutoff]
         self.bad_samples  = [s for s in samples if len(s.clean) < self.read_count_cutoff]

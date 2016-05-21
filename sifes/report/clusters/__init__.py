@@ -81,7 +81,7 @@ class ClusterTemplate(ReportTemplate):
         return {p:getattr(self, p) for p in params}
     def count_dropped_samples(self):        return len(self.cluster.bad_samples)
     def read_count_cutoff(self):            return self.cluster.read_count_cutoff
-    def read_count_cutoff_percentile(self): return self.cluster.read_count_cutoff_percentile
+    def read_count_cutoff_factor(self):     return self.cluster.read_count_cutoff_factor
 
     # Samples #
     def sample_table(self):

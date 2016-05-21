@@ -15,4 +15,6 @@ from tqdm import tqdm
 
 ###############################################################################
 execfile(sifes.home + "deploy/sifes/scripts/projects/envonautics/test_proj/load.py")
-for s in test_proj:  s.report.generate()
+#for s in test_proj:  s.report.generate()
+print 1
+print test_proj.cluster.taxa_table.results.graphs.taxa_barstack_domain(rerun=True)

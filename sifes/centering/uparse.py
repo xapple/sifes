@@ -62,6 +62,8 @@ class Uparse(object):
         self.readmap = UClusterFile(self.p.readmap)
 
     def run(self, threshold=None, cpus=1):
+        # Message #
+        print "Making OTUs on '%s'" % self.reads
         # Optional threshold #
         if threshold is None: threshold = self.threshold
         # Number of cores #

@@ -32,12 +32,12 @@ from tqdm import tqdm
 plexed = sifes.load("~/deploy/sifes/metadata/json/projects/micans/micans_v6_exp1_plexed/")
 
 # Load all real project #
-projects = ['minican_4_5', 'posmic_olk', 'pseud_fluo', 'febex_dp', 'cosc_1']
+projects = ['minican_4_5', 'posmic_olk', 'pseud_fluo', 'febex_dp', 'cosc_1', 'mysterious']
 projects = [sifes.load("~/deploy/sifes/metadata/json/projects/micans/" + p, False) for p in projects]
 samples  = [s for p in projects for s in p]
 samples.sort(key=lambda s: s.num)
 
-# Demultiplex #
+# Demultiplex - 1h00 #
 demultiplexer = Demultiplexer(plexed, samples)
 demultiplexer.run()
 
@@ -52,16 +52,17 @@ for s in samples: print s.pair.fwd.md5
 for s in samples: print s.pair.rev.md5
 for s in samples: print len(s.pair.fwd.first_read)
 
-# Uncompress reads #
+# Uncompress reads - 0h15 #
+with Timer(): prll_map(lambda s: s.uncompressed_pair, samples)
 for s in samples:
     assert s.uncompressed_pair.fwd.count == s.uncompressed_pair.rev.count
     assert s.pair.count                  == s.uncompressed_pair.rev.count
 
-# Join reads #
+# Join reads - 1h30 #
 with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), samples)
 for s in samples: print s.short_name, s.joiner.results.unassembled_percent
 
-# Filter #
+# Filter - 0h15 #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 60
@@ -72,15 +73,15 @@ for s in samples: print s.short_name, s.filter.n_base_fasta.count
 for s in samples: print s.short_name, s.filter.length_fasta.count
 for s in samples: print s.short_name, s.filter.renamed_fasta.count
 
-# Cluster #
+# Cluster combine reads - 0h01 #
 for p in projects: print p.short_name, p.cluster.num_dropped_samples
 for p in projects: print p.short_name, [s.clean.count for s in p.cluster.good_samples]
 for p in projects: print p.short_name, [s.clean.count for s in p.cluster.bad_samples]
-for p in projects: print p.short_name, p.cluster.reads.count
-for proj in projects: proj.cluster.combine_reads()
+for p in projects: print p.short_name, p.cluster.read_count_cutoff
+with Timer(): prll_map(lambda p: p.cluster.combine_reads(), projects)
 
-# Make centers #
-for proj in projects: p.cluster.centering.run(cpus=32)
+# Make centers  - 0hxx #
+with Timer(): [p.cluster.centering.run(cpus=32) for proj in projects]
 for p in projects: print p.short_name, p.cluster.centering.results.centers.count
 
 # Taxonomy assignment #
@@ -100,20 +101,20 @@ for s in samples:
 
 # Make good sample graphs #
 for s in p.cluster:
-    s.graphs.chao1()
-    s.graphs.ace()
-    s.graphs.shannon()
-    s.graphs.simpson()
+    s.graphs.chao1(rerun=True)
+    s.graphs.ace(rerun=True)
+    s.graphs.shannon(rerun=True)
+    s.graphs.simpson(rerun=True)
 
 # Make project graphs #
 for p in projects:
-    p.cluster.otu_table.results.graphs.otu_sizes_dist()
-    p.cluster.otu_table.results.graphs.otu_sums_graph()
-    p.cluster.otu_table.results.graphs.sample_sums_graph()
-    p.cluster.otu_table.results.graphs.cumulative_presence()
-    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g()
+    p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
+    p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
     if len (p.cluster) < 2: continue
-    p.cluster.nmds_graph()
+    p.cluster.nmds_graph(rerun=True)
 
 # Clean cache #
 for s in samples: s.report.cache_dir.remove()

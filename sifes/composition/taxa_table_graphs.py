@@ -36,8 +36,11 @@ class TaxaBarstack(Graph):
         # Data #
         taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
+        # Special case where there is only one taxa e.g. only 'Bacteria' #
+        if len(self.frame.columns): colors = 'gray'
+        else:                       colors = cool_colors
         # Plot #
-        axes = self.frame.plot(kind='bar', stacked=True, color=cool_colors)
+        axes = self.frame.plot(kind='bar', stacked=True, color=colors)
         fig = pyplot.gcf()
         # Other #
         title = 'Taxonomic relative abundances per sample at rank %i (%s).'

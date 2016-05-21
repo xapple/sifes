@@ -8,7 +8,7 @@ This is the cluster named "{{cluster_name}}". It contains {{count_samples}} samp
 Samples
 -------
 {{#dropped_samples}}
-However, {{count_dropped_samples}}} samples were excluded because their read count was below the threshold of {{read_count_cutoff}}. This cutoff was calculated by taking the {{read_count_cutoff_percentile}} percentile of all read counts.
+However, {{count_dropped_samples}} samples were excluded because their read count was below the threshold of {{read_count_cutoff}}. This cutoff was calculated by taking the average read counts in all samples and multiplying the result by a {{read_count_cutoff_factor}} factor.
 {{/dropped_samples}}
 
 Some summary information the samples is given in table 1 below.

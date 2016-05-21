@@ -27,4 +27,4 @@ class DropBoxUpload(object):
                 dropbox_path  = os.path.join(self.output_dir, relative_path)
                 # upload the file
                 with open(local_path, 'rb') as f:
-                    self.dbx.put_file(dropbox_path, f)
+                    self.dbx.put_file(dropbox_path, f, overwrite=True)
