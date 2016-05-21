@@ -38,10 +38,10 @@
 "project_long_name":    "FEBEX_DP (GrimselTestSite)",
 "sample_long_name":     "IRB.BC.60.16.10.2 (150224_IRB1)",
 
-
-
-
-
+"fwd_read_count":       "4894294",
+"rev_read_count":       "4894294",
+"fwd_md5":              "f661263abff1f4f84d274d05c58c6796",
+"rev_md5":              "7300f6f1aa318bd409dd1db1ababfc23",
 
 
 

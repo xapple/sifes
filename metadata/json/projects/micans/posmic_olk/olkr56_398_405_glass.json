@@ -36,12 +36,12 @@
 "suffix":               "150060_glass/",
 
 "project_long_name":    "POSMIC (Olkiluoto)",
-"sample_long_name":     "OLKR56.398.405mglass (150060_glass)",
+"sample_long_name":     "OLKR56.398.405mglass (150060)",
 
-
-
-
-
+"fwd_read_count":       "550318",
+"rev_read_count":       "550318",
+"fwd_md5":              "b603a4789d7fc7c86723a0ad7d9c8825",
+"rev_md5":              "06ee19dbeaf53587679bdc83acc0fdbb",
 
 
 

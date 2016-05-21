@@ -40,8 +40,8 @@ corr = {
     u'PhiX spiking':                         'lorem',
     u'Forward filename':                     'fwd_filename',
     u'Reverse filename':                     'rev_filename',
-    u'Forward reads count':                  'fwd_count',
-    u'Reverse reads count':                  'rev_count',
+    u'Forward reads count':                  'fwd_read_count',
+    u'Reverse reads count':                  'rev_read_count',
     u'Forward MD5 checksum':                 'fwd_md5',
     u'Reverse MD5 checksum':                 'rev_md5',
 

@@ -38,10 +38,10 @@
 "project_long_name":    "POSMIC (Olkiluoto)",
 "sample_long_name":     "OLKR57.149.152mglass (150001)",
 
-
-
-
-
+"fwd_read_count":       "778194",
+"rev_read_count":       "778194",
+"fwd_md5":              "1d6dbaf9a3b26ee225ddb002e5578e35",
+"rev_md5":              "b64239afd7ec618d91d137a9d69a3ea9",
 
 
 

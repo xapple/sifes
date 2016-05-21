@@ -36,12 +36,12 @@
 "suffix":               "160011_10_7/",
 
 "project_long_name":    "Pseudomonas fluorescence (Micans)",
-"sample_long_name":     "PseudomonasFluorescence10.7 (160011_10_7)",
+"sample_long_name":     "PseudoFluorescence10.7 (160011)",
 
-
-
-
-
+"fwd_read_count":       "1249513",
+"rev_read_count":       "1249513",
+"fwd_md5":              "db5684e9e3c3a517dca631a492a5d99b",
+"rev_md5":              "be25ae0419c5f43dfc382d771be1fd0b",
 
 
 

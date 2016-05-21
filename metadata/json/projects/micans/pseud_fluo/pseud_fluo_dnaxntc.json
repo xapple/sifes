@@ -38,10 +38,10 @@
 "project_long_name":    "Pseudomonas fluorescence (Micans)",
 "sample_long_name":     "DNAxNTC (160012)",
 
-
-
-
-
+"fwd_read_count":       "96651",
+"rev_read_count":       "96651",
+"fwd_md5":              "e1454b18d01fa6d690f14456019cfe2b",
+"rev_md5":              "5150ee869e79cc4f00768ef1187c504c",
 
 
 

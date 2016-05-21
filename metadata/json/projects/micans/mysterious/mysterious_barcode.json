@@ -38,10 +38,10 @@
 "project_long_name":    "All mysterious samples",
 "sample_long_name":     "Unknown barcode 'TCAGC' of last pool",
 
-
-
-
-
+"fwd_read_count":       "3767045",
+"rev_read_count":       "3767045",
+"fwd_md5":              "b7378d60a5ce93dd086bad9907173d69",
+"rev_md5":              "9695ada5af684d34641d7743e5e2d8b9",
 
 
 

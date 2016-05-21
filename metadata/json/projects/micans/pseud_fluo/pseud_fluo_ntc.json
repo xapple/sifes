@@ -38,10 +38,10 @@
 "project_long_name":    "Pseudomonas fluorescence (Micans)",
 "sample_long_name":     "NTC (control)",
 
-
-
-
-
+"fwd_read_count":       "173299",
+"rev_read_count":       "173299",
+"fwd_md5":              "0f01009793355d3b5b276932ca8eae44",
+"rev_md5":              "ad0c0415c54fd5ce67f9505a9a0fdc3c",
 
 
 

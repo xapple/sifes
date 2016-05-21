@@ -36,12 +36,12 @@
 "suffix":               "150060_garnets/",
 
 "project_long_name":    "POSMIC (Olkiluoto)",
-"sample_long_name":     "OLKR56.398.405mgarnets (150060_garnets)",
+"sample_long_name":     "OLKR56.398.405mgarnets (150060)",
 
-
-
-
-
+"fwd_read_count":       "2162643",
+"rev_read_count":       "2162643",
+"fwd_md5":              "adbd300f650ea153e8ed2e18df433498",
+"rev_md5":              "99c45f9f80ea275a48493a50e8db0e5b",
 
 
 
