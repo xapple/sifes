@@ -6,13 +6,15 @@ import shutil
 from collections import OrderedDict
 
 # Internal modules #
+
 import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
-from pymarktex         import Document
-from plumbing.common   import split_thousands, andify
-from pymarktex.figures import ScaledFigure
+from plumbing.autopaths import FilePath
+from plumbing.common    import split_thousands, andify
+from pymarktex.figures  import ScaledFigure
+from pymarktex          import Document
 
 # Third party modules #
 from tabulate import tabulate
@@ -29,20 +31,22 @@ class ClusterReport(Document):
         # Automatic paths #
         self.base_dir    = self.cluster.p.report_dir
         self.output_path = self.cluster.p.report_pdf
+        # Basic export path #
+        self.copy_base = sifes.reports_dir + self.cluster.project.name + '/' + self.cluster.name + '.pdf'
+        self.copy_base = FilePath(self.copy_base)
 
     def generate(self):
         # Dynamic templates #
         self.markdown = unicode(ClusterTemplate(self))
         # Render to latex #
         self.make_body()
-        self.make_latex()
+        self.make_latex({'title': 'Cluster report'})
         self.make_pdf(safe=True)
         # Copy to reports directory #
+        self.copy_base.directory.create(safe=True)
         shutil.copy(self.output_path, self.copy_base)
         # Return #
         return self.output_path
-
-    copy_base = property(lambda self: sifes.reports_dir + self.cluster.project.name + '/' + self.cluster.name + '.pdf')
 
 ###############################################################################
 class ClusterTemplate(ReportTemplate):
@@ -84,7 +88,6 @@ class ClusterTemplate(ReportTemplate):
         # The columns #
         info = OrderedDict((
             ('Name',        lambda s: "**" + s.short_name + "**"),
-            ('Reference',   lambda s: "`" + s.name + "`"),
             ('Description', lambda s: s.long_name),
             ('Reads lost',  lambda s: "%.1f%%" % (100 - ((len(s.filter.results.clean) / len(s))*100))),
             ('Reads left',  lambda s: split_thousands(len(s.filter.results.clean))),
@@ -111,7 +114,7 @@ class ClusterTemplate(ReportTemplate):
     def otus_total(self):             return split_thousands(len(self.centering.results.centers))
 
     # Classification #
-    def classify_citation(self):    return "the %s method (%s)" % (self.taxonomy.long_name, self.taxonomy.version)
+    def classify_citation(self):    return "the '%s' method" % self.taxonomy.long_name
     def classify_database(self):    return self.taxonomy.database
     def otu_classified_table(self):
         info = OrderedDict((('Rank',         lambda i: "**" + self.taxonomy.results.rank_names[i] + "**"),
@@ -148,7 +151,7 @@ class ClusterTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     # Composition #
-    def phyla_barstack(self):
+    def phylum_barstack(self):
         caption = "Relative abundances per sample on the phyla level"
         path    = self.taxa_table.results.graphs.taxa_barstack_phyla
         label   = "phyla_barstack"
@@ -165,6 +168,9 @@ class ClusterTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     # Comparison #
+    def comparison(self):
+        if len (self.cluster) < 2: return False
+        else: return {'otu_nmds': self.otu_nmds()}
     def otu_nmds(self):
         caption = "NMDS using the OTU table for %i samples" % len(self.cluster)
         path    = self.cluster.nmds_graph()

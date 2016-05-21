@@ -12,12 +12,6 @@ from sifes.otus.otu_table           import OtuTable
 from sifes.composition.taxa_table   import TaxaTable
 from sifes.statistics.nmds          import GraphNMDS
 
-# Composition #
-#from sifes.clustering.composition.custom_rank import CompositionPhyla, CompositionOrder, CompositionClass
-#from sifes.clustering.composition.custom_rank import CompositionFamily, CompositionGenus
-#from sifes.clustering.composition.tips        import CompositionTips
-#from sifes.clustering.statistics import StatsOnTaxonomy
-
 # First party modules #
 from fasta import FASTA
 from plumbing.cache import property_cached
@@ -58,7 +52,7 @@ class Cluster(Aggregate):
         super(self.__class__,self).__init__(name, self.good_samples, out_dir)
         # Figure out if it's a subset of a project #
         self.project = None
-        if set(self.samples) < set(self.first.project.samples):
+        if set(self.samples) <= set(self.first.project.samples):
             self.project = self.first.project
         # FASTA #
         self.reads = FASTA(self.p.all_reads)
@@ -74,8 +68,6 @@ class Cluster(Aggregate):
         #self.stats = StatsOnTaxonomy(self)
         # Source tracking #
         #self.seqenv = Seqenv(self)
-        # Report #
-        self.report = ClusterReport(self)
 
     def combine_reads(self):
         """This is the first method you should call. It will combine all the
@@ -114,3 +106,8 @@ class Cluster(Aggregate):
          distance metric such as the Horn 1966 (adapted from Morisita 1959)" one,
          will place every sample on an ordination plot."""
         return GraphNMDS(self, self.p.graphs_dir)
+
+    @property_cached
+    def report(self):
+        """The PDF report."""
+        return ClusterReport(self)

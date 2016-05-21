@@ -95,12 +95,19 @@ class TaxaTableResults(object):
     def load_table(self, path):
         return pandas.io.parsers.read_csv(path, sep='\t', index_col=0, encoding='utf-8')
 
+    @property_cached
     def taxa_table_domain(self):  return self.load_table(self.p.domain)
+    @property_cached
     def taxa_table_phylum(self):  return self.load_table(self.p.phylum)
+    @property_cached
     def taxa_table_class(self):   return self.load_table(self.p('class'))
+    @property_cached
     def taxa_table_order(self):   return self.load_table(self.p.order)
+    @property_cached
     def taxa_table_family(self):  return self.load_table(self.p.family)
+    @property_cached
     def taxa_table_genus(self):   return self.load_table(self.p.genus)
+    @property_cached
     def taxa_table_species(self): return self.load_table(self.p.species)
 
     @property_cached

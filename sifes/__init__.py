@@ -28,6 +28,7 @@ project_dir  = view_dir + 'projects/'
 samples_dir  = view_dir + 'samples/'
 clusters_dir = view_dir + 'clusters/'
 reports_dir  = home     + 'SIFES/reports/'
+bundles_dir  = home     + 'SIFES/bundles/'
 
 # Internal modules #
 from sifes.groups.projects import Projects

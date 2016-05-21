@@ -3,7 +3,7 @@ Sample "{{sample_short_name}}"
 
 General Information
 -------------------
-This sample has the code "{{sample_short_name}}" and is named "{{sample_long_name}}". It is part of the project code "{{project_short_name}}" ("{{project_long_name}}") along with {{project_other_samples}} other samples.
+This sample has the code "`{{sample_short_name}}`" and is named "{{sample_long_name}}". It is part of the project code "`{{project_short_name}}`" ("{{project_long_name}}") along with {{project_other_samples}} other samples.
 
 -------
 
@@ -11,7 +11,7 @@ Meta-data details
 -----------------
 All the meta-data associated with this file is displayed below:
 
-    {{json_content}}
+{{json_content}}
 
 -------
 
@@ -78,7 +78,7 @@ Further analysis is usually performed not at the single sample level but on a bu
 {{#diversity}}
 Diversity
 ---------
-One of the basic questions one can ask is "What is the diversity in this sample ?", or more specifically "What are the richness and evenness ?". Several estimators are available. Moreover, we can calculate these estimates at several rarefaction values to check if the sampling depth was sufficient. We input the OTU count vector for this specific sample (containing {{total_otu_sum}} sequences and {{total_otu_count}} OTUs) and down-sample it iteratively (without replacement). The Chao1, ACE, Shannon and Simpsons estimates can be seen in figures \ref{chao1_curve}, \ref{ace_curve}, \ref{shannon_curve} and \ref{simpson_curve}.
+One of the basic questions one can ask is "What is the diversity in this sample ?", or more specifically "What are the richness and evenness ?". Several estimators are available. Moreover, we can calculate these estimates at several rarefaction values to check if the sampling depth was sufficient. We input the OTU count vector for this specific sample (containing {{total_otu_sum}} sequences) and down-sample it iteratively (without replacement). The Chao1, ACE, Shannon and Simpsons estimates can be seen in figures \ref{chao1_curve}, \ref{ace_curve}, \ref{shannon_curve} and \ref{simpson_curve}.
 
 {{chao1_curve}}
 

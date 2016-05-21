@@ -95,8 +95,6 @@ class Sample(object):
         self.primer_rev = self.info.get('primers', {}).get('reverse', {}).get('sequence')
         if self.primer_fwd and self.primer_rev:
             self.primers = TwoPrimers(self.primer_fwd, self.primer_rev)
-        # Report in PDF #
-        self.report = SampleReport(self)
 
     @property_cached
     def uncompressed_pair(self):
@@ -140,3 +138,8 @@ class Sample(object):
             cls = getattr(sample_graphs, graph)
             setattr(result, cls.short_name, cls(self))
         return result
+
+    @property_cached
+    def report(self):
+        """The PDF report."""
+        return SampleReport(self)

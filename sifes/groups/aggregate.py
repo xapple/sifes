@@ -49,9 +49,10 @@ class Aggregate(object):
     def __repr__(self): return '<%s object "%s" with %i samples>' % \
                                (self.__class__.__name__, self.name, len(self))
 
-    def __str__(self):  return self.short_name
-    def __iter__(self): return iter(self.children)
-    def __len__(self):  return len(self.children)
+    def __str__(self):             return self.short_name
+    def __iter__(self):            return iter(self.children)
+    def __len__(self):             return len(self.children)
+    def __contains__(self, item):  return item in self.children
 
     def __getitem__(self, key):
         if   isinstance(key, basestring):  return [c for c in self.children if str(c) == key][0]

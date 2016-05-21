@@ -10,9 +10,11 @@ import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
-from pymarktex         import Document
-from plumbing.common   import split_thousands
-from pymarktex.figures import ScaledFigure, DualFigure
+from plumbing.autopaths import FilePath, DirectoryPath
+from plumbing.common    import split_thousands
+from plumbing.cache     import property_pickled
+from pymarktex.figures  import ScaledFigure, DualFigure
+from pymarktex          import Document
 
 # Third party modules #
 import pandas
@@ -30,20 +32,29 @@ class SampleReport(Document):
         # Automatic paths #
         self.base_dir    = self.sample.p.report_dir
         self.output_path = self.sample.p.report_pdf
+        # Basic export path #
+        self.copy_base = sifes.reports_dir + self.sample.project.name + '/' + self.sample.short_name + '.pdf'
+        self.copy_base = FilePath(self.copy_base)
+        # Where should we cache stuff #
+        self.cache_dir = DirectoryPath(self.base_dir + 'cached/')
+        self.cache_dir.create(safe=True)
 
     def generate(self):
+        # Message #
+        print "Making report for sample '%s'" % self.sample.short_name
         # Dynamic templates #
         self.markdown = unicode(SampleTemplate(self))
         # Render to latex #
         self.make_body()
-        self.make_latex()
+        self.make_latex({'title': 'Sample report'})
         self.make_pdf(safe=True)
         # Copy to reports directory #
+        self.copy_base.directory.create(safe=True)
         shutil.copy(self.output_path, self.copy_base)
+        # Message #
+        print "Report for sample '%s' is done." % self.sample.short_name
         # Return #
         return self.output_path
-
-    copy_base = property(lambda self: sifes.reports_dir + self.sample.project.name + '/' + self.sample.short_name + '.pdf')
 
 ###############################################################################
 class SampleTemplate(ReportTemplate):
@@ -54,10 +65,11 @@ class SampleTemplate(ReportTemplate):
 
     def __init__(self, report):
         # Attributes #
-        self.report  = report
-        self.sample  = self.parent.sample
-        self.project = self.sample.project
-        self.cluster = self.sample.project.cluster
+        self.report, self.parent = report, report
+        self.sample    = self.parent.sample
+        self.project   = self.sample.project
+        self.cluster   = self.sample.project.cluster
+        self.cache_dir = self.parent.cache_dir
 
     def values_with_percent(self, val):
         percentage = lambda x,y: (len(x)/len(y))*100 if len(y) != 0 else 0
@@ -74,19 +86,28 @@ class SampleTemplate(ReportTemplate):
     ############## JSON ##############
     def json_content(self):
         content = self.sample.json_path.read('utf-8')
-        #TODO: remove blank lines
-        pass
         # Remove the contacts #
-        content = re.sub('\A(.+?)^    },$', '', content, flags=re.M|re.DOTALL)
+        content = re.sub('\A(.+?)^},$', '', content, flags=re.M|re.DOTALL)
+        # Remove blank lines #
+        while '\n\n\n' in content: content = content.replace('\n\n\n', '\n\n')
         # Remove the last brace #
-        return content.strip('\n }')
+        content = content.strip('\n}')
+        # Pad with spaces #
+        content = '\n'.join('    ' + l for l in content.split('\n'))
+        # Return #
+        return content
 
     ############## Raw data ##############
     def fwd_size(self):  return str(self.sample.pair.fwd.size)
+    @property_pickled
     def fwd_count(self): return split_thousands(self.sample.pair.fwd.count)
+    @property_pickled
     def fwd_qual(self):  return "%.2f" % self.sample.pair.fwd.avg_quality
+
     def rev_size(self):  return str(self.sample.pair.rev.size)
+    @property_pickled
     def rev_count(self): return split_thousands(self.sample.pair.rev.count)
+    @property_pickled
     def rev_qual(self):  return "%.2f" % self.sample.pair.rev.avg_quality
 
     def per_base_qual(self):
@@ -108,10 +129,13 @@ class SampleTemplate(ReportTemplate):
     ############## Joining ##############
     def joiner_version(self): self.sample.joiner.long_name
 
+    @property_pickled
     def assembled_count(self):
         return self.values_with_percent(self.sample.joiner.results.assembled)
+    @property_pickled
     def unassembled_count(self):
-        return self.values_with_percent(self.sample.joiner.results.unassembled)
+        return "%s (%s)" % (self.sample.joiner.results.unassembled_count,
+                            self.sample.joiner.results.unassembled_percent)
 
     def joined_len_dist(self):
         caption = "Distribution of sequence lengths after joining"
@@ -122,37 +146,45 @@ class SampleTemplate(ReportTemplate):
     ############## Filtering ##############
     def primer_max_dist(self):    return self.sample.filter.primer_max_dist
     def mismatches_allowed(self): return self.sample.filter.primer_mismatches
+    @property_pickled
     def primer_discard(self):
-        before = self.sample.joining.results.assembled
+        before = self.sample.joiner.results.assembled
         after  = self.sample.filter.results.primers_fasta
         return split_thousands(len(before) - len(after))
+    @property_pickled
     def primer_left(self):
         return split_thousands(len(self.sample.filter.results.primers_fasta))
 
+    @property_pickled
     def n_base_discard(self):
         before = self.sample.filter.results.primers_fasta
         after  = self.sample.filter.results.n_base_fasta
         return split_thousands(len(before) - len(after))
+    @property_pickled
     def n_base_left(self):
         return split_thousands(len(self.sample.filter.results.n_base_fasta))
 
     def min_read_length(self): return self.sample.filter.min_read_length
     def max_read_length(self): return self.sample.filter.max_read_length
+    @property_pickled
     def length_discard(self):
         before = self.sample.filter.results.n_base_fasta
         after  = self.sample.filter.results.length_fasta
         return split_thousands(len(before) - len(after))
+    @property_pickled
     def length_left(self):
         return split_thousands(len(self.sample.filter.results.length_fasta))
 
+    @property_pickled
     def percent_remaining(self):
         return "%.1f%%" % ((len(self.sample.filter.results.clean)/len(self.sample))*100)
 
     ############## Taxonomy ##############
     def taxonomy_table(self):
-        if not self.cluster.taxa_table: return False
-        else: return {'genera_table': self.genera_table()}
+        if not self.sample in self.cluster: return False
+        else: return {'genera_table': self.genera_table}
 
+    @property_pickled
     def genera_table(self):
         # Check #
         if not self.cluster.taxa_table: return False
@@ -171,7 +203,7 @@ class SampleTemplate(ReportTemplate):
 
     ############## Diversity ##############
     def diversity(self):
-        if not self.cluster.otu_table: return False
+        if not self.sample in self.cluster: return False
         params = ('total_otu_sum', 'total_otu_count', 'chao1_curve',
                   'ace_curve', 'shannon_curve', 'simpson_curve')
         return {p:getattr(self, p) for p in params}
@@ -182,21 +214,21 @@ class SampleTemplate(ReportTemplate):
         return split_thousands(len(self.sample.otu_counts))
     def chao1_curve(self):
         caption = "Chao1 rarefaction curve"
-        path = self.sample.diversity.chao1.path
+        path = self.sample.graphs.chao1()
         label = "chao1_curve"
         return str(ScaledFigure(path, caption, label))
     def ace_curve(self):
         caption = "Ace rarefaction curve"
-        path = self.sample.diversity.ace.path
+        path = self.sample.graphs.ace()
         label = "ace_curve"
         return str(ScaledFigure(path, caption, label))
     def shannon_curve(self):
         caption = "Shannon rarefaction curve"
-        path = self.sample.diversity.shannon.path
+        path = self.sample.graphs.shannon()
         label = "shannon_curve"
         return str(ScaledFigure(path, caption, label))
     def simpson_curve(self):
         caption = "Simpson rarefaction curve"
-        path = self.sample.diversity.simpson.path
+        path = self.sample.graphs.simpson()
         label = "simpson_curve"
         return str(ScaledFigure(path, caption, label))

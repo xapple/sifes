@@ -25,7 +25,8 @@ class MothurJoin(object):
     /rev.fastq
     /stdout.txt
     /stderr.txt
-    /assembled.fasta"""
+    /assembled.fasta
+    /unassembled.fasta"""
    #/fwd.trim.contigs.fasta
    #/fwd.contigs.report
    #/fwd.scrap.contigs.fasta
@@ -66,8 +67,10 @@ class MothurJoin(object):
         # Back #
         os.chdir(current_dir)
         # Check #
-        self.p.assembled.link_from(self.results.joined)
         assert self.results.joined
+        # Link #
+        self.p.assembled.link_from(self.results.joined)
+        self.p.unassembled.link_from(self.results.scrap)
         # Return #
         return self.results.assembled
 
@@ -94,3 +97,13 @@ class MothurJoinResults(object):
         self.scrap       = FASTA(   self.base_dir + 'fwd.scrap.contigs.fasta')
         self.outputs     = (self.joined, self.report, self.scrap)
         self.assembled   = FASTA(self.p.assembled)
+        self.unassembled = FASTA(self.p.unassembled)
+
+    @property
+    def unassembled_count(self):
+        return len(self.parent.pair) - len(self.assembled)
+
+    @property
+    def unassembled_percent(self):
+        percent = (self.unassembled_count / len(self.parent.pair)) * 100.0
+        return "%.1f%%" % percent

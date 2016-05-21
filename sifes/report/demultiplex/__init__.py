@@ -31,7 +31,7 @@ class MultiplexReport(Document):
         # Automatic paths #
         self.base_dir    = self.plexed.p.report_dir
         self.output_path = self.plexed.p.report_pdf
-        # Copy path #
+        # Basic export path #
         self.copy_base = sifes.reports_dir + self.plexed.short_name + '/' + self.parent.short_name + '.pdf'
         self.copy_base = FilePath(self.copy_base)
 

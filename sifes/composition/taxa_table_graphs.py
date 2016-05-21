@@ -34,7 +34,7 @@ class TaxaBarstack(Graph):
 
     def plot(self, **kwargs):
         # Data #
-        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]()
+        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
         # Plot #
         axes = self.frame.plot(kind='bar', stacked=True, color=cool_colors)
