@@ -2,13 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run all the procedure on Mican's first data job.
-The code is: micans_v6_exp1
+A script to run all the procedure on our demonstration under ice dataset.
 
 To first generate the JSON files:
 
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans/micans_v6_exp1_plexed/metadata_plexed.xlsx
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/envonautics/under_ice/metadata.xlsx
 
 """
 
