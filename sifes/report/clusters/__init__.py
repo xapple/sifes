@@ -189,12 +189,12 @@ class ClusterTemplate(ReportTemplate):
         from skbio.diversity import alpha_diversity as alphadiv
         from skbio.stats     import subsample_counts as subsample
         k = self.down_sampled_to()
-        info = OrderedDict(
+        info = OrderedDict((
             ('Name',     lambda s: "**" + s.short_name + "**"),
             ('Chao1',    lambda s: alphadiv('chao1',   subsample(s.otu_counts, k))),
             ('Ace',      lambda s: alphadiv('ace',     subsample(s.otu_counts, k))),
             ('Shannon',  lambda s: alphadiv('shannon', subsample(s.otu_counts, k))),
-            ('Simpson',  lambda s: alphadiv('simpson', subsample(s.otu_counts, k))))
+            ('Simpson',  lambda s: alphadiv('simpson', subsample(s.otu_counts, k)))))
         table = [[i+1] + [f(s) for f in info.values()] for i,s in enumerate(self.samples)]
         table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
         return table + "\n\n   : Summary of diversity estimates for all samples."
