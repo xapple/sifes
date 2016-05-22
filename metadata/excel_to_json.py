@@ -55,7 +55,7 @@ for i, row in df.iterrows():
     if content.get('used') == 'no': continue
 
     # Double quotes are used in JSON, replace them, and add quotes around #
-    for k,v in content.items(): content[k] = '"' + str(v).replace('"', "'") + '"'
+    for k,v in content.items(): content[k] = '"' + unicode(v).replace('"', "'") + '"'
 
     # Special case for missing second contact #
     second_contact = {"contact_two_function": content['contact_two_function'],

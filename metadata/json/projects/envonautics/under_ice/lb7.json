@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "Co-founder",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@envonautics.com"
+    }
+    ,
+    "contact_two": {
+        "function": "Co-founder",
+        "name":     "Alexander Eiler",
+        "email":    "alex@envonautics.com"
+    }
+},
+
+"project_short_name":   "under_ice",
+"sample_short_name":    "lb7",
+"sample_num":           "23",
+"used":                 "yes",
+
+"fwd_filename":         "AE_POOL1_2014_12_TCCTCTAC-TAGATCGC_L001_R1_001.fastq.gz",
+"rev_filename":         "AE_POOL1_2014_12_TCCTCTAC-TAGATCGC_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "envonautics",
+"prefix":               "~/SIFES/raw/projects/envonautics/",
+"directory":            "under_ice/140610_M00629_0001_000000000-A8H0L/",
+"suffix":               "Sample_AE_POOL1_2014_12/",
+
+"project_long_name":    "Jämtland lakes under ice",
+"sample_long_name":     "Ice LB7Am",
+
+
+
+
+
+
+
+
+
+"forward_num":          "N501",
+"forward_mid":          "TAGATCGC",
+"reverse_num":          "N712",
+"reverse_mid":          "GTAGAGGA",
+
+
+"primers": {
+        "name":    "General bacteria 16S primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "341F", "sequence": "NNNNCCTACGGGNGGCWGCAG"},
+        "reverse": {"name": "805R", "sequence": "GACTACHVGGGTATCTAATCC"}
+},
+
+"dna_after":     ["2.26055251718", "ng/µl"],
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "v2.5.0.5",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "freshwater lake",
+"env_feature":   "lake water",
+"env_material":  "water",
+
+"date":         "2014-03-19 00:00:00",
+"latitude":     ["63.338277", "N"],
+"longitude":    ["12.548028", "E"],
+"country":      "Sweden",
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
