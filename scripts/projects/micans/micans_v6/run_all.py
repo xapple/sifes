@@ -21,7 +21,6 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
 from plumbing.processes import prll_map
-from plumbing.autopaths import DirectoryPath
 from plumbing.timer import Timer
 
 # Third party modules #
@@ -39,10 +38,10 @@ samples.sort(key=lambda s: s.num)
 
 # Demultiplex - 1h00 #
 demultiplexer = Demultiplexer(plexed, samples)
-demultiplexer.run()
+with Timer(): demultiplexer.run()
 
 # Demultiplex Report #
-demultiplexer.report.generate()
+with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
 # Get information for excel file #
@@ -80,60 +79,66 @@ for p in projects: print p.short_name, [s.clean.count for s in p.cluster.bad_sam
 for p in projects: print p.short_name, p.cluster.read_count_cutoff
 with Timer(): prll_map(lambda p: p.cluster.combine_reads(), projects)
 
-# Make centers  - 0hxx #
-with Timer(): [p.cluster.centering.run(cpus=32) for proj in projects]
+# Make centers  - 0h10 #
+with Timer(): [p.cluster.centering.run(cpus=32) for p in projects]
 for p in projects: print p.short_name, p.cluster.centering.results.centers.count
 
-# Taxonomy assignment #
-for p in projects: p.cluster.taxonomy.run(cpus=32)
+# Taxonomy assignment - 0h03 #
+with Timer(): prll_map(lambda p: p.cluster.taxonomy.run(cpus=1), projects)
 for p in projects: print p.short_name, len(p.cluster.taxonomy.results.assignments)
 
-# Make the OTU table #
-for p in projects: p.cluster.otu_table.run()
+# Make the OTU table - 0h03 #
+with Timer(): [p.cluster.otu_table.run() for p in projects]
 
-# Make the taxa tables #
-for p in projects: p.cluster.taxa_table.run()
+# Make the taxa tables - 0h01 #
+with Timer(): [p.cluster.taxa_table.run() for p in projects]
 
-# Make sample graphs #
+# Make sample graphs - 0hxx #
 for s in samples:
     s.pair.fwd.fastqc.run()
     s.pair.rev.fastqc.run()
 
-# Make good sample graphs #
-for s in p.cluster:
+# Make diversity sample graphs - 0h20 #
+def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
+with Timer(): prll_map(diversity_plot, p.cluster.samples)
 
-# Make project graphs #
-for p in projects:
+# Make project graphs - 0h04 #
+def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+with Timer(): prll_map(otu_plot, projects)
+
+def otu_plot(p):
     for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
-    if len (p.cluster) < 2: continue
+    if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
+with Timer(): prll_map(otu_plot, projects)
 
 # Clean cache #
 for s in samples: s.report.cache_dir.remove()
 for s in samples: s.report.cache_dir.create()
 
-# The average quality is super long #
+# The average quality is super long - 0h10 #
 from sifes.report.samples import SampleTemplate
-prll_map(lambda s: SampleTemplate(s.report).fwd_qual, samples)
-prll_map(lambda s: SampleTemplate(s.report).rev_qual, samples)
+with Timer(): prll_map(lambda s: SampleTemplate(s.report).fwd_qual, samples)
+with Timer(): prll_map(lambda s: SampleTemplate(s.report).rev_qual, samples)
 
-# Make reports #
-prll_map(lambda s: s.report.generate(), samples)
-for tqdm(s) in samples: s.report.generate()
-for p in projects: p.cluster.report.generate()
+# Make cluster reports - 0h02 #
+with Timer(): prll_map(lambda p: p.cluster.report.generate(), projects)
 
-# Bundle #
+# Make sample reports - 0h15 # slowest: irb_bc_60_16_10_2
+with Timer(): prll_map(lambda s: s.report.generate(), samples)
+
+# Bundle - 0h02 #
 from sifes.distribute.bundle import Bundle
 bundle = Bundle("micans_v6", samples)
-bundle.run()
+with Timer(): bundle.run()
 
 # Extra files #
 path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx"
@@ -143,7 +148,7 @@ shutil.copy(path, bundle.p.multiplexed)
 path = sifes.reports_dir + 'micans_v6_exp1_plexed/demultiplexer.pdf'
 shutil.copy(path, bundle.p.demultiplexing_report)
 
-# Upload #
+# Upload - 0h03 #
 from sifes.distribute.upload import DropBoxUpload
 dbx_upload = DropBoxUpload(bundle.base_dir)
-dbx_upload.run()
+with Timer(): dbx_upload.run()

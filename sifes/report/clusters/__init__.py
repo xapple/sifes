@@ -36,6 +36,8 @@ class ClusterReport(Document):
         self.copy_base = FilePath(self.copy_base)
 
     def generate(self):
+        # Message #
+        print "Making report for cluster '%s'" % self.cluster.name
         # Dynamic templates #
         self.markdown = unicode(ClusterTemplate(self))
         # Render to latex #
@@ -60,6 +62,7 @@ class ClusterTemplate(ReportTemplate):
         self.report, self.parent = report, report
         self.cluster = self.parent.cluster
         self.project = self.cluster.project
+        self.samples = self.cluster.samples
         # Convenience #
         self.centering  = self.cluster.centering
         self.taxonomy   = self.cluster.taxonomy
@@ -93,7 +96,7 @@ class ClusterTemplate(ReportTemplate):
             ('Reads left',  lambda s: split_thousands(len(s.filter.results.clean))),
         ))
         # The table #
-        table = [[i+1] + [f(self.cluster.samples[i]) for f in info.values()] for i in range(len(self.cluster))]
+        table = [[i+1] + [f(s) for f in info.values()] for i,s in enumerate(self.samples)]
         # Make it as text #
         table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
         # Add caption #
@@ -169,7 +172,7 @@ class ClusterTemplate(ReportTemplate):
 
     # Comparison #
     def comparison(self):
-        if len (self.cluster) < 2: return False
+        if len(self.cluster) < 2: return False
         else: return {'otu_nmds': self.otu_nmds()}
     def otu_nmds(self):
         caption = "NMDS using the OTU table for %i samples" % len(self.cluster)
@@ -177,8 +180,24 @@ class ClusterTemplate(ReportTemplate):
         label   = "otu_nmds"
         return str(ScaledFigure(path, caption, label))
 
-    # Diversity #
-    pass
+    # Alpha diversity #
+    def alpha_diversity(self):
+        return {'alpha_diversity_table': self.alpha_diversity_table(),
+                'down_sampled_to':       self.down_sampled_to()}
+    def down_sampled_to(self): return min(sum(s.otu_counts) for s in self.samples)
+    def alpha_diversity_table(self):
+        from skbio.diversity import alpha_diversity as alphadiv
+        from skbio.stats     import subsample_counts as subsample
+        k = self.down_sampled_to()
+        info = OrderedDict(
+            ('Name',     lambda s: "**" + s.short_name + "**"),
+            ('Chao1',    lambda s: alphadiv('chao1',   subsample(s.otu_counts, k))),
+            ('Ace',      lambda s: alphadiv('ace',     subsample(s.otu_counts, k))),
+            ('Shannon',  lambda s: alphadiv('shannon', subsample(s.otu_counts, k))),
+            ('Simpson',  lambda s: alphadiv('simpson', subsample(s.otu_counts, k))))
+        table = [[i+1] + [f(s) for f in info.values()] for i,s in enumerate(self.samples)]
+        table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
+        return table + "\n\n   : Summary of diversity estimates for all samples."
 
     # Beta-dispersion #
     pass

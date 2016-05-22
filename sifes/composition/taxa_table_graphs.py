@@ -37,8 +37,8 @@ class TaxaBarstack(Graph):
         taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
         # Special case where there is only one taxa e.g. only 'Bacteria' #
-        if len(self.frame.columns): colors = 'gray'
-        else:                       colors = cool_colors
+        if len(self.frame.columns) < 2 : colors = 'gray'
+        else:                            colors = cool_colors
         # Plot #
         axes = self.frame.plot(kind='bar', stacked=True, color=colors)
         fig = pyplot.gcf()

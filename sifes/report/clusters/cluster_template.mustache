@@ -109,14 +109,24 @@ We now would like to start comparing samples amongst each other to determine whi
 
 These kind of graphs have a random component to them and can be easily influenced by one or two differently looking samples.
 
--------
-{{/comparison}}
-
 Distances
 ---------
 To compute beta diversity, other distance measures are possible of course. Bray-Curtis and Jaccard distance matrices can be created. We can also explore phylogenetic distance measures such as the UniFrac one. This is also possible and a UniFrac distance matrix can easily be computed. One can also build a hierarchical clustering of the samples from it (not included).
 
 -------
+
+-------
+{{/comparison}}
+
+{{#alpha_diversity}}
+Alpha diversity
+---------------
+For each individual sample, we can compute several diversity estimators. More details on this procedure are available in each individual sample report. Here, a summary table is provided where the OTU table was downsampled (randomly rarefied) to {{down_sampled_to}} counts so that the different diversity estimates could be compared across samples.
+
+{{alpha_diversity_table}}
+
+-------
+{{/alpha_diversity}}
 
 Environmental tags
 ------------------

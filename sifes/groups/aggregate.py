@@ -7,7 +7,7 @@ from __future__ import division
 
 # First party modules #
 from plumbing.cache             import property_cached
-from plumbing.autopaths         import AutoPaths
+from plumbing.autopaths         import AutoPaths, DirectoryPath
 
 ###############################################################################
 class Collection(object):
@@ -78,7 +78,7 @@ class Aggregate(object):
         if all(s.info.get('num') for s in samples): samples.sort(key=lambda s: s.info['num'])
         else:                                       samples.sort(key=lambda s: s.short_name)
         # Dir #
-        self.base_dir = out_dir + self.name + '/'
+        self.base_dir = DirectoryPath(out_dir + self.name + '/')
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     @property_cached

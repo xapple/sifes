@@ -31,6 +31,8 @@ class Bundle(Aggregate):
         self.projects = [sifes.projects[p] for p in proj_names]
 
     def run(self):
+        self.base_dir.remove()
+        self.base_dir.create()
         for p in self.projects:
             # Directories #
             proj_dir    = DirectoryPath(self.p.projects_dir + p.name)
@@ -38,7 +40,7 @@ class Bundle(Aggregate):
             reports_dir = DirectoryPath(proj_dir + 'reports')
             reports_dir.create(safe=True)
             p.cluster.report.output_path.copy(reports_dir)
-            for s in p: s.report.output_path.copy(reports_dir + s.short_name)
+            for s in p: s.report.output_path.copy(reports_dir + s.short_name + '.pdf')
             # Data files #
             data_dir = DirectoryPath(proj_dir + 'data')
             data_dir.create(safe=True)
