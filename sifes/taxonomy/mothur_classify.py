@@ -21,11 +21,11 @@ class MothurClassify(object):
     """A wrapper to mothur classify"""
 
     # Attributes #
-    short_name = 'mothur_classify'
-    long_name  = 'Mothur Version 1.37.4'
-    executable = 'mothur'
-    doc        = 'http://www.mothur.org/wiki/Classify.seqs'
-    database   = 'the non-redundant, no-gaps Silva v123 database'
+    short_name    = 'mothur_classify'
+    long_name     = 'Mothur Version 1.37.4'
+    executable    = 'mothur'
+    doc           = 'http://www.mothur.org/wiki/Classify.seqs'
+    database_name = 'the non-redundant, no-gaps Silva version 123 database'
 
     # Parameters #
     bootstrap_cutoff = 60

@@ -118,7 +118,7 @@ class ClusterTemplate(ReportTemplate):
 
     # Classification #
     def classify_citation(self):    return "the '%s' method" % self.taxonomy.long_name
-    def classify_database(self):    return self.taxonomy.database
+    def classify_database(self):    return self.taxonomy.database_name
     def otu_classified_table(self):
         info = OrderedDict((('Rank',         lambda i: "**" + self.taxonomy.results.rank_names[i] + "**"),
                             ('Classified',   lambda i:        self.taxonomy.results.count_assigned[i]),
@@ -157,7 +157,7 @@ class ClusterTemplate(ReportTemplate):
     def phylum_barstack(self):
         caption = "Relative abundances per sample on the phyla level"
         path    = self.taxa_table.results.graphs.taxa_barstack_phyla
-        label   = "phyla_barstack"
+        label   = "phylum_barstack"
         return str(ScaledFigure(path, caption, label))
     def class_barstack(self):
         caption = "Relative abundances per sample on the class level"
@@ -184,11 +184,12 @@ class ClusterTemplate(ReportTemplate):
     def alpha_diversity(self):
         return {'alpha_diversity_table': self.alpha_diversity_table(),
                 'down_sampled_to':       self.down_sampled_to()}
-    def down_sampled_to(self): return min(sum(s.otu_counts) for s in self.samples)
+    def down_sampled_to(self):
+        return split_thousands(min(sum(s.otu_counts) for s in self.samples))
     def alpha_diversity_table(self):
         from skbio.diversity import alpha_diversity as alphadiv
         from skbio.stats     import subsample_counts as subsample
-        k = self.down_sampled_to()
+        k = min(sum(s.otu_counts) for s in self.samples)
         info = OrderedDict((
             ('Name',     lambda s: "**" + s.short_name + "**"),
             ('Chao1',    lambda s: alphadiv('chao1',   subsample(s.otu_counts, k))),

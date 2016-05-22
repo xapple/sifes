@@ -64,7 +64,7 @@ for s in samples: print s.short_name, s.joiner.results.unassembled_percent
 # Filter - 0h15 #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 60
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 55
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 140
 with Timer(): prll_map(lambda s: s.filter.run(), samples)
 for s in samples: print s.short_name, s.filter.primers_fasta.count
@@ -94,17 +94,19 @@ with Timer(): [p.cluster.otu_table.run() for p in projects]
 with Timer(): [p.cluster.taxa_table.run() for p in projects]
 
 # Make sample graphs - 0hxx #
-for s in samples:
+def basic_graphs(s):
+    s.joiner.results.assembled.graphs.length_dist(rerun=True)
     s.pair.fwd.fastqc.run()
     s.pair.rev.fastqc.run()
+with Timer(): prll_map(basic_graphs, samples)
 
-# Make diversity sample graphs - 0h20 #
+# Make diversity sample graphs - 0h30 #
 def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
-with Timer(): prll_map(diversity_plot, p.cluster.samples)
+with Timer(): prll_map(diversity_plot, samples)
 
 # Make project graphs - 0h04 #
 def otu_plot(p):
@@ -112,17 +114,16 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
-with Timer(): prll_map(otu_plot, projects)
-
-def otu_plot(p):
+    p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): prll_map(otu_plot, projects)
 
-# Clean cache #
+# Optionally clean cache #
 for s in samples: s.report.cache_dir.remove()
 for s in samples: s.report.cache_dir.create()
+for s in samples: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
 
 # The average quality is super long - 0h10 #
 from sifes.report.samples import SampleTemplate

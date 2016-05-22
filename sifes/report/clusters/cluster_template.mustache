@@ -21,7 +21,7 @@ Processing
 ----------
 * This report (and all the analysis) was generated using the SIFES project at: <{{project_url}}>
 
-* A more detailed peer reviewed article has been [published in PLoS ONE](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0116955) describing this method.
+* A more detailed peer reviewed article has been [published in PLoS ONE](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0116955) describing parts of this method.
 
 * Version `{{project_version}}` of the pipeline was used.
 
@@ -56,7 +56,7 @@ Classification
 --------------
 Relying on databases of ribosomal genes such as Silva, we can classify each OTU and give it an approximative affiliation. This provides a taxonomic name to each OTU. This is done using {{classify_citation}} and {{classify_database}}.
 
-Out of our {{otus_total}} OTUs, some are totally unclassified while others have predictions at different positions in the tree of life. Summarized below is the proportion of classified OTUs:
+Out of our {{otus_total}} OTUs, some are totally unclassified while others have predictions at different positions in the tree of life. The proportion of classified OTUs is summarized below:
 
 {{otu_classified_table}}
 
@@ -119,7 +119,7 @@ To compute beta diversity, other distance measures are possible of course. Bray-
 {{#alpha_diversity}}
 Alpha diversity
 ---------------
-For each individual sample, we can compute several diversity estimators. More details on this procedure are available in each individual sample report. Here, a summary table is provided where the OTU table was downsampled (randomly rarefied) to {{down_sampled_to}} counts so that the different diversity estimates could be compared across samples.
+For each individual sample, we can compute several diversity estimators. More details on this procedure are available in each individual sample report. Here, a summary table is provided where the OTU table was downsampled (randomly rarefied) to {{down_sampled_to}} counts so that the different diversity estimates can be compared across samples.
 
 {{alpha_diversity_table}}
 
@@ -128,6 +128,6 @@ For each individual sample, we can compute several diversity estimators. More de
 
 Environmental tags
 ------------------
-Relying on the same kind of databases and their meta-data, we can try to infer and assign a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This method is also available upon request:
+Relying on different kinds of databases and their meta-data, we can try to infer and assign a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This method is also available upon request:
 
 > <https://github.com/xapple/seqenv>

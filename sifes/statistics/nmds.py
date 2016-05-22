@@ -10,8 +10,6 @@ class GraphNMDS(Graph):
     """Non-metric dimensional scaling plot."""
 
     short_name = 'nmds_horn'
-    bottom     = 0.03
-    top        = 0.97
 
     def plot(self, **kwargs):
         # The otu table path #

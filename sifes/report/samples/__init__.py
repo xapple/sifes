@@ -127,7 +127,7 @@ class SampleTemplate(ReportTemplate):
         return str(DualFigure(*params))
 
     ############## Joining ##############
-    def joiner_version(self): self.sample.joiner.long_name
+    def joiner_version(self): return self.sample.joiner.long_name
 
     @property_pickled
     def assembled_count(self):
@@ -195,6 +195,7 @@ class SampleTemplate(ReportTemplate):
         frame['Genera'] = row.index
         frame['Reads']  = [split_thousands(r) for r in row.values]
         #frame['OTUs']   = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
+        frame = frame.sort_values(by="Genera", ascending=False)
         frame = frame[0:20]
         # Make it as text #
         table = tabulate(OrderedDict(frame), headers="keys", numalign="right", tablefmt="pipe")

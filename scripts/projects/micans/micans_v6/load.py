@@ -32,6 +32,6 @@ demultiplexer = Demultiplexer(plexed, samples)
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 25
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 60
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 55
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 140
 
