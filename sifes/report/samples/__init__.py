@@ -190,12 +190,12 @@ class SampleTemplate(ReportTemplate):
         if not self.cluster.taxa_table: return False
         # The data #
         row             = self.cluster.taxa_table.results.taxa_table_genus.loc[self.sample.short_name]
+        row             = row.sort_values(ascending=False)
         frame           = pandas.DataFrame(index=range(len(row)))
         frame['#']      = range(1, len(row)+1)
         frame['Genera'] = row.index
         frame['Reads']  = [split_thousands(r) for r in row.values]
         #frame['OTUs']   = [self.sample.project.cluster.otus.taxonomy.comp_tips.count_otus(s) for s in row.index]
-        frame = frame.sort_values(by="Genera", ascending=False)
         frame = frame[0:20]
         # Make it as text #
         table = tabulate(OrderedDict(frame), headers="keys", numalign="right", tablefmt="pipe")
