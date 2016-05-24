@@ -21,7 +21,8 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
 from plumbing.processes import prll_map
-from plumbing.timer import Timer
+from plumbing.timer     import Timer
+from plumbing.autopaths import FilePath
 
 # Third party modules #
 from tqdm import tqdm
@@ -49,7 +50,7 @@ for s in samples: print s.pair.fwd.count
 for s in samples: print s.pair.rev.count
 for s in samples: print s.pair.fwd.md5
 for s in samples: print s.pair.rev.md5
-for s in samples: print len(s.pair.fwd.first_read)
+for s in samples: print len(s.pair.fwd.first)
 
 # Uncompress reads - 0h15 #
 with Timer(): prll_map(lambda s: s.uncompressed_pair, samples)
