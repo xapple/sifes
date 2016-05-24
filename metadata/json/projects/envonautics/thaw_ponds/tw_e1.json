@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "PI",
+        "name":     "Sari Peura",
+        "email":    "sari.peura@ebc.uu.se"
+    }
+    ,
+    "contact_two": {
+        "function": "Co-PI",
+        "name":     "Alexander Eiler",
+        "email":    "alexander.eiler@ebc.uu.se"
+    }
+},
+
+"project_short_name":   "thaw_ponds",
+"sample_short_name":    "tw_e1",
+"sample_num":           "27",
+"used":                 "yes",
+
+"fwd_filename":         "fwd.fastq.gz",
+"rev_filename":         "rev.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "envonautics",
+"prefix":               "~/SIFES/raw/projects/envonautics/",
+"directory":            "thaw_ponds/",
+"suffix":               "Sample_Barcode_328/",
+
+"project_long_name":    "Thawpond size series from Canada",
+"sample_long_name":     "SAS 2C 0.25 m",
+
+
+
+
+
+
+
+
+
+"forward_num":          "529",
+"forward_mid":          "AGGTTACG",
+"reverse_num":          "708",
+"reverse_mid":          "CCTCTCTG",
+
+
+"primers": {
+        "name":    "General bacteria 16S primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "341F", "sequence": "NNNNCCTACGGGNGGCWGCAG"},
+        "reverse": {"name": "805R", "sequence": "GACTACHVGGGTATCTAATCC"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "v2.5.0.5",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "freshwater lake",
+"env_feature":   "lake water",
+"env_material":  "water",
+
+"date":         "2014-08-06",
+"latitude":     ["55.226806", "N"],
+"longitude":    ["-77.695611", "E"],
+"country":      "Canada",
+"location":     "Quebec",
+
+"design_description": "Water samples were taken with a Limnos sampler and prefiltered using a 40 µm sieve. Microbial cells were then captured into 0.2 µm filters and DNA was extracted with a PowerSoil DNA extraction kit.",
+
+
+
+
+"sentinel":             "True"
+}
