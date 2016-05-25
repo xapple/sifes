@@ -1,10 +1,13 @@
 # Built-in modules #
+from __future__ import division
+
+# Built-in modules #
 
 # Internal modules #
 import os, multiprocessing
 
 # First party modules #
-from plumbing.autopaths import AutoPaths
+from plumbing.autopaths import AutoPaths, DirectoryPath
 from plumbing.cache     import property_cached
 from plumbing.autopaths import FilePath
 from fasta import FASTA
@@ -40,7 +43,7 @@ class MothurJoin(object):
         self.result_dir  = result_dir
         self.sample_name = sample_name
         # Auto paths #
-        self.base_dir = self.result_dir + self.short_name + '/'
+        self.base_dir = DirectoryPath(self.result_dir + self.short_name)
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self, cpus=1):

@@ -152,5 +152,5 @@ shutil.copy(path, bundle.p.demultiplexing_report)
 
 # Upload - 0h03 #
 from sifes.distribute.upload import DropBoxUpload
-dbx_upload = DropBoxUpload(bundle.base_dir)
+dbx_upload = DropBoxUpload(bundle.base_dir, '/Micans V6 analysis delivery')
 with Timer(): dbx_upload.run()

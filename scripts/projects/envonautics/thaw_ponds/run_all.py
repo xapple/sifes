@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run all the procedure on our demonstration under ice dataset.
+A script to run all the procedure on Sari's thaw ponds.
 
 To first generate the JSON files:
 
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/envonautics/under_ice/metadata.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/envonautics/thaw_ponds/metadata.xlsx
 
 """
 
@@ -26,7 +26,7 @@ from tqdm import tqdm
 
 ###############################################################################
 # Load multiplexed project #
-proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/under_ice/")
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/thaw_ponds/")
 
 ###############################################################################
 # Get information for excel file #
@@ -43,8 +43,16 @@ for s in proj:
     assert s.pair.count                  == s.uncompressed_pair.rev.count
 
 # Join reads - 0h0x #
+for s in proj: s.default_joiner = 'pandaseq'
 with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
 for s in proj: print s.short_name, s.joiner.results.unassembled_percent
+
+# Make sample graphs - 0hxx #
+def basic_graphs(s):
+    s.pair.fwd.fastqc.run()
+    s.pair.rev.fastqc.run()
+    s.joiner.results.assembled.graphs.length_dist(rerun=True)
+with Timer(): prll_map(basic_graphs, proj)
 
 # Filter - 0h0x #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 1
@@ -65,6 +73,8 @@ print proj.short_name, proj.cluster.read_count_cutoff
 with Timer(): proj.cluster.combine_reads()
 
 # Make centers  - 0h15 #
+import sifes.centering.uparse
+sifes.centering.uparse.Uparse.threshold = 1.5
 with Timer(): proj.cluster.centering.run(cpus=32)
 print proj.short_name, proj.cluster.centering.results.centers.count
 
@@ -77,13 +87,6 @@ with Timer(): proj.cluster.otu_table.run()
 
 # Make the taxa tables - 0h0x #
 with Timer(): proj.cluster.taxa_table.run()
-
-# Make sample graphs - 0hxx #
-def basic_graphs(s):
-    s.pair.fwd.fastqc.run()
-    s.pair.rev.fastqc.run()
-    s.joiner.results.assembled.graphs.length_dist(rerun=True)
-with Timer(): prll_map(basic_graphs, proj)
 
 # Make diversity sample graphs - 0hxx #
 def diversity_plot(s):
@@ -105,11 +108,6 @@ def otu_plot(p):
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
 
-# Optionally clean cache #
-for s in proj: s.report.cache_dir.remove()
-for s in proj: s.report.cache_dir.create()
-for s in proj: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
-
 # Make cluster reports - 0h0x #
 with Timer(): proj.cluster.report.generate()
 
@@ -118,5 +116,14 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 # Bundle - 0h02 #
 from sifes.distribute.bundle import Bundle
-bundle = Bundle("under_ice", proj)
+bundle = Bundle("thaw_ponds", proj.samples[:])
 with Timer(): bundle.run()
+
+# Extra files #
+path = sifes.home + "deploy/sifes/metadata/excel/projects/envonautics/thaw_ponds/metadata.xlsx"
+shutil.copy(path, bundle.p.samples_xlsx)
+
+# Upload - 0h03 #
+from sifes.distribute.upload import DropBoxUpload
+dbx_upload = DropBoxUpload(bundle.base_dir, '/Thaw ponds analysis delivery')
+with Timer(): dbx_upload.run()

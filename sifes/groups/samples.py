@@ -25,6 +25,8 @@ class Sample(object):
     It's a bunch of paired sequences all coming from the same particular
     IRL lab sample. Might or might not correspond to an Illumina MID."""
 
+    default_joiner = 'mothur'
+
     all_paths = """
     /logs/
     /info.json
@@ -108,9 +110,11 @@ class Sample(object):
     @property_cached
     def joiner(self):
         """Will put the forward and reverse reads together."""
-        return MothurJoin(self.uncompressed_pair, self.p.joined_dir, self.short_name)
-        return Pandaseq(self.pair,   self.p.joined_dir)
-        return QiimeJoin(self.pair,  self.p.joined_dir)
+        choices = {'mothur':   (MothurJoin, (self.uncompressed_pair, self.p.joined_dir, self.short_name)),
+                   'pandaseq': (Pandaseq,   (self.pair,              self.p.joined_dir, self.short_name)),
+                   'qiime':    (QiimeJoin,  (self.pair,              self.p.joined_dir, self.short_name))}
+        cls, params = choices.get(self.default_joiner, choices['mothur'])
+        return cls(*params)
 
     @property_cached
     def filter(self):
