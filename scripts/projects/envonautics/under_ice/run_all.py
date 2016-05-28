@@ -18,7 +18,7 @@ import sifes.filtering.seq_filter
 
 # First party modules #
 from plumbing.processes import prll_map
-from plumbing.timer import Timer
+from plumbing.timer     import Timer
 from plumbing.autopaths import FilePath
 
 # Third party modules #
@@ -118,5 +118,5 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 # Bundle - 0h02 #
 from sifes.distribute.bundle import Bundle
-bundle = Bundle("under_ice", proj)
+bundle = Bundle("under_ice", proj.samples)
 with Timer(): bundle.run()

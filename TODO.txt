@@ -1,7 +1,3 @@
-* Fix problem with legend overflowing on NMDS
-
-* Fix the legend on the large taxonomy plots
+* Fix the legend on the large taxonomy plots (no more than 20, all other grouped into others)
 
 * Double check that the unwanted taxa are spelled similar in the database
-
-* Question about second smaller basespace run ?
