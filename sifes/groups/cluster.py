@@ -56,18 +56,6 @@ class Cluster(Aggregate):
             self.project = self.first.project
         # FASTA #
         self.reads = FASTA(self.p.all_reads)
-        # Composition tables #
-        #self.comp_phyla  = CompositionPhyla(self,  self.p.comp_phyla)
-        #self.comp_order  = CompositionOrder(self,  self.p.comp_order)
-        #self.comp_class  = CompositionClass(self,  self.p.comp_class)
-        #self.comp_family = CompositionFamily(self, self.p.comp_order)
-        #self.comp_genus  = CompositionGenus(self,  self.p.comp_class)
-        # The complete one #
-        #self.comp_tips  = CompositionTips(self,  self.p.comp_tips)
-        # Stats #
-        #self.stats = StatsOnTaxonomy(self)
-        # Source tracking #
-        #self.seqenv = Seqenv(self)
 
     def combine_reads(self):
         """This is the first method you should call. It will combine all the
