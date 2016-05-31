@@ -48,8 +48,8 @@ class Bundle(Aggregate):
             p.cluster.taxonomy.p.assignments.copy(data_dir)    # assignments
             p.cluster.otu_table.p.flat.copy(data_dir)          # otu_table
             # Optional extras #
-            p.cluster.reads.copy(data_dir)                     # all_reads.fasta from the cluster
-            p.cluster.centering.readmap.copy(data_dir)         # readmap.uc from uparse
+            p.cluster.reads.link_to(data_dir, safe=True)             # all_reads.fasta
+            p.cluster.centering.readmap.link_to(data_dir, safe=True) # readmap.uc
             # Taxa tables #
             taxa_dir = DirectoryPath(data_dir + 'taxa_tables')
             taxa_dir.remove()

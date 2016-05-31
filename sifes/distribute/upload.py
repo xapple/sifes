@@ -1,7 +1,8 @@
 # Built-in modules #
+import os
 
 # Internal modules #
-import os
+import sifes
 
 # First party modules #
 
@@ -28,3 +29,19 @@ class DropBoxUpload(object):
                 # upload the file
                 with open(local_path, 'rb') as f:
                     self.dbx.put_file(dropbox_path, f, overwrite=True)
+
+###############################################################################
+class DropBoxSync(object):
+    """Expects that your drop box is mounted at ~/Dropbox and then uses rsync.
+    Don't forget to start the daemon:
+        $ dropbox.py start
+    """
+
+    dbx_mount_point = sifes.home + "Dropbox/"
+
+    def __init__(self, input_dir, output_dir='/Micans V6 analysis delivery'):
+        self.input_dir  = input_dir
+        self.output_dir = output_dir
+
+    def run(self):
+        pass #TODO

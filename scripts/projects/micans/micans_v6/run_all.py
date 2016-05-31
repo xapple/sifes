@@ -138,6 +138,7 @@ with Timer(): prll_map(lambda p: p.cluster.report.generate(), projects)
 with Timer(): prll_map(lambda s: s.report.generate(), samples)
 
 # Bundle - 0h02 #
+with Timer(): prll_map(lambda s: s.clean.count, samples)
 from sifes.distribute.bundle import Bundle
 bundle = Bundle("micans_v6", samples)
 with Timer(): bundle.run()
