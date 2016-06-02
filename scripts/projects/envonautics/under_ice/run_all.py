@@ -120,3 +120,8 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 from sifes.distribute.bundle import Bundle
 bundle = Bundle("under_ice", proj.samples)
 with Timer(): bundle.run()
+
+# Upload to CKAN #
+from sifes.distribute.ckan_samples import CkanSamples
+ckan = CkanSamples(proj.samples)
+ckan.run()
