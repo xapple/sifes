@@ -13,6 +13,7 @@ from sifes.report import ReportTemplate
 # First party modules #
 from plumbing.autopaths import FilePath
 from plumbing.common    import split_thousands, andify
+from plumbing.cache     import property_cached
 from pymarktex.figures  import ScaledFigure
 from pymarktex          import Document
 
@@ -35,11 +36,14 @@ class ClusterReport(Document):
         self.copy_base = sifes.reports_dir + self.cluster.project.name + '/' + self.cluster.name + '.pdf'
         self.copy_base = FilePath(self.copy_base)
 
+    @property_cached
+    def template(self): return ClusterTemplate(self)
+
     def generate(self):
         # Message #
         print "Making report for cluster '%s'" % self.cluster.name
         # Dynamic templates #
-        self.markdown = unicode(ClusterTemplate(self))
+        self.markdown = unicode(self.template)
         # Render to latex #
         self.make_body()
         self.make_latex({'title': 'Cluster report'})

@@ -51,6 +51,7 @@ class Sample(object):
         self.json_path = FilePath(json_path)
         # Parse #
         self.info = load_json_path(self.json_path)
+        self.info.pop('sentinel')
         # Own attributes #
         self.num                = self.info.get('sample_num')
         self.short_name         = self.info.get('sample_short_name')

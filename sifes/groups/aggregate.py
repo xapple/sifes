@@ -57,6 +57,7 @@ class Aggregate(object):
     def __getitem__(self, key):
         if   isinstance(key, basestring):  return [c for c in self.children if str(c) == key][0]
         elif isinstance(key, int):
+            if key < 0:                    return self.children[key]
             if hasattr(self.first, 'num'): return [c for c in self.children if int(c.num) == key][0]
             else:                          return self.children[key]
         elif isinstance(key, slice):       return self.children[key]

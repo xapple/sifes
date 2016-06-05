@@ -12,7 +12,7 @@ from sifes.report import ReportTemplate
 # First party modules #
 from plumbing.autopaths import FilePath, DirectoryPath
 from plumbing.common    import split_thousands
-from plumbing.cache     import property_pickled
+from plumbing.cache     import property_cached, property_pickled
 from pymarktex.figures  import ScaledFigure, DualFigure
 from pymarktex          import Document
 
@@ -39,11 +39,14 @@ class SampleReport(Document):
         self.cache_dir = DirectoryPath(self.base_dir + 'cached/')
         self.cache_dir.create(safe=True)
 
+    @property_cached
+    def template(self): return SampleTemplate(self)
+
     def generate(self):
         # Message #
         print "Making report for sample '%s'" % self.sample.short_name
         # Dynamic templates #
-        self.markdown = unicode(SampleTemplate(self))
+        self.markdown = unicode(self.template)
         # Render to latex #
         self.make_body()
         self.make_latex({'title': 'Sample report'})

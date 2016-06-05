@@ -13,6 +13,7 @@ from sifes.report import ReportTemplate
 from pymarktex          import Document
 from plumbing.autopaths import FilePath
 from plumbing.common    import split_thousands
+from plumbing.cache     import property_cached
 
 # Third party modules #
 from tabulate import tabulate
@@ -35,10 +36,12 @@ class MultiplexReport(Document):
         self.copy_base = sifes.reports_dir + self.plexed.short_name + '/' + self.parent.short_name + '.pdf'
         self.copy_base = FilePath(self.copy_base)
 
+    @property_cached
+    def template(self): return MultiplexTemplate(self)
+
     def generate(self):
         # Dynamic templates #
-        self.main = MultiplexTemplate(self)
-        self.markdown = unicode(self.main)
+        self.markdown = unicode(self.template)
         # Render to latex #
         self.make_body()
         self.make_latex(params={'title': 'Demultiplexing report'})
