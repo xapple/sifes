@@ -123,7 +123,7 @@ class CkanSamples(object):
         self.server.action.resource_create(
             url           = self.server_address + "/dataset/" + short_name,
             name          = "joined_reads_len_dist.pdf",
-            description   = "Length distribution of the joined read as a PDF",
+            description   = "Length distribution of the joined reads as a PDF",
             package_id    = s.short_name,
             upload        = open(s.joiner.results.assembled.graphs.length_dist(), 'rb'),
             resource_type = 'plot',
