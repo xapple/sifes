@@ -1,6 +1,6 @@
 # `sifes` version 2.0.0
 
-The acronym `sifes` stands for **S**pieces **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
+The acronym `sifes` stands for **S**pecies **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
 
 This project is a python pipeline handling the analysis -- from start to finish -- of 16S rRNA microbial amplicon sequencing data.
 
@@ -105,7 +105,7 @@ Don't forget to rehash the binary links at the end:
 Special libraries:
 
     $ pip install git+https://github.com/uqfoundation/pathos.git@master
-    
+
 #### Step 5: Check you have all the required executables
 `sifes` will search for several different binaries as it processes your data. Please check all of these are available in your `$PATH`:
 
