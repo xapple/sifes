@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "pi",
+        "name":     "Alexander Eiler",
+        "email":    "alex@envonautics.com"
+    }
+    ,
+    "contact_two": {
+        "function": "postdoc",
+        "name":     "Christian Wurzbacher",
+        "email":    "christian.wurzbacher@bioenv.gu.se"
+    }
+},
+
+"project_short_name":   "hundred_lakes_fung",
+"sample_short_name":    "fg_mjoern_m_fl",
+"sample_num":           "313",
+"used":                 "yes",
+
+"fwd_filename":         "g5_S136_L001_R1_001.fastq.gz",
+"rev_filename":         "g5_S136_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "uppsala_universitet",
+"prefix":               "~/SIFES/raw/projects/uppsala_universitet/",
+"directory":            "heli_hundred_lakes/",
+"suffix":               "Sample_g5/",
+
+"project_long_name":    "Hundred lakes study (fungal)",
+"sample_long_name":     "4) Mjörn, 9.10, bottom, 0.22 µm",
+
+
+
+
+
+
+
+
+
+"forward_num":          "529",
+"forward_mid":          "AGGTTACG",
+"reverse_num":          "707",
+"reverse_mid":          "GTAGAGAG",
+
+
+"primers": {
+        "name":    "Fungal ITS2 primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "ITS3mix2", "sequence": "AACCAWCGATGAAGAACGCAG"},
+        "reverse": {"name": "ITS4cwmix", "sequence": "AATCCTCCGCTTAYTRATATGC"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired-end",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "V2.6.1.1",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "lake",
+"env_feature":   "epilimnion",
+"env_material":  "water",
+
+
+
+
+"country":      "Sweden",
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

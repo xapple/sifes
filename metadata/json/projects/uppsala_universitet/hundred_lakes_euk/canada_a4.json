@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "pi",
+        "name":     "Alexander Eiler",
+        "email":    "alex@envonautics.com"
+    }
+    ,
+    "contact_two": {
+        "function": "postdoc",
+        "name":     "Christian Wurzbacher",
+        "email":    "christian.wurzbacher@bioenv.gu.se"
+    }
+},
+
+"project_short_name":   "hundred_lakes_euk",
+"sample_short_name":    "canada_a4",
+"sample_num":           "124",
+"used":                 "yes",
+
+"fwd_filename":         "A4_S124_L001_R1_001.fastq.gz",
+"rev_filename":         "A4_S124_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "uppsala_universitet",
+"prefix":               "~/SIFES/raw/projects/uppsala_universitet/",
+"directory":            "heli_hundred_lakes/",
+"suffix":               "Sample_A4/",
+
+"project_long_name":    "Hundred lakes study (eukaryotic)",
+
+
+
+
+
+
+
+
+
+
+"forward_num":          "532",
+"forward_mid":          "GCGATATG",
+"reverse_num":          "705",
+"reverse_mid":          "AGGAGTCC",
+
+
+"primers": {
+        "name":    "Universal SSU primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "926F", "sequence": "ACAAACTYRAAGRAATWGRCGG"},
+        "reverse": {"name": "1392R", "sequence": "CAGACGGGCGGTGWGTRC"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired-end",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "V2.6.1.1",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "lake",
+"env_feature":   "epilimnion",
+"env_material":  "water",
+
+
+
+
+"country":      "Canada",
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

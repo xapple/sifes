@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "pi",
+        "name":     "Alexander Eiler",
+        "email":    "alex@envonautics.com"
+    }
+    ,
+    "contact_two": {
+        "function": "postdoc",
+        "name":     "Christian Wurzbacher",
+        "email":    "christian.wurzbacher@bioenv.gu.se"
+    }
+},
+
+"project_short_name":   "hundred_lakes_euk",
+"sample_short_name":    "hjartsjon_slu",
+"sample_num":           "34",
+"used":                 "yes",
+
+"fwd_filename":         "36_S34_L001_R1_001.fastq.gz",
+"rev_filename":         "36_S34_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "uppsala_universitet",
+"prefix":               "~/SIFES/raw/projects/uppsala_universitet/",
+"directory":            "heli_hundred_lakes/",
+"suffix":               "Sample_36/",
+
+"project_long_name":    "Hundred lakes study (eukaryotic)",
+"sample_long_name":     "Hjärtsjön water SLU Aug2014",
+
+
+
+
+
+
+
+
+
+"forward_num":          "501",
+"forward_mid":          "TAGATCGC",
+"reverse_num":          "706",
+"reverse_mid":          "CATGCCTA",
+
+
+"primers": {
+        "name":    "Universal SSU primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "926F", "sequence": "ACAAACTYRAAGRAATWGRCGG"},
+        "reverse": {"name": "1392R", "sequence": "CAGACGGGCGGTGWGTRC"}
+},
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired-end",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "V2.6.1.1",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "lake",
+"env_feature":   "epilimnion",
+"env_material":  "water",
+
+"date":         "2014-08-21 00:00:00",
+"latitude":     ["56.88417", "N"],
+"longitude":    ["14.92334", "E"],
+"country":      "Sweden",
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
