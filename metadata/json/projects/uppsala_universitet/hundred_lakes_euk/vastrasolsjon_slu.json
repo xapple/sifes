@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Västra Solsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "117353",
+"rev_read_count":       "117353",
+"fwd_md5":              "d08ebd2821404ef9d221fce28c19fe4a",
+"rev_md5":              "b37242c549ad68afea2aa53d5c79f805",
 
 
 

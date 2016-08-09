@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Mäsen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "143977",
+"rev_read_count":       "143977",
+"fwd_md5":              "e1e3221537e0829ea4079451a816fdf5",
+"rev_md5":              "d75ff079a56939d94a930654ce011109",
 
 
 

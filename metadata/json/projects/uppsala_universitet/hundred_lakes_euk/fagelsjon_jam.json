@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Fågelsjön",
 
-
-
-
-
+"fwd_read_count":       "97660",
+"rev_read_count":       "97660",
+"fwd_md5":              "1ae68941b8dc7b46dc03ee701a38a9f0",
+"rev_md5":              "721b26fcb7c577d758df16e19184d4c1",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Stora Lummersjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "127986",
+"rev_read_count":       "127986",
+"fwd_md5":              "3589aacf17d2580575589ab132748ebc",
+"rev_md5":              "6581d39d83f80de45719495763e58d37",
 
 
 

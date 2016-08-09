@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Syot-Backsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "135664",
+"rev_read_count":       "135664",
+"fwd_md5":              "c27afe47805476c492764ab557453876",
+"rev_md5":              "e5c50e4415a80d5130530f060019558a",
 
 
 

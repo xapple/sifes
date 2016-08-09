@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Vitträsket water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "117113",
+"rev_read_count":       "117113",
+"fwd_md5":              "ae4e8784f5294db0a9f25a6e0384bde5",
+"rev_md5":              "976bd278b28096a184fa9dd307b99d81",
 
 
 

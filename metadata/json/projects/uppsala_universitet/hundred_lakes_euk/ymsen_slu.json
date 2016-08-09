@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Ymsen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "100752",
+"rev_read_count":       "100752",
+"fwd_md5":              "c19654ea888420ef1a02b6b2dfd0fc06",
+"rev_md5":              "0fc3f930370219d5ae64b654e8967c99",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "3) Mjörn, 9.10, surface, 0.22 µm",
 
-
-
-
-
+"fwd_read_count":       "110061",
+"rev_read_count":       "110061",
+"fwd_md5":              "8c1ffc7c6c6da19c29d185974f420c09",
+"rev_md5":              "22bd221d22d6ffcd559074d59a5c85fe",
 
 
 

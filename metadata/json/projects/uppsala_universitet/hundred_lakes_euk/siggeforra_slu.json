@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Siggeforasjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "141041",
+"rev_read_count":       "141041",
+"fwd_md5":              "cf0a5c54b17e851db7031c215aad5a28",
+"rev_md5":              "a7a8c80cba8cbf6bcca7149c76c2b38c",
 
 
 

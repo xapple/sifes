@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Ulvsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "108530",
+"rev_read_count":       "108530",
+"fwd_md5":              "b361f7e886004b2a9dd44833b9e2a258",
+"rev_md5":              "839a31e1725cda4d45e9cd9c7ba36a88",
 
 
 

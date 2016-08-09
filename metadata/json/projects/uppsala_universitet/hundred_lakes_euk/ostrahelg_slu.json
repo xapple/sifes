@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Östra Helgtjärnen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "134143",
+"rev_read_count":       "134143",
+"fwd_md5":              "df3f6d21a69f036e0dbc37bb90217ec0",
+"rev_md5":              "006516e980d70ae202a25944bd91070f",
 
 
 

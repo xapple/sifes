@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Fysingen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "123849",
+"rev_read_count":       "123849",
+"fwd_md5":              "ec9fdab87b8ea31374411db7feac06a5",
+"rev_md5":              "3a54eff09a6a98d6093274adde96d678",
 
 
 

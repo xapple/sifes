@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Tväringen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "123978",
+"rev_read_count":       "123978",
+"fwd_md5":              "b98bd094304a2f3b0df0d55ad48848c7",
+"rev_md5":              "80bed41a27534f824118497622009f19",
 
 
 

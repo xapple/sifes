@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "7) Nordsjön, 30.9, surface, 0.22 µm",
 
-
-
-
-
+"fwd_read_count":       "105750",
+"rev_read_count":       "105750",
+"fwd_md5":              "b00e9e43474e331833fb6464e36054fe",
+"rev_md5":              "164fa5b9519b96407542a47d30fef36d",
 
 
 

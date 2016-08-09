@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Latnajaure water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "104180",
+"rev_read_count":       "104180",
+"fwd_md5":              "541347e55c485671da3c129444a99448",
+"rev_md5":              "8400533196cd085a4401d828d86cad36",
 
 
 

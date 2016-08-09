@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Härsvattnet water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "135688",
+"rev_read_count":       "135688",
+"fwd_md5":              "c06c09177acea48778c7478ee93e3db8",
+"rev_md5":              "21040975aea83a74dac489a079225c23",
 
 
 

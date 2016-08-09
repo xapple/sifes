@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Stor-Arasjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "111775",
+"rev_read_count":       "111775",
+"fwd_md5":              "47b4feba1d6d38e814517acd4fec9875",
+"rev_md5":              "8ba6bf5d744c155bb282e056aacfe151",
 
 
 

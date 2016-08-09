@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Svinarydsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "121760",
+"rev_read_count":       "121760",
+"fwd_md5":              "42285bef290b624a3a39382a7a336753",
+"rev_md5":              "269545bafcd4dc0345b5a2c16f699a24",
 
 
 

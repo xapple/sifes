@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Rotehogstjärnen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "131077",
+"rev_read_count":       "131077",
+"fwd_md5":              "cf5a66e619cdfef201bf7c083a423f91",
+"rev_md5":              "53d6e49a8fb66bc5a10ed185ed141bbf",
 
 
 

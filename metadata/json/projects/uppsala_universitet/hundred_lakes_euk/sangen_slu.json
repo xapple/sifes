@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Sangen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "128202",
+"rev_read_count":       "128202",
+"fwd_md5":              "0bc295bf0e50266e4e1c4fa09c5b4db1",
+"rev_md5":              "3ab53f370fba74e386ef23b9e72aff04",
 
 
 

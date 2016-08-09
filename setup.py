@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
       name             = 'sifes',
-      version          = '2.0.0',
+      version          = '2.0.1',
       description      = 'Pipeline for 16S microbial environmental sequencing',
       long_description = open('README.md').read(),
       license          = 'Proprietary software, all rights reserved.',

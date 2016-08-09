@@ -9,3 +9,4 @@ find /home/lucas/SIFES/raw/projects/uppsala_universitet/hundred_lakes/ -type d -
 find /home/lucas/SIFES/raw/projects/uppsala_universitet/hundred_lakes/ -type f -print0 | xargs -0 chmod u=r,g=,o=
 
 # Generate JSON files #
+~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/uppsala_universitet/heli_hundred_lakes/metadata.xlsx

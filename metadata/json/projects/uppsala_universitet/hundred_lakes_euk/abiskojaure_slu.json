@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Abiskojause water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "102325",
+"rev_read_count":       "102325",
+"fwd_md5":              "ffdfe75e709c59201a21eced2a067436",
+"rev_md5":              "8cdfe510d6fcc03524053a8fffd0ef39",
 
 
 

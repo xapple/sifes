@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Degervattnet water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "93950",
+"rev_read_count":       "93950",
+"fwd_md5":              "e37f051dc3bc4a23ed90783cc11c5e79",
+"rev_md5":              "3001978cfb507359da5390c21ddf616c",
 
 
 

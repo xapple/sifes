@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Tronntjärnarna water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "88015",
+"rev_read_count":       "88015",
+"fwd_md5":              "ddc4bf5d1f11c1ed188d4a4a588c463a",
+"rev_md5":              "1355e6fe5ea54165a1d1896a2351497b",
 
 
 

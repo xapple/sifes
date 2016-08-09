@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Fiolen water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "136468",
+"rev_read_count":       "136468",
+"fwd_md5":              "ab52655aec1b9c147e6da726378b1079",
+"rev_md5":              "55450ee1bb664e956fa6308172ad944c",
 
 
 

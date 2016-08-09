@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Rundbosjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "102101",
+"rev_read_count":       "102101",
+"fwd_md5":              "006ab0c77dd9833d423477e52e2c3c94",
+"rev_md5":              "645c11325ad2d3da4befb61ba6d317e3",
 
 
 

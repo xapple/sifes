@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Gipsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "118631",
+"rev_read_count":       "118631",
+"fwd_md5":              "e77b5e5e09bb5f4a95ad56d3a58add3b",
+"rev_md5":              "c2ae7f5c1cafda59db66109b66a4c900",
 
 
 

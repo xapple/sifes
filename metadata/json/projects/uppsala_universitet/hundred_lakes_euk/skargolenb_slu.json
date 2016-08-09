@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Skärgölen B water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "126002",
+"rev_read_count":       "126002",
+"fwd_md5":              "020bf1a59d27f9b86c26c8e9145f01a8",
+"rev_md5":              "b9ec0438b2b9fa0233e73f6464b270e8",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Tärnan water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "116664",
+"rev_read_count":       "116664",
+"fwd_md5":              "bdf0eda2b1d67f94628ac62699555192",
+"rev_md5":              "abf6908a02db6dd3f9217b938b262a9f",
 
 
 

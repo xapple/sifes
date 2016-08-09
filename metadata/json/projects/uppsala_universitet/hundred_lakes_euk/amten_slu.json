@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Ämten water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "95403",
+"rev_read_count":       "95403",
+"fwd_md5":              "60bc2ff37ffae65ce894e5b727b5d82b",
+"rev_md5":              "8788eb561e9d0c36a727cda19477f254",
 
 
 

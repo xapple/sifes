@@ -1,4 +1,4 @@
-# `sifes` version 2.0.0
+# `sifes` version 2.0.1
 
 The acronym `sifes` stands for **S**pecies **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
 

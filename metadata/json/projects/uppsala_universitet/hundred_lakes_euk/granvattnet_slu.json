@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Granvattnet water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "130497",
+"rev_read_count":       "130497",
+"fwd_md5":              "7f7bc541f2705d59b89edb151389b0e0",
+"rev_md5":              "03568f972fcb25c1f27d7eecee51a632",
 
 
 

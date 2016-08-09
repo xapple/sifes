@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Tängersjö water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "132802",
+"rev_read_count":       "132802",
+"fwd_md5":              "d95fd83c2a6e4bbfcfbde2b925a261ae",
+"rev_md5":              "afefe0948221406792b014fefed3115c",
 
 
 

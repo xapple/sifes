@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Vuolejaure water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "123293",
+"rev_read_count":       "123293",
+"fwd_md5":              "dacce67a41d1f666a192369d20ae1a8a",
+"rev_md5":              "8cdeb45c7158ece13fa1dc4094b2d195",
 
 
 

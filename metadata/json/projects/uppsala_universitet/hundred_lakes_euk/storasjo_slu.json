@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Storasjö water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "133815",
+"rev_read_count":       "133815",
+"fwd_md5":              "acef3e14f97a55dcf287afa8d8f894b6",
+"rev_md5":              "7da745804a2ac2557735e76bd94fe3e2",
 
 
 

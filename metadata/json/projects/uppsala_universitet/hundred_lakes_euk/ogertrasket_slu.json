@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Ögerträsket water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "123331",
+"rev_read_count":       "123331",
+"fwd_md5":              "49eb18c56d59a53af9705f67c09ab38a",
+"rev_md5":              "6bcc756ce403407defe823895a8d07c2",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Björken water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "95139",
+"rev_read_count":       "95139",
+"fwd_md5":              "1133b226742d3a2c0e0c7aaded85a738",
+"rev_md5":              "fce399f2e5f6bc2187514ddc599e2340",
 
 
 

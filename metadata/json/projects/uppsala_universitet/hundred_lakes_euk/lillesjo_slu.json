@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Lillesjö water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "99606",
+"rev_read_count":       "99606",
+"fwd_md5":              "744352b89d1dbe8c66a3747a28b0ade7",
+"rev_md5":              "f57ea4ca54511b5111bc578cb7b101a3",
 
 
 

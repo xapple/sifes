@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Häggsjön water Jamtland June2014",
 
-
-
-
-
+"fwd_read_count":       "102099",
+"rev_read_count":       "102099",
+"fwd_md5":              "1af66b62118cdf3435c494ed7d5c9ac3",
+"rev_md5":              "955ee6aeda19eed1883d0e519ddf1983",
 
 
 

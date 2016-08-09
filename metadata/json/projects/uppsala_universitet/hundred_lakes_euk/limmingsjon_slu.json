@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Limmingsjön water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "137304",
+"rev_read_count":       "137304",
+"fwd_md5":              "7fcc9546d581f932a51bcadc28903657",
+"rev_md5":              "07c2f418143e6fb6807102055ec50ada",
 
 
 

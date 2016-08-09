@@ -38,10 +38,10 @@
 "project_long_name":    "Hundred lakes study (eukaryotic)",
 "sample_long_name":     "Fagertärn water SLU Aug2014",
 
-
-
-
-
+"fwd_read_count":       "112999",
+"rev_read_count":       "112999",
+"fwd_md5":              "fd2846f192e033429ac9b795b70f9ad9",
+"rev_md5":              "9ef91ae041ed990a9620535e72d08097",
 
 
 
