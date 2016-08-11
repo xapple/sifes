@@ -38,52 +38,52 @@ for s in proj: print s.pair.fwd.md5
 for s in proj: print s.pair.rev.md5
 for s in proj: print len(s.pair.fwd.first)
 
-# Uncompress reads - 0h01 #
+# Uncompress reads - 0h03 #
 with Timer(): prll_map(lambda s: s.uncompressed_pair, proj)
 for s in proj:
     assert s.uncompressed_pair.fwd.count == s.uncompressed_pair.rev.count
     assert s.pair.count                  == s.uncompressed_pair.rev.count
 
-# Join reads - 0h0x #
+# Join reads - 0h02 #
 with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
 for s in proj: print s.short_name, s.joiner.results.unassembled_percent
+for s in proj: print s.joiner.results.assembled.graphs.length_dist()
 
-# Filter - 0h0x #
+# Filter - 0h03 #
 with Timer(): prll_map(lambda s: s.filter.run(), proj)
 for s in proj: print s.short_name, s.filter.primers_fasta.count
 for s in proj: print s.short_name, s.filter.n_base_fasta.count
 for s in proj: print s.short_name, s.filter.length_fasta.count
 for s in proj: print s.short_name, s.filter.renamed_fasta.count
 
-# Cluster combine reads - 0h0x #
+# Cluster combine reads - 0h01 #
 print proj.short_name, proj.cluster.num_dropped_samples
 print proj.short_name, [s.clean.count for s in proj.cluster.good_samples]
 print proj.short_name, [s.clean.count for s in proj.cluster.bad_samples]
 print proj.short_name, proj.cluster.read_count_cutoff
 with Timer(): proj.cluster.combine_reads()
 
-# Make centers  - 0h15 #
+# Make centers  - 0h05 #
 with Timer(): proj.cluster.centering.run(cpus=32)
 print proj.short_name, proj.cluster.centering.results.centers.count
 
-# Taxonomy assignment - 0h0x #
+# Taxonomy assignment - 0h07 #
 with Timer(): proj.cluster.taxonomy.run(cpus=1)
 print proj.short_name, len(proj.cluster.taxonomy.results.assignments)
 
-# Make the OTU table - 0h0x #
+# Make the OTU table - 0h01 #
 with Timer(): proj.cluster.otu_table.run()
 
-# Make the taxa tables - 0h0x #
+# Make the taxa tables - 0h01 #
 with Timer(): proj.cluster.taxa_table.run()
 
-# Make sample graphs - 0hxx #
-def basic_graphs(s):
+# Make fastqc graphs - 0h50 #
+for s in tqdm(proj):
+    print "fastqc101 on sample '%s'" % s
     s.pair.fwd.fastqc.run()
     s.pair.rev.fastqc.run()
-    s.joiner.results.assembled.graphs.length_dist(rerun=True)
-with Timer(): prll_map(basic_graphs, proj)
 
-# Make diversity sample graphs - 0hxx #
+# Make diversity sample graphs - 0h03 #
 def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
@@ -91,7 +91,7 @@ def diversity_plot(s):
     s.graphs.simpson(rerun=True)
 with Timer(): prll_map(diversity_plot, proj)
 
-# Make project graphs - 0h0x #
+# Make project graphs - 0h13 #
 def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
@@ -108,7 +108,7 @@ for s in proj: s.report.cache_dir.remove()
 for s in proj: s.report.cache_dir.create()
 for s in proj: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
 
-# Make cluster reports - 0h0x #
+# Make cluster reports - 0h07 #
 with Timer(): proj.cluster.report.generate()
 
 # Make sample reports - 0h0x #
@@ -119,7 +119,15 @@ from sifes.distribute.bundle import Bundle
 bundle = Bundle("under_ice", proj.samples)
 with Timer(): bundle.run()
 
-# Upload to CKAN #
-from sifes.distribute.ckan_samples import CkanSamples
-ckan = CkanSamples(proj.samples)
-ckan.run()
+# Extra files #
+path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx"
+shutil.copy(path, bundle.p.samples_xlsx)
+path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1_plexed/metadata_plexed.xlsx"
+shutil.copy(path, bundle.p.multiplexed)
+path = sifes.reports_dir + 'micans_v6_exp1_plexed/demultiplexer.pdf'
+shutil.copy(path, bundle.p.demultiplexing_report)
+
+# Upload - 0h03 #
+from sifes.distribute.upload import DropBoxUpload
+dbx_upload = DropBoxUpload(bundle.base_dir, '/Micans V6 analysis delivery')
+with Timer(): dbx_upload.run()
