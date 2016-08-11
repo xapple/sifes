@@ -36,11 +36,12 @@ class Bundle(Aggregate):
         for p in self.projects:
             # Directories #
             proj_dir    = DirectoryPath(self.p.projects_dir + p.name)
-            # Reports #
+            # Reports for samples #
             reports_dir = DirectoryPath(proj_dir + 'reports')
             reports_dir.create(safe=True)
-            p.cluster.report.output_path.copy(reports_dir)
             for s in p: s.report.output_path.copy(reports_dir + s.short_name + '.pdf')
+            # Reports for cluster #
+            p.cluster.report.output_path.copy(self.p.projects_dir + 'project_report.pdf')
             # Data files #
             data_dir = DirectoryPath(proj_dir + 'data')
             data_dir.create(safe=True)
