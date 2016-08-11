@@ -116,18 +116,14 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 # Bundle - 0h02 #
 from sifes.distribute.bundle import Bundle
-bundle = Bundle("under_ice", proj.samples)
+bundle = Bundle("hundred_lakes", proj.samples)
 with Timer(): bundle.run()
 
 # Extra files #
-path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx"
+path = sifes.home + "deploy/sifes/metadata/excel/projects/uppsala_universitet/heli_hundred_lakes/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
-path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1_plexed/metadata_plexed.xlsx"
-shutil.copy(path, bundle.p.multiplexed)
-path = sifes.reports_dir + 'micans_v6_exp1_plexed/demultiplexer.pdf'
-shutil.copy(path, bundle.p.demultiplexing_report)
 
-# Upload - 0h03 #
-from sifes.distribute.upload import DropBoxUpload
-dbx_upload = DropBoxUpload(bundle.base_dir, '/Micans V6 analysis delivery')
-with Timer(): dbx_upload.run()
+# Upload - 0h00 #
+from sifes.distribute.upload import DropBoxSync
+dbx_sync = DropBoxSync(bundle.base_dir, '/100 lakes analysis delivery')
+with Timer(): dbx_sync.run()

@@ -117,7 +117,7 @@ class ClusterTemplate(ReportTemplate):
     # Clustering #
     def clustering_citation(self):    return "the %s method (%s)" % (self.centering.long_name, self.centering.version)
     def clustering_publication(self): return self.centering.article
-    def clustering_threshold(self):   return "%.1f%%" % self.centering.threshold
+    def clustering_threshold(self):   return "%.1f" % self.centering.threshold
     def otus_total(self):             return split_thousands(len(self.centering.results.centers))
 
     # Classification #
