@@ -56,6 +56,8 @@ class CkanSamples(object):
         extras = s.info.copy()
         # Add dummy methane value #
         extras['methane'] = random.uniform(1.5, 9.0)
+        # Add dummy date value #
+        extras['date'] = "2014-03-%i" % random.randint(0, 28)
         # Remove stuff #
         extras.pop('contacts', None)
         extras.pop('used', None)
