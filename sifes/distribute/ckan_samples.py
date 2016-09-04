@@ -1,4 +1,5 @@
 # Built-in modules #
+import random
 
 # Internal modules #
 
@@ -23,7 +24,7 @@ class CkanSamples(object):
         print groups
 
     Resources are files, packages are datasets that contain one or more files.
-    Groups contain one or more datasets. Organisations own datasets.
+    Groups contain one or more datasets. Organizations own datasets.
     """
 
     server_address = "http://anaerobes.science"
@@ -37,8 +38,8 @@ class CkanSamples(object):
         # Main object #
         self.server = ckanapi.RemoteCKAN(self.server_address, user_agent='sifes', apikey=self.api_key)
         # Do it #
-        #print "Making datasets"
-        #for s in tqdm(self.samples): self.make_dataset(s)
+        print "Making datasets"
+        for s in tqdm(self.samples): self.make_dataset(s)
         print "Making groups"
         self.make_groups()
         #print "Uploading all data"
@@ -53,6 +54,9 @@ class CkanSamples(object):
         if int(s.short_name[-1]) == 8: tags = [{'name': 'bottom'}]
         # Extras #
         extras = s.info.copy()
+        # Add dummy methane value #
+        extras['methane'] = random.uniform(1.5, 9.0)
+        # Remove stuff #
         extras.pop('contacts', None)
         extras.pop('used', None)
         extras.pop('prefix', None)
@@ -86,7 +90,7 @@ class CkanSamples(object):
             #url                       = None,
             #version                   = None,
             state                     = 'active',
-            type                      = 'dna_sequences',
+            #type                      = 'dna_sequences', # Do not assign types ! Causes 404 !
             tags                      = tags,
             extras                    = extras,
             owner_org                 = 'envonautics',
@@ -109,7 +113,7 @@ class CkanSamples(object):
     def upload_resources(self, s):
         # The fasta file #
         self.server.action.resource_create(
-            url           = self.server_address + "/dataset/" + short_name,
+            url           = self.server_address + "/dataset/" + s.short_name,
             name          = "joined_reads.fasta",
             description   = "The joined reads before filtering as a FASTA",
             package_id    = s.short_name,
@@ -121,7 +125,7 @@ class CkanSamples(object):
         )
         # A graph #
         self.server.action.resource_create(
-            url           = self.server_address + "/dataset/" + short_name,
+            url           = self.server_address + "/dataset/" + s.short_name,
             name          = "joined_reads_len_dist.pdf",
             description   = "Length distribution of the joined reads as a PDF",
             package_id    = s.short_name,
@@ -132,7 +136,7 @@ class CkanSamples(object):
         )
         # Genera table #
         self.server.action.resource_create(
-            url           = self.server_address + "/dataset/" + short_name,
+            url           = self.server_address + "/dataset/" + s.short_name,
             name          = "top_20_genera.tsv",
             description   = "Top 20 genera found in this sample as a TSV table",
             package_id    = s.short_name,
@@ -143,7 +147,7 @@ class CkanSamples(object):
         )
         # Chao1 rarefaction #
         self.server.action.resource_create(
-            url           = self.server_address + "/dataset/" + short_name,
+            url           = self.server_address + "/dataset/" + s.short_name,
             name          = "chao1.pdf",
             description   = "Rarefaction curve of alpha diversity (Chao1)",
             package_id    = s.short_name,
