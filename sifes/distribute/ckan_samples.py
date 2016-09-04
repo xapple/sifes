@@ -74,7 +74,7 @@ class CkanSamples(object):
         extras.pop('env_material', None)
         extras.pop('location', None)
         extras = [{'key':k, 'value':v} for k,v in extras.items()]
-        # Try to purge #
+        # Try to purge datasets #
         try: self.server.action.dataset_purge(id=short_name)
         except ckanapi.errors.NotFound: pass
         # The package #
@@ -99,6 +99,10 @@ class CkanSamples(object):
     def make_groups(self):
         # Groups #
         group_names = set([s.short_name[0:2] for s in self.samples])
+        # Delete groups if they exist #
+        for name in group_names:
+            try: self.server.action.group_purge(id=name)
+            except ckanapi.errors.NotFound: pass
         # Loop #
         for name in group_names:
             samples = [s for s in self.samples if s.short_name.startswith(name)]
