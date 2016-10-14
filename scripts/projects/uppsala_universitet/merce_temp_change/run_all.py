@@ -49,7 +49,7 @@ print("# Join reads - 0h02 #")
 with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
 for s in proj: print s.joiner.results.unassembled_percent
 
-print("# Filter - 0h03 #")
+print("# Filter - 0h11 #")
 with Timer(): prll_map(lambda s: s.filter.run(), proj)
 for s in proj: print s.short_name, s.filter.primers_fasta.count
 for s in proj: print s.short_name, s.filter.n_base_fasta.count
@@ -63,11 +63,11 @@ print proj.short_name, [s.clean.count for s in proj.cluster.bad_samples]
 print proj.short_name, proj.cluster.read_count_cutoff
 with Timer(): proj.cluster.combine_reads()
 
-print("# Make centers  - 0h05 #")
+print("# Make centers  - 0h16 #")
 with Timer(): proj.cluster.centering.run(cpus=32)
 print proj.short_name, proj.cluster.centering.results.centers.count
 
-print("# Taxonomy assignment - 0h07 #")
+print("# Taxonomy assignment - 0h03 #")
 with Timer(): proj.cluster.taxonomy.run(cpus=1)
 print proj.short_name, len(proj.cluster.taxonomy.results.assignments)
 
@@ -114,7 +114,7 @@ for s in proj: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove
 print("# Make cluster reports - 0h07 #")
 with Timer(): proj.cluster.report.generate()
 
-print("# Attribute deletion because of odd pickling parallelisation problem #")
+print("# Attribute deletion because of odd pickling parallelization problem #")
 for s in proj: del s.joiner.results.assembled.graphs
 
 print("# Make sample reports - 0h05 #")

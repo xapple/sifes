@@ -12,6 +12,7 @@ from dropbox.client import DropboxClient
 
 # Constants #
 home = os.environ.get('HOME', '~') + '/'
+dropbox_token = "_WV-ZSiONaAAAAAAAAAAINlmCV5smn1f7rwFV-g8aibak73Pu6Rhu1rA2z1Z--Om"
 
 ###############################################################################
 class DropBoxSync(object):
@@ -35,7 +36,7 @@ class DropBoxUpload(object):
     """http://dropbox-sdk-python.readthedocs.io/en/master/"""
 
     def __init__(self, input_dir, output_dir='/Micans V6 analysis delivery'):
-        self.dbx = DropboxClient('_WV-ZSiONaAAAAAAAAAAC6xOZMQp1hDcU9sHMOreqe-GwHxuFvcKJ7JXadxD08Ch')
+        self.dbx = DropboxClient(dropbox_token)
         self.input_dir  = input_dir
         self.output_dir = output_dir
 
