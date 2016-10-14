@@ -2,6 +2,7 @@
 from __future__ import division
 
 # Built-in modules #
+import warnings
 
 # Internal modules #
 
@@ -75,9 +76,12 @@ class Aggregate(object):
         # Check names are unique #
         names = [s.short_name for s in self.samples]
         assert len(names) == len(set(names))
+        # Are the samples numbered #
+        have_numbers = all(s.info.get('sample_num') for s in samples)
+        if not have_numbers: warnings.warn("Not all samples of project '%s' were numbered." % self)
         # Sort the samples #
-        if all(s.info.get('num') for s in samples): samples.sort(key=lambda s: s.info['num'])
-        else:                                       samples.sort(key=lambda s: s.short_name)
+        if have_numbers: samples.sort(key=lambda s: s.info['sample_num'])
+        else:            samples.sort(key=lambda s: s.short_name)
         # Dir #
         self.base_dir = DirectoryPath(out_dir + self.name + '/')
         self.p = AutoPaths(self.base_dir, self.all_paths)

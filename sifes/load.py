@@ -39,6 +39,6 @@ def load(json_dir_path, raw_files_must_exist=True):
     # Link the samples to their project #
     for s in new_samples: s.project = projects[s.project_short_name]
 
-    # Return project #
+    # Return project if only one project #
     proj_name = set(s.project_short_name for s in new_samples)
     if len(proj_name) == 1: return projects[proj_name.pop()]
