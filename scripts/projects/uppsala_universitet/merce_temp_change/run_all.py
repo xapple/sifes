@@ -47,7 +47,7 @@ for s in proj:
 
 print("# Join reads - 0h02 #")
 with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
-for s in proj: print s.short_name, s.joiner.results.unassembled_percent
+for s in proj: print s.joiner.results.unassembled_percent
 
 print("# Filter - 0h03 #")
 with Timer(): prll_map(lambda s: s.filter.run(), proj)

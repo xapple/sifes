@@ -7,3 +7,8 @@ find /home/lucas/SIFES/raw/projects/uppsala_universitet/merce_temp_change/ -type
 
 # Generate JSON files (was originally run016) #
 ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/uppsala_universitet/merce_temp_change/metadata.xlsx
+
+# Copy back from storage 1 to storage 2 #
+rsync -av --progress /home/lucas/storage1/sifes/raw/projects/uppsala_universitet/merce_temp_change/ /home/lucas/storage2/sifes/raw/projects/uppsala_universitet/merce_temp_change/
+rsync -av --progress /home/lucas/storage1/sifes/views/projects/uppsala_universitet/merce_temp_change/ /home/lucas/storage2/sifes/views/projects/uppsala_universitet/merce_temp_change/
+rsync -av --progress /home/lucas/storage1/sifes/views/samples/uppsala_universitet/merce_temp_change/ /home/lucas/storage2/sifes/views/samples/uppsala_universitet/merce_temp_change/
