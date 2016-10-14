@@ -32,6 +32,7 @@ for s in proj: s.default_joiner = 'pandaseq'
 
 ###############################################################################
 print("# Get information for excel file #")
+for s in proj: print s.short_name
 for s in proj: print s.pair.fwd.count
 for s in proj: print s.pair.rev.count
 for s in proj: print s.pair.fwd.md5

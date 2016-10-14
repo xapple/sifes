@@ -80,7 +80,7 @@ class Aggregate(object):
         have_numbers = all(s.info.get('sample_num') for s in samples)
         if not have_numbers: warnings.warn("Not all samples of project '%s' were numbered." % self)
         # Sort the samples #
-        if have_numbers: samples.sort(key=lambda s: s.info['sample_num'])
+        if have_numbers: samples.sort(key=lambda s: int(s.info['sample_num']))
         else:            samples.sort(key=lambda s: s.short_name)
         # Dir #
         self.base_dir = DirectoryPath(out_dir + self.name + '/')
