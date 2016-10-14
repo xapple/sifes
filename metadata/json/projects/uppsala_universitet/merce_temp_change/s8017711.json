@@ -1,0 +1,91 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Merce Berga",
+        "email":    "merce.berga@io-warnemuende.de"
+    }
+    ,
+    "contact_two": {
+        "function": "pi",
+        "name":     "Silke Langenheder",
+        "email":    "silke.langenheder@ebc.uu.se"
+    }
+},
+
+"project_short_name":   "merce_temp_change",
+"sample_short_name":    "s8017711",
+"sample_num":           "66",
+"used":                 "yes",
+
+"fwd_filename":         "80-17-7-1-1_CCATAGCA-AGAGTAGA_L001_R1_001.fastq.gz",
+"rev_filename":         "80-17-7-1-1_CCATAGCA-AGAGTAGA_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "uppsala_universitet",
+"prefix":               "~/SIFES/raw/projects/uppsala_universitet/",
+"directory":            "merce_temp_change/",
+"suffix":               "Sample_80-17-7-1-1/",
+
+"project_long_name":    "Strong temperature change adaptations",
+"sample_long_name":     "17/7_1.1",
+
+
+
+
+
+
+
+
+
+"forward_num":          "504",
+"forward_mid":          "AGAGTAGA",
+"reverse_num":          "736",
+"reverse_mid":          "TGCTATGG",
+"barcode_num":          "75",
+
+"primers": {
+        "name":    "General bacteria 16S primers",
+        "sense":   "5' to 3'",
+        "forward": {"name": "341F", "sequence": "NNNNCCTACGGGNGGCWGCAG"},
+        "reverse": {"name": "805R", "sequence": "GACTACHVGGGTATCTAATCC"}
+},
+
+"dna_after":     ["2.06396844078", "ng/µl"],
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired-end",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+"instrument_software":  "v2.5.0.5",
+"forward_read_length":  "300",
+"reverse_read_length":  "300",
+
+"organism":      "aquatic metagenome",
+"env_biome":     "freshwater",
+"env_feature":   "lake",
+"env_material":  "water",
+
+"date":         "2012-08-26 00:00:00",
+"latitude":     ["59.83032", "N"],
+"longitude":    ["18.61994", "E"],
+"country":      "Sweden",
+"location":     "Lake Erken",
+
+"design_description": "Water from lake Erken was taken and transported into the lab. Most of the water was used to prepare the medium for the incubations and a small part of it used as inoculum. A number of bottles were filled and inoculated and different sets of bottles were incubated under distinct temperature regimes (oscillations around 20C). Samples were taken regularly and after 14 and 20 days all the bottles were exposed to a constant temperature of 35C. Also here samples were taken regularly to test the response of the communities",
+
+
+
+
+"sentinel":             "True"
+}
