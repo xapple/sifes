@@ -17,7 +17,7 @@ import sifes
 
 ###############################################################################
 # Load two projects #
-proj = sifes.load("~/deploy/sifes/metadata/json/projects/uppsala_universitet/hundred_lakes_euk/")
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/uppsala_universitet/merce_temp_change/")
 
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 2

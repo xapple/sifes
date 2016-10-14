@@ -38,10 +38,10 @@
 "project_long_name":    "Strong temperature change adaptations",
 "sample_long_name":     "21/7_4.1",
 
-
-
-
-
+"fwd_read_count":       "69600",
+"rev_read_count":       "69600",
+"fwd_md5":              "11d20379f30f00694a3e9f49a99ba618",
+"rev_md5":              "7441cafdaf868d429d1d9d1d5693c0d1",
 
 
 
@@ -76,7 +76,7 @@
 "env_feature":   "lake",
 "env_material":  "water",
 
-"date":         "2012-10-12 00:00:00",
+"date":         "2012-06-22 00:00:00",
 "latitude":     ["59.83032", "N"],
 "longitude":    ["18.61994", "E"],
 "country":      "Sweden",

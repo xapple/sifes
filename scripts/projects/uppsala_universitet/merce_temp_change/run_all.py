@@ -21,7 +21,7 @@ from tqdm import tqdm
 
 ###############################################################################
 # Load two projects #
-proj = sifes.load("~/deploy/sifes/metadata/json/projects/uppsala_universitet/hundred_lakes_euk/")
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/uppsala_universitet/merce_temp_change/")
 
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 2
@@ -38,7 +38,7 @@ for s in proj: print s.pair.fwd.md5
 for s in proj: print s.pair.rev.md5
 for s in proj: print len(s.pair.fwd.first)
 
-print("# Uncompress reads - 0h03 #")
+print("# Uncompress reads - 0h02 #")
 with Timer(): prll_map(lambda s: s.uncompressed_pair, proj)
 for s in proj:
     assert s.uncompressed_pair.fwd.count == s.uncompressed_pair.rev.count
