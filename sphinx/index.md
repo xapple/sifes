@@ -4,7 +4,7 @@ The acronym `sifes` stands for **S**pieces **I**​dentification **F**​rom **E
 
 This project is a python pipeline handling the analysis -- from start to finish -- of 16S rRNA microbial amplicon sequencing data.
 
-This source code is propriety of Lucas Sinclair <lucas@envonautics.com>, co-founder of Envonautics Ltd. (https://www.envonautics.com)
+This source code is propriety of Lucas Sinclair <lucas.sinclair@me.com>
 
 ## Introduction
 
