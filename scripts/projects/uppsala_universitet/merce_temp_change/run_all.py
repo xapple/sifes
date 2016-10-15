@@ -91,7 +91,7 @@ def diversity_plot(s):
     s.graphs.simpson(rerun=True)
 with Timer(): prll_map(diversity_plot, proj)
 
-print("# Make project graphs - 0h13 #")
+print("# Make project graphs - 0h12 #")
 def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
@@ -103,15 +103,15 @@ def otu_plot(p):
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
 
-print("# Make length dist graphs #")
-for s in proj: print s.joiner.results.assembled.graphs.length_dist(rerun=True)
+print("# Make length dist graphs - 0h23 #")
+for s in tqdm(proj): print s.joiner.results.assembled.graphs.length_dist(rerun=True)
 
 #print("# Optionally clean cache #")
 #for s in proj: s.report.cache_dir.remove()
 #for s in proj: s.report.cache_dir.create()
 #for s in proj: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
 
-print("# Make cluster reports - 0h07 #")
+print("# Make cluster reports - 0h05 #")
 with Timer(): proj.cluster.report.generate()
 
 print("# Attribute deletion because of odd pickling parallelization problem #")
@@ -122,14 +122,15 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 print("# Bundle - 0h02 #")
 from sifes.distribute.bundle import Bundle
-bundle = Bundle("hundred_lakes", proj.samples)
+bundle = Bundle("merce_temp_change", proj.samples)
 with Timer(): bundle.run()
 
 print("# Extra files #")
-path = sifes.home + "deploy/sifes/metadata/excel/projects/uppsala_universitet/heli_hundred_lakes/metadata.xlsx"
+path = sifes.home + "deploy/sifes/metadata/excel/projects/uppsala_universitet/merce_temp_change/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
 
 print("# Upload - 0h02 #")
 from sifes.distribute.upload import DropBoxSync
-dbx_sync = DropBoxSync(bundle.base_dir, '/100 lakes analysis delivery')
+dbx_sync = DropBoxSync(bundle.base_dir, '/Mercè temperature change')
 with Timer(): dbx_sync.run()
+print("Total delivery: %s" % bundle.base_dir.size)
