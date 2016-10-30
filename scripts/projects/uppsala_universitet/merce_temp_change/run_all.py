@@ -5,6 +5,8 @@
 A script to run all the procedure on the hundred lakes project.
 """
 
+import os
+
 # Built-in modules #
 import shutil
 

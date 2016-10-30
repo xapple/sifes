@@ -13,8 +13,8 @@ from sifes.report import ReportTemplate
 from plumbing.autopaths import FilePath, DirectoryPath
 from plumbing.common    import split_thousands
 from plumbing.cache     import property_cached, property_pickled
-from pymarktex.figures  import ScaledFigure, DualFigure
 from pymarktex          import Document
+from pymarktex.figures  import ScaledFigure, DualFigure
 
 # Third party modules #
 import pandas
@@ -89,13 +89,15 @@ class SampleTemplate(ReportTemplate):
     ############## JSON ##############
     def json_content(self):
         content = self.sample.json_path.read('utf-8')
-        # Remove the contacts #
+        # Remove the first nested dictionary (it's always the contacts) #
         content = re.sub('\A(.+?)^},$', '', content, flags=re.M|re.DOTALL)
+        # Remove the sentinel line #
+        content = re.sub('"sentinel": +"True"', '', content)
         # Remove blank lines #
         while '\n\n\n' in content: content = content.replace('\n\n\n', '\n\n')
         # Remove the last brace #
         content = content.strip('\n}')
-        # Pad with spaces #
+        # Pad with spaces for monospace block #
         content = '\n'.join('    ' + l for l in content.split('\n'))
         # Return #
         return content
