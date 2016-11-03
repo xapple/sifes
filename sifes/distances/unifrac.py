@@ -5,7 +5,7 @@ import os, shutil, glob
 from fasta               import FASTA
 from plumbing.autopaths  import AutoPaths, FilePath
 from plumbing.cache      import property_cached
-from plumbing.csv_tables import CSVTable
+from plumbing.csv_tables import TSVTable
 
 # Third party modules #
 import sh, pandas
@@ -30,7 +30,7 @@ class UniFrac(object):
     Step 3. Feed the tree and the OTU table into a UniFrac algorithm
     One can use:
         * Pycogent
-        * scikit-bio  <- fastest
+        * scikit-bio
 
     Step 4. Return distance matrix as a TSV.
 
@@ -51,7 +51,7 @@ class UniFrac(object):
     /mothur/flip.accnos
     /raxml/output.tree
     /fasttree/output.tree
-    /distances.csv
+    /distances.tsv
     """
 
     def __init__(self, otu_table, result_dir):
@@ -68,13 +68,13 @@ class UniFrac(object):
         # Other files #
         self.raxml_tree    = FilePath(self.p.raxml_tree)
         self.fasttree_tree = FilePath(self.p.fasttree_tree)
-        self.distances_csv = CSVTable(self.p.distances_csv)
+        self.distances_tsv = TSVTable(self.p.distances_tsv)
 
     def run(self):
         # Step 1 #
-        self.align_mothur()
+        #self.align_mothur()
         # Step 2 #
-        self.tree_fasttree()
+        #self.tree_fasttree()
         # Step 3 #
         self.unifrac_pycogent()
         # Step 4 #
@@ -85,7 +85,7 @@ class UniFrac(object):
     def reference(self):
         """The reference database to use for the alignment"""
         from seqsearch.databases.silva import silva
-        return silva.nr99_align
+        return silva.aligned
 
     def align_clustalo(self):
         """Step 1 with clustalo"""
@@ -94,22 +94,21 @@ class UniFrac(object):
 
     def align_pynast(self):
         """Step 1 with PyNAST"""
-        sh.pynast('--input_fp', self.otu_table.centers, '--template_fp', self.reference,
+        sh.pynast('--input_fp',     self.otu_table.centers, '--template_fp', self.reference,
                   '--fasta_out_fp', self.pynast_aligned,
-                  '--log_fpa', self.p.pynast_log, '--failure_fp', self.p.pynast_fail,)
+                  '--log_fpa',      self.p.pynast_log, '--failure_fp', self.p.pynast_fail,)
 
     def align_mothur(self):
         """Step 1 with mothur"""
         # Run it #
         command = "#align.seqs(candidate=%s, template=%s, search=kmer, flip=false, processors=%s);"
         command = command % (self.otu_table.results.centers, self.reference, 16)
-        print command
-        pass
         sh.mothur(command)
-        # Move things #
-        shutil.move(self.tax.centers.prefix_path + '.align',        self.mothur_aligned)
-        shutil.move(self.tax.centers.prefix_path + '.align.report', self.p.mothur_report)
-        path = self.tax.centers.prefix_path + '.flip.accnos'
+        # Move results #
+        shutil.move(self.otu_table.results.centers.prefix_path + '.align',        self.mothur_aligned)
+        shutil.move(self.otu_table.results.centers.prefix_path + '.align.report', self.p.mothur_report)
+        # Optional file #
+        path = self.otu_table.results.centers.prefix_path + '.flip.accnos'
         if os.path.exists(path): shutil.move(path, self.p.mothur_accnos)
         # Clean up #
         for p in glob.glob('mothur.*.logfile'): os.remove(p)
@@ -130,35 +129,38 @@ class UniFrac(object):
     #----------------------------- Algorithms ------------------------------#
     def unifrac_pycogent(self):
         """Step 3 with Pycogent"""
-        tree_newick = open(self.fasttree_tree, 'r').read()
-        from cogent.parse.tree import DndParser
-        from cogent.maths.unifrac.fast_tree import UniFracTreeNode
-        tree = DndParser(tree_newick, UniFracTreeNode)
+        # Modules #
+        from cogent.parse.tree                 import DndParser
+        from cogent.maths.unifrac.fast_tree    import UniFracTreeNode
         from cogent.maths.unifrac.fast_unifrac import fast_unifrac
-        distances = fast_unifrac(tree, self.tax.otu_table.to_dict())
+        # Do it #
+        tree_newick = open(self.fasttree_tree, 'r').read()
+        tree        = DndParser(tree_newick, UniFracTreeNode)
+        distances   = fast_unifrac(tree, self.otu_table.results.otu_table.to_dict())
         # Make a dataframe #
         names = distances['distance_matrix'][1]
-        df = pandas.DataFrame(distances['distance_matrix'][0], index=names, columns=names)
-        df.to_csv(self.distances_csv, sep='\t', float_format='%.5g')
+        df    = pandas.DataFrame(distances['distance_matrix'][0], index=names, columns=names)
+        # Save it #
+        df.to_csv(self.distances_tsv.path, sep='\t', float_format='%.5g')
 
     def unifrac_skbio(self):
-        """Step 3 with Scikit-bio"""
+        """Step 3 with Scikit-bio. The tree must be rooted :'( """
         # The OTU table #
-        data = 0
-        # The name of the samples (columns) #
-        ids = 0
-        # The name of the OTUs (rows) #
-        otu_ids = ['OTU1', 'OTU2', 'OTU3', 'OTU4', 'OTU5', 'OTU6', 'OTU7']
+        values  = self.otu_table.results.otu_table.values
+        # The name of the samples (rows) #
+        ids     = self.otu_table.results.otu_table.index
+        # The name of the OTUs (columns) #
+        otu_ids = self.otu_table.results.otu_table.columns
         # Load the tree #
         from skbio import TreeNode
-        tree = TreeNode.read(StringIO())
+        tree = TreeNode.read(self.fasttree_tree)
         # Do the algorithm #
         from skbio.diversity import beta_diversity
-        matrix = beta_diversity("weighted_unifrac", data, ids, tree=tree, otu_ids=otu_ids)
+        matrix = beta_diversity("weighted_unifrac", values, ids, tree=tree, otu_ids=otu_ids)
         # Save the matrix on disk #
-        pass
+        1/0
 
     #-------------------------------- Result ---------------------------------#
     @property_cached
     def distances(self):
-        return pandas.io.parsers.read_csv(self.distances_csv, sep='\t', index_col=0)
+        return pandas.io.parsers.read_csv(self.distances_tsv, sep='\t', index_col=0)
