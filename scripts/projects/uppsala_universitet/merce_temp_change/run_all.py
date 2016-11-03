@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run all the procedure on the hundred lakes project.
+A script to run all the procedure on Mercè's temperature change project.
 """
 
-import os
-
 # Built-in modules #
+import os
 import shutil
 
 # Internal modules #
@@ -22,7 +21,7 @@ from plumbing.autopaths import FilePath
 from tqdm import tqdm
 
 ###############################################################################
-# Load two projects #
+# Load one project #
 proj = sifes.load("~/deploy/sifes/metadata/json/projects/uppsala_universitet/merce_temp_change/")
 
 # Parameters #

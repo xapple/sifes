@@ -30,7 +30,7 @@ class Uparse(object):
     article    = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
     version    = uparse_version
 
-    # Parameters
+    # Parameters #
     threshold = 3.0
 
     all_paths = """

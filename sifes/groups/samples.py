@@ -44,7 +44,6 @@ class Sample(object):
     def __str__(self):          return self.short_name
     def __iter__(self):         return iter(self.children)
     def __len__(self):          return self.pair.count
-    def __getitem__(self, key): return self.children[key]
 
     def __init__(self, json_path, raw_files_must_exist):
         # Attributes #

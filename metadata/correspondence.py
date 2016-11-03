@@ -37,7 +37,7 @@ corr = {
 
     u'Barcode ref.':                         'barcode_num',
     u'DNA con. [ng/µl]':                     'dna_after',
-    u'PhiX spiking':                         'lorem',
+    u'PhiX spiking':                         'phix_spiking',
     u'Forward filename':                     'fwd_filename',
     u'Reverse filename':                     'rev_filename',
     u'Forward reads count':                  'fwd_read_count',

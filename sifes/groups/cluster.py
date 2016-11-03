@@ -11,6 +11,7 @@ from sifes.taxonomy.mothur_classify import MothurClassify
 from sifes.otus.otu_table           import OtuTable
 from sifes.composition.taxa_table   import TaxaTable
 from sifes.statistics.nmds          import GraphNMDS
+from sifes.distances.unifrac        import UniFrac
 
 # First party modules #
 from fasta import FASTA
@@ -34,6 +35,7 @@ class Cluster(Aggregate):
     /otu_table/
     /taxa_table/
     /taxonomy/
+    /distances/
     /graphs/
     /report/report.pdf
     """
@@ -94,6 +96,11 @@ class Cluster(Aggregate):
          distance metric such as the Horn 1966 (adapted from Morisita 1959)" one,
          will place every sample on an ordination plot."""
         return GraphNMDS(self, self.p.graphs_dir)
+
+    @property_cached
+    def unifrac_matrix(self):
+        """Will produce the UniFrac distance matrix."""
+        return UniFrac(self, self.p.distances_dir)
 
     @property_cached
     def report(self):
