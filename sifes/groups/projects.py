@@ -3,7 +3,7 @@
 # Internal modules #
 import sifes
 from sifes.groups.aggregate import Aggregate
-from gefes.groups.lump      import Lump
+from sifes.groups.lump      import Lump
 
 # First party modules #
 

@@ -10,10 +10,6 @@ from plumbing.csv_tables import CSVTable
 # Third party modules #
 import sh, pandas
 
-# Constants #
-home = os.environ.get('HOME', '~') + '/'
-reference = FASTA(home + 'glob/16s/silva/v111/rep_set_aligned/97_Silva_111_rep_set.fasta')
-
 ################################################################################
 class UniFrac(object):
     """A class to compute the UniFrac algorithm producing a distance matrix
@@ -58,9 +54,9 @@ class UniFrac(object):
     /distances.csv
     """
 
-    def __init__(self, parent, result_dir):
+    def __init__(self, otu_table, result_dir):
         # Save parent #
-        self.cluster, self.parent = parent, parent
+        self.otu_table = otu_table
         # Auto paths #
         self.result_dir = result_dir
         self.base_dir = self.result_dir + self.short_name + '/'
@@ -85,22 +81,31 @@ class UniFrac(object):
         return self.distances
 
     #------------------------------ Alignments -------------------------------#
+    @property_cached
+    def reference(self):
+        """The reference database to use for the alignment"""
+        from seqsearch.databases.silva import silva
+        return silva.nr99_align
+
     def align_clustalo(self):
         """Step 1 with clustalo"""
         self.centers_aligned.remove()
-        sh.clustalo('-i', self.tax.centers, '--profile1', reference, '-o', self.clustalo_aligned, '--threads', 16)
+        sh.clustalo('-i', self.otu_table.centers, '--profile1', self.reference, '-o', self.clustalo_aligned, '--threads', 16)
 
     def align_pynast(self):
         """Step 1 with PyNAST"""
-        sh.pynast('--input_fp', self.tax.centers, '--template_fp', reference,
+        sh.pynast('--input_fp', self.otu_table.centers, '--template_fp', self.reference,
                   '--fasta_out_fp', self.pynast_aligned,
                   '--log_fpa', self.p.pynast_log, '--failure_fp', self.p.pynast_fail,)
 
     def align_mothur(self):
         """Step 1 with mothur"""
         # Run it #
-        sh.mothur("#align.seqs(candidate=%s, template=%s, search=kmer, flip=false, processors=%s);" \
-                  % (self.tax.centers, reference, 16))
+        command = "#align.seqs(candidate=%s, template=%s, search=kmer, flip=false, processors=%s);"
+        command = command % (self.otu_table.results.centers, self.reference, 16)
+        print command
+        pass
+        sh.mothur(command)
         # Move things #
         shutil.move(self.tax.centers.prefix_path + '.align',        self.mothur_aligned)
         shutil.move(self.tax.centers.prefix_path + '.align.report', self.p.mothur_report)
@@ -137,6 +142,7 @@ class UniFrac(object):
         df.to_csv(self.distances_csv, sep='\t', float_format='%.5g')
 
     def unifrac_skbio(self):
+        """Step 3 with Scikit-bio"""
         # The OTU table #
         data = 0
         # The name of the samples (columns) #

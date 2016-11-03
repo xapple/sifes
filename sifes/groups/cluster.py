@@ -100,7 +100,7 @@ class Cluster(Aggregate):
     @property_cached
     def unifrac_matrix(self):
         """Will produce the UniFrac distance matrix."""
-        return UniFrac(self, self.p.distances_dir)
+        return UniFrac(self.otu_table, self.p.distances_dir)
 
     @property_cached
     def report(self):

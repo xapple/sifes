@@ -25,3 +25,6 @@ sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 35
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 400
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 530
 for s in proj: s.default_joiner = 'pandaseq'
+
+print "Hi"
+proj.cluster.unifrac_matrix.run()
