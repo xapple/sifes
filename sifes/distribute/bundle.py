@@ -12,10 +12,11 @@ from plumbing.autopaths import DirectoryPath
 
 ###############################################################################
 class Bundle(Aggregate):
-    """Regroup result files and reports from one of several projects for delivery."""
+    """Regroup result files and reports from one or several projects for delivery."""
 
     all_paths = """
     /projects/
+    /samples/
     /metadata/samples.xlsx
     /metadata/multiplexed.xlsx
     /demultiplexing/report.pdf
@@ -41,7 +42,7 @@ class Bundle(Aggregate):
             reports_dir.create(safe=True)
             for s in p: s.report.output_path.copy(reports_dir + s.short_name + '.pdf')
             # Reports for cluster #
-            p.cluster.report.output_path.copy(self.p.projects_dir + 'project_report.pdf')
+            p.cluster.report.output_path.copy(reports_dir + 'project_report.pdf')
             # Data files #
             data_dir = DirectoryPath(proj_dir + 'data')
             data_dir.create(safe=True)
@@ -55,6 +56,18 @@ class Bundle(Aggregate):
             taxa_dir = DirectoryPath(data_dir + 'taxa_tables')
             taxa_dir.remove()
             p.cluster.taxa_table.base_dir.copy(taxa_dir)
+
+    def add_samples(self):
+        """In some cases, for instance when the samples are originally multiplexed in
+        FASTQ files, it can be useful to include the original raw FASTQ files of
+        each sample to the bundle."""
+        for s in self:
+            # Directories #
+            sample_dir = DirectoryPath(self.p.samples_dir + s.short_name)
+            sample_dir.create(safe=True)
+            # Raw reads for each sample #
+            s.pair.fwd.copy(sample_dir)
+            s.pair.rev.copy(sample_dir)
 
     @property_cached
     def results(self):

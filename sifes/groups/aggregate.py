@@ -43,7 +43,9 @@ class Aggregate(object):
             if hasattr(self.first, 'num'): return [c for c in self.children if int(c.num) == key][0]
             else:                          return self.children[key]
         elif isinstance(key, slice):       return self.children[key]
-        else:                              raise TypeError('key')
+        elif isinstance(key, tuple):       return (self[k] for k in key)
+        elif isinstance(key, list):        return [self[k] for k in key]
+        else:                              raise TypeError("The key '%s' is not found" % key)
 
     @property
     def first(self): return self.children[0]

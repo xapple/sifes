@@ -27,12 +27,13 @@ class CkanSamples(object):
     Groups contain one or more datasets. Organizations own datasets.
     """
 
-    server_address = "http://anaerobes.science"
-    api_key        = "fba01b2e-5ead-4d29-a58a-baba01867092"
+    server_address = "http://edna.pro"
+    api_key        = "9b303512-6051-42f7-8958-f30ea4edd474"
 
-    def __init__(self, samples):
+    def __init__(self, samples, groups=None):
         # Save attributes #
         self.samples = samples
+        self.groups  = groups
 
     def run(self):
         # Main object #
@@ -40,24 +41,26 @@ class CkanSamples(object):
         # Do it #
         print "Making datasets"
         for s in tqdm(self.samples): self.make_dataset(s)
+        # Groups #
         print "Making groups"
         self.make_groups()
-        #print "Uploading all data"
-        #for s in tqdm(self.samples): self.upload_resources(s)
+        # Upload #
+        print "Uploading all data"
+        for s in tqdm(self.samples): self.upload_resources(s)
 
     def make_dataset(self, s):
         # Identifier #
         short_name = s.short_name
         # Tag #
         tags = []
-        if int(s.short_name[-1]) == 1: tags = [{'name': 'top'}]
+        if int(s.short_name[-1]) == 1: tags = [{'name': 'raw'}]
         if int(s.short_name[-1]) == 8: tags = [{'name': 'bottom'}]
         # Extras #
         extras = s.info.copy()
         # Add dummy methane value #
         extras['methane'] = random.uniform(1.5, 9.0)
         # Add dummy date value #
-        extras['date'] = "2014-03-%i" % random.randint(0, 28)
+        extras['date'] = "2017-03-%i" % random.randint(0, 28)
         # Remove stuff #
         extras.pop('contacts', None)
         extras.pop('used', None)
@@ -85,8 +88,8 @@ class CkanSamples(object):
             title                     = s.long_name,
             author                    = s.info['contacts']['contact_one']['name'],
             author_email              = s.info['contacts']['contact_one']['email'],
-            maintainer                = s.info['contacts']['contact_two']['name'],
-            maintainer_email          = s.info['contacts']['contact_two']['email'],
+            #maintainer                = s.info['contacts']['contact_two']['name'],
+            #maintainer_email          = s.info['contacts']['contact_two']['email'],
             license_id                = "uk-ogl", # print server.action.license_list()[11]
             #notes                     = None,
             #url                       = None,
@@ -95,28 +98,57 @@ class CkanSamples(object):
             #type                      = 'dna_sequences', # Do not assign types ! Causes 404 !
             tags                      = tags,
             extras                    = extras,
-            owner_org                 = 'envonautics',
+            owner_org                 = 'university-of-geneva',
         )
 
     def make_groups(self):
         # Groups #
-        group_names = set([s.short_name[0:2] for s in self.samples])
+        if self.groups: group_names = set(self.groups.keys())
+        else:           group_names = set([s.short_name[0:2] for s in self.samples])
         # Delete groups if they exist #
         for name in group_names:
-            try: self.server.action.group_purge(id=name)
+            try:   self.server.action.group_purge(id=name)
             except ckanapi.errors.NotFound: pass
         # Loop #
         for name in group_names:
-            samples = [s for s in self.samples if s.short_name.startswith(name)]
+            if self.groups: samples = [s for s in self.samples if s in self.groups[name]]
+            else:           samples = [s for s in self.samples if s.short_name.startswith(name)]
             self.server.action.group_create(
                 name   = name,
-                title  = "Reactor " + name.upper(),
+                title  = name.replace('-',' ').capitalize(),
                 packages = [{'id': s.short_name} for s in samples]
             )
         # Return success #
         return True
 
     def upload_resources(self, s):
+        # The raw reads #
+        print "\nForward reads (%s)" % s.pair.fwd.size
+        self.server.action.resource_create(
+            url           = self.server_address + "/dataset/" + s.short_name,
+            name          = "fwd.fastq.gz",
+            description   = "The raw reads from the Illumina machine (forward)",
+            package_id    = s.short_name,
+            upload        = open(s.pair.fwd),
+            resource_type = 'raw_reads',
+            format        = 'fastq',
+            mimetype      = 'application/x-gzip',
+            size          = s.pair.fwd.count,
+        )
+        print "\nReverse reads (%s)" % s.pair.rev.size
+        self.server.action.resource_create(
+            url           = self.server_address + "/dataset/" + s.short_name,
+            name          = "rev.fastq.gz",
+            description   = "The raw reads from the Illumina machine (reverse)",
+            package_id    = s.short_name,
+            upload        = open(s.pair.rev),
+            resource_type = 'raw_reads',
+            format        = 'fastq',
+            mimetype      = 'application/x-gzip',
+            size          = s.pair.rev.count,
+        )
+        # Stop here #
+        return True
         # The fasta file #
         self.server.action.resource_create(
             url           = self.server_address + "/dataset/" + s.short_name,
@@ -177,6 +209,7 @@ class CkanSamples(object):
         frame = StringIO.StringIO(frame)
         return frame
 
+    #-------------------------------------------------------------------------#
     def via_requests(self):
         """Some example code on how to post directly via HTTP."""
         path       = "1"

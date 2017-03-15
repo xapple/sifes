@@ -14,7 +14,8 @@ import sifes
 from tqdm import tqdm
 
 ###############################################################################
-execfile(sifes.home + "deploy/sifes/scripts/projects/envonautics/test_proj/load.py")
-#for s in test_proj:  s.report.generate()
-print 1
-print test_proj.cluster.taxa_table.results.graphs.taxa_barstack_domain(rerun=True)
+execfile(sifes.home + "deploy/sifes/scripts/projects/envonautics/under_ice/load.py")
+from sifes.distribute.ckan_samples import CkanSamples
+samples = proj[['bt1', 'rl1', 'lb1']]
+ckan = CkanSamples(samples, groups={'under-ice': samples})
+ckan.run()

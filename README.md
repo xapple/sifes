@@ -73,30 +73,30 @@ Relaunch your shell and type these commands to get the right version of python n
 #### Step 4: Install all required python packages
 `sifes` uses many third party python libraries. You can get them by running these commands:
 
-    $ pip install sh
-    $ pip install decorator
-    $ pip install biopython
-    $ pip install threadpool
-    $ pip install patsy
-    $ pip install scipy
-    $ pip install matplotlib
-    $ pip install pandas
-    $ pip install statsmodels
-    $ pip install ipython
-    $ pip install scikit-learn
-    $ pip install rpy2
-    $ pip install brewer2mpl
-    $ pip install regex
-    $ pip install ftputil
-    $ pip install names
-    $ pip install shell_command
-    $ pip install pystache
-    $ pip install tabulate
-    $ pip install tqdm
-    $ pip install humanfriendly
-    $ pip install biom-format
-    $ pip install future
-    $ pip install scikit-bio
+    $ pip install --user sh
+    $ pip install --user decorator
+    $ pip install --user biopython
+    $ pip install --user threadpool
+    $ pip install --user patsy
+    $ pip install --user scipy
+    $ pip install --user matplotlib
+    $ pip install --user pandas
+    $ pip install --user statsmodels
+    $ pip install --user ipython
+    $ pip install --user scikit-learn
+    $ pip install --user rpy2
+    $ pip install --user brewer2mpl
+    $ pip install --user regex
+    $ pip install --user ftputil
+    $ pip install --user names
+    $ pip install --user shell_command
+    $ pip install --user pystache
+    $ pip install --user tabulate
+    $ pip install --user tqdm
+    $ pip install --user humanfriendly
+    $ pip install --user biom-format
+    $ pip install --user future
+    $ pip install --user scikit-bio==0.4.2
 
 Don't forget to rehash the binary links at the end:
 

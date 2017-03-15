@@ -110,7 +110,7 @@ for s in proj: s.report.cache_dir.remove()
 for s in proj: s.report.cache_dir.create()
 for s in proj: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
 
-# Make cluster reports - 0h0x #
+# Make cluster report - 0h03 #
 with Timer(): proj.cluster.report.generate()
 
 # Make sample reports - 0h0x #

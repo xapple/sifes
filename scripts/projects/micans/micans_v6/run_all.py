@@ -125,6 +125,7 @@ with Timer(): prll_map(otu_plot, projects)
 for s in samples: s.report.cache_dir.remove()
 for s in samples: s.report.cache_dir.create()
 for s in samples: print FilePath(s.report.cache_dir + 'genera_table.pickle').remove()
+#with Timer(): prll_map(lambda s: s.clean.count, samples)
 
 # The average quality is super long - 0h10 #
 from sifes.report.samples import SampleTemplate
@@ -137,13 +138,14 @@ with Timer(): prll_map(lambda p: p.cluster.report.generate(), projects)
 # Make sample reports - 0h15 # slowest: irb_bc_60_16_10_2
 with Timer(): prll_map(lambda s: s.report.generate(), samples)
 
-# Bundle - 0h02 #
-with Timer(): prll_map(lambda s: s.clean.count, samples)
+print("# Bundle - 0h02 #")
 from sifes.distribute.bundle import Bundle
-bundle = Bundle("micans_v6", samples)
-with Timer(): bundle.run()
+with Timer():
+    bundle = Bundle("micans_v6", samples)
+    bundle.run()
+    bundle.add_samples()
 
-# Extra files #
+print("# Extra files #")
 path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
 path = sifes.home + "deploy/sifes/metadata/excel/projects/micans/micans_v6_exp1_plexed/metadata_plexed.xlsx"
@@ -151,7 +153,8 @@ shutil.copy(path, bundle.p.multiplexed)
 path = sifes.reports_dir + 'micans_v6_exp1_plexed/demultiplexer.pdf'
 shutil.copy(path, bundle.p.demultiplexing_report)
 
-# Upload - 0h03 #
-from sifes.distribute.upload import DropBoxUpload
-dbx_upload = DropBoxUpload(bundle.base_dir, '/Micans V6 analysis delivery')
-with Timer(): dbx_upload.run()
+print("# Upload - 0hxx #")
+from sifes.distribute.upload import DropBoxSync
+dbx_sync = DropBoxSync(bundle.base_dir, '/Micans V6 analysis delivery')
+with Timer(): dbx_sync.run()
+print("Total delivery: %s" % bundle.base_dir.size)
