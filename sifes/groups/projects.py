@@ -1,9 +1,9 @@
 # Built-in modules #
 
 # Internal modules #
-import sifes
 from sifes.groups.aggregate import Aggregate
 from sifes.groups.lump      import Lump
+import sifes
 
 # First party modules #
 from plumbing.processes import prll_map
@@ -34,7 +34,6 @@ class Project(Aggregate):
     @property
     def organization(self): return self.first.info.get('organization', '')
 
-    @property
     def run_analysis(self):
         print "Join reads"
         with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), self)

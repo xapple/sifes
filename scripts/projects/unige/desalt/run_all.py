@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run all the procedure on our demonstration under ice dataset.
+A script to run all the procedure on our V1V2 desalt project.
 
 To first generate the JSON files:
 
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/envonautics/under_ice/metadata.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/desalt_plexed/metadata_plexed.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx
 
 """
 
@@ -15,6 +16,7 @@ import shutil
 
 # Internal modules #
 import sifes.filtering.seq_filter
+from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
 from plumbing.processes import prll_map
@@ -25,10 +27,23 @@ from plumbing.autopaths import FilePath
 from tqdm import tqdm
 
 ###############################################################################
-# Load project #
-proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/under_ice/")
+# Load multiplexed project #
+plexed = sifes.load("~/deploy/sifes/metadata/json/unige/desalt_plexed/")
+
+# Load all real project #
+proj = sifes.load("~/deploy/sifes/metadata/json/unige/desalt/")
+
+# Demultiplex - xh00 #
+demultiplexer = Demultiplexer(plexed, proj.samples)
+with Timer(): demultiplexer.run()
+
+# Demultiplex Report #
+with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
+# Load normal project #
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/under_ice/")
+
 # Get information for excel file #
 for s in proj: print s.pair.fwd.count
 for s in proj: print s.pair.rev.count
