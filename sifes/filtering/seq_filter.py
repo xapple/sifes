@@ -30,8 +30,8 @@ class SeqFilter(object):
     # Parameters #
     primer_mismatches = 2
     primer_max_dist   = 70
-    min_read_length   = -1
-    max_read_length   = -1
+    min_read_length   = 400
+    max_read_length   = 560
 
     all_paths = """
     /primers.fasta

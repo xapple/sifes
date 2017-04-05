@@ -71,8 +71,12 @@ class CkanSamples(object):
         extras.pop('project_short_name', None)
         extras.pop('project_long_name', None)
         extras.pop('sample_long_name', None)
-        extras.pop('sample_long_name', None)
-        extras['primers'] = extras['primers']['forward']['name'] + ' and ' + extras['primers']['reverse']['name']
+        # Primers #
+        extras['fwd_primer'] = extras['primers']['forward']['sequence']
+        extras['rev_primer'] = extras['primers']['reverse']['sequence']
+        extras['primers'] = extras['primers']['forward']['name'] + ' and ' \
+                          + extras['primers']['reverse']['name']
+        # Special extras #
         extras.pop('organism', None)
         extras.pop('env_biome', None)
         extras.pop('env_feature', None)
@@ -208,6 +212,11 @@ class CkanSamples(object):
         frame = frame.to_csv(sep='\t', encoding='utf-8', float_format='%.5g')
         frame = StringIO.StringIO(frame)
         return frame
+
+    def update_primers(self, s):
+        datasets = self.server.action.package_list()
+        d = [x for x in datasets if x['name'] == s.short_name][0]
+        print d
 
     #-------------------------------------------------------------------------#
     def via_requests(self):

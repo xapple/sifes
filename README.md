@@ -46,7 +46,7 @@ Here you will edit either your ``~/.bashrc`` or ``~/.bash_profile`` to add a ref
     $ vim ~/.bash_profile
     export PYTHONPATH="$HOME/repos/sifes/":$PYTHONPATH
 
-#### Step 3: Install your own version of python
+#### Step 3A: Install your own version of python
 Your system probably comes with a version of python installed. But the variations from system to system are too great to rely on any available python. We strongly suggest to just install our own version in your home directory.
 
 For this we will be using this excellent project: https://github.com/yyuu/pyenv
@@ -70,15 +70,20 @@ Relaunch your shell and type these commands to get the right version of python n
     pyenv rehash
     pyenv global 2.7.11
 
+#### Step 3B: Install your own version of R
+
+Check that you have a working installation of R. Either the system version, or a user version.
+
 #### Step 4: Install all required python packages
 `sifes` uses many third party python libraries. You can get them by running these commands:
 
+    $ pip install --user numpy
+    $ pip install --user scipy
+    $ pip install --user biopython
     $ pip install --user sh
     $ pip install --user decorator
-    $ pip install --user biopython
     $ pip install --user threadpool
     $ pip install --user patsy
-    $ pip install --user scipy
     $ pip install --user matplotlib
     $ pip install --user pandas
     $ pip install --user statsmodels
@@ -97,6 +102,12 @@ Relaunch your shell and type these commands to get the right version of python n
     $ pip install --user biom-format
     $ pip install --user future
     $ pip install --user scikit-bio==0.4.2
+
+And some extra home made ones:
+
+    $ pip install --user plumbing
+    $ pip install --user fasta
+    $ pip install --user pymarktex
 
 Don't forget to rehash the binary links at the end:
 

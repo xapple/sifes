@@ -6,6 +6,8 @@ from sifes.groups.aggregate import Aggregate
 from sifes.groups.lump      import Lump
 
 # First party modules #
+from plumbing.processes import prll_map
+from plumbing.timer     import Timer
 
 # Third party modules #
 
@@ -31,3 +33,9 @@ class Project(Aggregate):
 
     @property
     def organization(self): return self.first.info.get('organization', '')
+
+    @property
+    def run_analysis(self):
+        print "Join reads"
+        with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), self)
+        for s in self: print s.short_name, s.joiner.results.unassembled_percent

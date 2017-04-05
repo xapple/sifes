@@ -25,7 +25,7 @@ class Sample(object):
     It's a bunch of paired sequences all coming from the same particular
     IRL lab sample. Might or might not correspond to an Illumina MID."""
 
-    default_joiner = 'mothur'
+    default_joiner = 'pandaseq'
 
     all_paths = """
     /logs/
@@ -45,12 +45,20 @@ class Sample(object):
     def __iter__(self):         return iter(self.children)
     def __len__(self):          return self.pair.count
 
-    def __init__(self, json_path, raw_files_must_exist):
+    def __init__(self, json_path=None, raw_files_must_exist=False, info=None):
+        """You can give a json_path, or pass an info dict directly."""
         # Attributes #
         self.json_path = FilePath(json_path)
+        self.raw_files_must_exist = raw_files_must_exist
+        self.info = info
         # Parse #
-        self.info = load_json_path(self.json_path)
-        self.info.pop('sentinel')
+        if not info:
+            self.info = load_json_path(self.json_path)
+            self.info.pop('sentinel')
+        # Call create #
+        self.create()
+
+    def create(self):
         # Own attributes #
         self.num                = self.info.get('sample_num')
         self.short_name         = self.info.get('sample_short_name')
@@ -68,7 +76,7 @@ class Sample(object):
         self.base_dir  = DirectoryPath(self.base_dir)
         self.p         = AutoPaths(self.base_dir, self.all_paths)
         # Make an alias to the json #
-        self.p.info_json.link_from(self.json_path, safe=True)
+        if self.json_path: self.p.info_json.link_from(self.json_path, safe=True)
         # Get the directory #
         prefix    = self.info.get('prefix',    '')
         directory = self.info.get('directory', '')
@@ -80,7 +88,7 @@ class Sample(object):
         if "fastq" in self.fwd_path: self.pair = PairedFASTQ(self.fwd_path, self.rev_path)
         else:                        self.pair = PairedFASTA(self.fwd_path, self.rev_path)
         # Check that the files exist #
-        if raw_files_must_exist:
+        if self.raw_files_must_exist:
             self.fwd_path.must_exist()
             self.rev_path.must_exist()
         # For speed let's update the sequence count cache if available #
@@ -113,7 +121,7 @@ class Sample(object):
         choices = {'mothur':   (MothurJoin, (self.uncompressed_pair, self.p.joined_dir, self.short_name)),
                    'pandaseq': (Pandaseq,   (self.pair,              self.p.joined_dir, self.short_name)),
                    'qiime':    (QiimeJoin,  (self.pair,              self.p.joined_dir, self.short_name))}
-        cls, params = choices.get(self.default_joiner, choices['mothur'])
+        cls, params = choices.get(self.default_joiner)
         return cls(*params)
 
     @property_cached
