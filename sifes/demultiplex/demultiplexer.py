@@ -7,7 +7,7 @@ from __future__ import division
 
 # Built-in modules #
 import sys
-from collections import Counter
+from collections import Counter, defaultdict, OrderedDict
 import multiprocessing
 
 # Internal modules #
@@ -34,10 +34,6 @@ class Demultiplexer(object):
     # Attributes #
     short_name = "demultiplexer"
 
-    # Parameters #
-    primer_mismatches  = 2
-    barcode_mismatches = 0
-
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
 
     def __init__(self, plexed, samples):
@@ -62,16 +58,7 @@ class Demultiplexer(object):
         # Merge lanes together #
         map(lambda p: p.merge_lanes(), self.plexfiles) #, cpus)
         # Search for barcodes #
-        map(self.extract_reads, self.plexfiles) #, cpus)
-
-    def extract_reads(self, plexfile):
-        """Extract all reads from a plex file."""
-        # Message #
-        print "Demultiplexing plexfile '%s'" % plexfile.fwd_path
-        # Main loop #
-        for f,r in tqdm(plexfile.pair.parse_primers(plexfile.primers, self.primer_mismatches)):
-            print 1/0
-            if f.fwd_start_pos: print "G"
+        map(lambda p: p.extract_reads(), self.plexfiles) #, cpus)
 
     @property_cached
     def results(self):
@@ -90,7 +77,12 @@ class DemultiplexerResults(object):
 
 ###############################################################################
 class PlexFile(object):
-    """A pair of FASTQs containing multiple samples distinguished by barcodes."""
+    """A pair of FASTQs (after optional merging of several pairs) containing
+    multiple samples distinguished by custom barcodes."""
+
+    # Parameters #
+    primer_mismatches  = 0
+    barcode_mismatches = 0
 
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
     def __nonzero__(self): return bool(self.pair)
@@ -130,6 +122,55 @@ class PlexFile(object):
         shell_output("zcat %s |gzip > %s" % (' '.join(self.rev_files), self.pair.rev))
         # Check #
         assert self.pair.fwd.first.id == self.pair.rev.first.id
+
+    def extract_reads(self):
+        """Extract all reads from a plex file."""
+        # Message #
+        print "Demultiplexing plexfile '%s'" % self.fwd_path
+        # Always the same barcode length #
+        barlen = len(self.samples[0].info['forward_mid'])
+        # Barcodes #
+        fwd_barcodes = OrderedDict((s.info['forward_mid'], s.info['forward_num']) for s in self.samples)
+        rev_barcodes = OrderedDict((s.info['reverse_mid'], s.info['reverse_num']) for s in self.samples)
+        # Array of possibilities #
+        array = defaultdict(lambda: defaultdict(int))
+        for s in self.samples: array[s.info['forward_mid']][s.info['reverse_mid']] = s
+        # Create samples #
+        for s in self.samples: s.pair.create()
+        # Dropped sequences #
+        not_both_primers = 0
+        unknown_barcode  = 0
+        # Main loop #
+        for f,r in tqdm(self.pair.parse_primers(self.primers, self.primer_mismatches)):
+            # Case primers not found #
+            if not (f.fwd_match and r.rev_match) and not (r.fwd_match and f.rev_match):
+                not_both_primers += 1
+                continue
+            # Regular case #
+            if f.fwd_match and r.rev_match:
+                fwd_barcode = f.read[fwd_start_pos-barlen:fwd_start_pos]
+                rev_barcode = r.read[rev_start_pos-barlen:rev_start_pos]
+                case = 'regular'
+            # Goofy case #
+            if r.fwd_match and f.rev_match:
+                fwd_barcode = r.read[fwd_start_pos-barlen:fwd_start_pos]
+                rev_barcode = f.read[rev_start_pos-barlen:rev_start_pos]
+                case = 'goofy'
+            # Throw away unknown barcodes #
+            if fwd_barcode not in fwd_barcodes or rev_barcode not in rev_barcodes:
+                unknown_barcode += 1
+                continue
+            # Get sample #
+            s = array[fwd_barcode][rev_barcode]
+            # Case it's a bad combination #
+            if isinstance(s, int):
+                array[fwd_barcode][rev_barcode] += 1
+                continue
+            # Case it's a good sample #
+            if case == 'regular': s.pair.add(f.read, r.read.reverse_complement())
+            if case == 'goofy':   s.pair.add(r.read, f.read.reverse_complement())
+        # Close samples #
+        for s in self.samples: s.pair.close()
 
     #-------------------------------------------------------------------------#
     def primer_statistics(self):
