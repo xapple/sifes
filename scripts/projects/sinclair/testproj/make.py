@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run create a fake test project with a few sequences
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/sinclair/desalt_plexed/testproj_plexed.xlsx
+    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx
 """
 
 # Built-in modules #
@@ -16,18 +17,13 @@ from tqdm import tqdm
 
 ###############################################################################
 # Load the project #
-test_proj = sifes.load("~/deploy/sifes/metadata/json/projects/envonautics/test/", False)
+test_proj = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj_plexed/", False)
+test_pair = test_proj[0].pair
 
 # Load the sequences to copy #
-import illumitag
-illumi_proj = illumitag.projects['ice']
-illumi_proj.load()
-illumi_proj.cluster.load()
-
-# Samples #
-illumi_samples = illumi_proj[8:16]
+real_proj = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/")
+real_pair = real_proj[0].pair
 
 # Copy #
-for i_s, s in tqdm(izip(illumi_samples, test_proj)):
-    s.pair.fwd.write(islice(i_s.fwd, 10000))
-    s.pair.rev.write(islice(i_s.rev, 10000))
+test_pair.fwd.write(islice(real_pair.fwd, 10000))
+test_pair.rev.write(islice(real_pair.rev, 10000))

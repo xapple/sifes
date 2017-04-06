@@ -152,7 +152,7 @@ class PlexFile(object):
 
     def get_primer_count(self, args):
         name, fastq, primer, sense, seq = args
-        mismatches = 1
+        mismatches = 2
         pattern = regex.compile("(%s){s<=%i}" % (iupac_pattern(seq), mismatches))
         count   = 0
         for r in tqdm(fastq):
