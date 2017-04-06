@@ -6,7 +6,6 @@ A script that reads an excel file and produces the correctly formated JSON files
 
 You can use this script from the shell like this:
 $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans_v6_exp1/metadata.xlsx
-$ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/micans_v6_exp1_plexed/metadata_plexed.xlsx
 
 NB: The excel sheet must have an non-empty cell in the position (0,0)
 NB: The excel sheet must have an non-empty cell in the position (0,1)

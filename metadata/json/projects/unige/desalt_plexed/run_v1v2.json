@@ -1,0 +1,86 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@sinclair.bio"
+    }
+    ,
+    "contact_two": {
+        "function": "prof",
+        "name":     "Jan Pawlowski",
+        "email":    "jan.pawlowski@unige.ch"
+    }
+},
+
+"project_short_name":   "desalt_plexed",
+"sample_short_name":    "run_v1v2",
+"sample_num":           "1",
+"used":                 "yes",
+
+"fwd_filename":         "V1V2_S1_L001_R1_001.fastq.gz",
+"rev_filename":         "V1V2_S1_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+
+
+"organization":         "unige",
+"prefix":               "~/SIFES/raw/projects/unige/",
+"directory":            "desalt_plexed/",
+"suffix":               "V1V2-44220907/",
+
+"project_long_name":    "V1V2 desalt project plexed",
+"sample_long_name":     "Single run of the V1V2 desalt project plexed",
+
+"fwd_read_count":       "7349733",
+"rev_read_count":       "7349733",
+"fwd_md5":              "c1cd848c683a4952976d67f729f6e161",
+"rev_md5":              "f7191909e51c358fe34690d38d88ff23",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}

@@ -9,13 +9,12 @@ A script to run small snippets of code.
 
 # Internal modules #
 import sifes
+from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # Third party modules #
 from tqdm import tqdm
 
 ###############################################################################
-execfile(sifes.home + "deploy/sifes/scripts/projects/envonautics/under_ice/load.py")
-from sifes.distribute.ckan_samples import CkanSamples
-samples = proj[['bt1', 'rl1', 'lb1']]
-ckan = CkanSamples(samples, groups={'under-ice': samples})
-ckan.run()
+plexed = sifes.load("~/deploy/sifes/metadata/json/unige/desalt_plexed/")
+proj = sifes.load("~/deploy/sifes/metadata/json/unige/desalt/")
+demultiplexer = Demultiplexer(plexed, proj.samples)

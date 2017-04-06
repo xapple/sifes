@@ -46,6 +46,7 @@ class Demultiplexer(object):
         # Pools #
         get_inputs  = lambda name: [i for i in self.plexed if i.info['multiplex_group'] == name]
         get_samples = lambda name: [s for s in self.samples if s.info['multiplexed_in'] == name]
+        # Pools #
         self.pools = sorted(list(set([s.info['multiplex_group'] for s in self.plexed])))
         self.pools = [Pool(name, get_inputs(name), get_samples(name)) for name in self.pools]
         # Report #
@@ -59,7 +60,7 @@ class Demultiplexer(object):
         # Search for barcodes #
         prll_map(self.extract_sample, self.samples, cpus)
 
-    def extract_sample(self, s, verbose=True):
+    def extract_sample(self, s):
         print "Demultiplexing sample '%s'" % s
         pool = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
         s.pair.create()
@@ -123,7 +124,7 @@ class Pool(object):
         assert self.pair.fwd.first.id == self.pair.rev.first.id
 
     def guess_barcodes(self, stop_at=30000):
-        """Usefull when barcodes seem wrong within a multiplexed pool"""
+        """Useful when barcodes seem wrong within a multiplexed pool"""
         barcodes = Counter()
         for i, pair in enumerate(self.pair.parse_primers(self.primers, 2)):
             fwd = pair[0]

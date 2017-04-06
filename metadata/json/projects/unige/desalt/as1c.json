@@ -1,0 +1,92 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@sinclair.bio"
+    }
+    ,
+    "contact_two": {
+        "function": "prof",
+        "name":     "Jan Pawlowski",
+        "email":    "jan.pawlowski@unige.ch"
+    }
+},
+
+"project_short_name":   "desalt",
+"sample_short_name":    "as1c",
+"sample_num":           "3",
+"used":                 "yes",
+
+"fwd_filename":         "as1c_fwd.fastq",
+"rev_filename":         "as1c_rev.fastq",
+
+
+"multiplexed_in":       "v1v2_plexed",
+
+
+
+
+
+
+"organization":         "unige",
+"prefix":               "~/SIFES/raw/projects/unige/",
+"directory":            "desalt/",
+
+
+"project_long_name":    "Desalination V1V2 project",
+"sample_long_name":     "Desalt SAL-AS1c",
+
+
+
+
+
+
+
+
+
+"forward_num":          "C",
+"forward_mid":          "CAGATGCG",
+"reverse_num":          "C",
+"reverse_mid":          "CAGATGCG",
+"barcode_num":          "CC",
+
+"primers": {
+        "name":    "V1V2",
+        "sense":   "5' to 3'",
+        "forward": {"name": "F", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "R", "sequence": "CCTGCTGCCTTCCTTRGA"}
+},
+
+
+"phix_spiking":   "0.01",
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
