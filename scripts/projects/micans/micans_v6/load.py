@@ -14,7 +14,7 @@ from plumbing.timer import Timer
 
 # Internal modules #
 import sifes
-from sifes.demultiplex.demultiplexer import Demultiplexer
+from sifes.demultiplex.multi_demultiplexer import Demultiplexer
 
 ###############################################################################
 # Load multiplexed project #

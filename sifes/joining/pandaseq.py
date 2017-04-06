@@ -57,7 +57,7 @@ class Pandaseq(object):
 
     def run(self, cpus=1):
         """-N: Eliminate uncalled bases
-           -F: Keep qual scores thought conceptually different.
+           -F: Keep qual scores though they are conceptually different.
            -T: The number of threads to spawn.
            -u: Write sequences for which the optimal alignment cannot be computed
                to a file as concatenated pairs.

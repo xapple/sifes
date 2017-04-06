@@ -17,7 +17,7 @@ import shutil
 
 # Internal modules #
 import sifes.filtering.seq_filter
-from sifes.demultiplex.demultiplexer import Demultiplexer
+from sifes.demultiplex.multi_demultiplexer import Demultiplexer
 
 # First party modules #
 from plumbing.processes import prll_map
