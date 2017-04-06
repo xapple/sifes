@@ -1,0 +1,92 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@sinclair.bio"
+    }
+    ,
+    "contact_two": {
+        "function": "prof",
+        "name":     "Jan Pawlowski",
+        "email":    "jan.pawlowski@unige.ch"
+    }
+},
+
+"project_short_name":   "testproj_plexed",
+"sample_short_name":    "run_v1v2",
+"sample_num":           "1",
+"used":                 "yes",
+
+"fwd_filename":         "test_fwd.fastq.gz",
+"rev_filename":         "test_rev.fastq.gz",
+
+
+
+
+
+
+
+"multiplex_group":      "v1v2_plexed",
+
+"organization":         "sinclair",
+"prefix":               "~/SIFES/raw/projects/sinclair/",
+"directory":            "testproj_plexed/",
+
+
+"project_long_name":    "Testproj plexed",
+"sample_long_name":     "Test project plexed single sample",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "V1V2",
+        "sense":   "5' to 3'",
+        "forward": {"name": "F", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "R", "sequence": "CCTGCTGCCTTCCTTRGA"}
+},
+
+
+
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+
+
+"forward_read_length":  "250",
+"reverse_read_length":  "250",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
