@@ -32,7 +32,7 @@ class Demultiplexer(object):
     short_name = "demultiplexer"
 
     # Parameters #
-    barcode_mismatches = 0
+    barcode_mismatches = 2
 
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
 
@@ -58,18 +58,41 @@ class Demultiplexer(object):
         # Merge lanes together #
         #prll_map(lambda pool: pool.merge_lanes(), self.pools, cpus)
         # Search for barcodes #
-        prll_map(self.extract_sample, self.samples, cpus)
+        map(self.extract_sample_double, self.samples) #, cpus)
 
-    def extract_sample(self, s):
+    def extract_sample_single(self, s):
+        """Extract a sample using a single custom barcode."""
         print "Demultiplexing sample '%s'" % s
-        pool = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
-        s.pair.create()
+        pool    = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
         barcode = SingleBarcode(s.info['custom_barcode'])
-        for f,r in tqdm(pool.pair.parse_primers(s.primers, 2)):
+        # Open file #
+        s.pair.create()
+        # Main loop - add to file #
+        for f,r in tqdm(pool.pair.parse_primers(s.primers, self.barcode_mismatches)):
             if f.fwd_start_pos:
                 start_pos, end_pos = barcode.search(f.read)
                 if end_pos == f.fwd_start_pos:
                     s.pair.add(f.read, r.read)
+        # Close file #
+        s.pair.close()
+
+    def extract_sample_double(self, s):
+        """Extract a sample using dual barcodes."""
+        # Message #
+        print "Demultiplexing sample '%s'" % s
+        # Variables #
+        pool     = [p for p in self.pools if p.name == s.info.get('multiplexed_in')][0]
+        barcodes = DoubleBarcode(s.info['forward_mid'], s.info['reverse_mid'])
+        # Open file #
+        s.pair.create()
+        # Main loop - add to file #
+        for f,r in tqdm(pool.pair.parse_primers(s.primers, self.barcode_mismatches)):
+            pass
+            if f.fwd_start_pos:
+                start_pos, end_pos = barcodes.search(f.read)
+                if end_pos == f.fwd_start_pos:
+                    s.pair.add(f.read, r.read)
+        # Close file #
         s.pair.close()
 
     @property_cached
@@ -136,13 +159,30 @@ class Pool(object):
 
 ###############################################################################
 class SingleBarcode(object):
-    """Useful when samples are mixed together and you need to find the
-    barcodes yourself."""
 
     def __len__(self): return len(self.string)
 
     def __init__(self, string, mismatches=0):
         self.string     = string
+        self.mismatches = mismatches
+        self.seq        = Seq(self.string, IUPAC.ambiguous_dna)
+        self.pattern    = ''.join(['[' + iupac[char] + ']' for char in self.string])
+        self.regex      = regex.compile("(%s){s<=%i}" % (self.pattern, self.mismatches))
+
+    def search(self, read):
+        match     = self.regex.search(str(read.seq))
+        start_pos = match.start() if match else None
+        end_pos   = match.end()   if match else None
+        return start_pos, end_pos
+
+###############################################################################
+class DoubleBarcode(object):
+
+    def __len__(self): return len(self.string)
+
+    def __init__(self, fwd, rev, mismatches=0):
+        self.fwd        = string
+        self.rev        = string
         self.mismatches = mismatches
         self.seq        = Seq(self.string, IUPAC.ambiguous_dna)
         self.pattern    = ''.join(['[' + iupac[char] + ']' for char in self.string])

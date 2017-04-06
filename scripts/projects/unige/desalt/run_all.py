@@ -28,10 +28,10 @@ from tqdm import tqdm
 
 ###############################################################################
 # Load multiplexed project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/unige/desalt_plexed/")
+plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/")
 
 # Load all real project #
-proj = sifes.load("~/deploy/sifes/metadata/json/unige/desalt/")
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/")
 
 # Demultiplex - xh00 #
 demultiplexer = Demultiplexer(plexed, proj.samples)

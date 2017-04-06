@@ -28,7 +28,7 @@
 
 
 
-
+"multiplex_group":      "v1v2_plexed",
 
 "organization":         "unige",
 "prefix":               "~/SIFES/raw/projects/unige/",
@@ -52,6 +52,12 @@
 
 
 
+"primers": {
+        "name":    "V1V2",
+        "sense":   "5' to 3'",
+        "forward": {"name": "F", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "R", "sequence": "CCTGCTGCCTTCCTTRGA"}
+},
 
 
 

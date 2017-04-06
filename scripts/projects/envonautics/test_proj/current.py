@@ -15,6 +15,7 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 from tqdm import tqdm
 
 ###############################################################################
-plexed = sifes.load("~/deploy/sifes/metadata/json/unige/desalt_plexed/")
-proj = sifes.load("~/deploy/sifes/metadata/json/unige/desalt/")
+plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=False)
+proj = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/", raw_files_must_exist=False)
 demultiplexer = Demultiplexer(plexed, proj.samples)
+demultiplexer.run()
