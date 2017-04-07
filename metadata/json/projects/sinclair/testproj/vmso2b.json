@@ -49,7 +49,7 @@
 "forward_num":          "N",
 "forward_mid":          "GCGTCGCA",
 "reverse_num":          "N",
-"reverse_mid":          "GCGTCGCA",
+"reverse_mid":          "TGCGACGC",
 "barcode_num":          "NN",
 
 "primers": {

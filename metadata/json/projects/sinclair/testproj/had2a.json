@@ -49,7 +49,7 @@
 "forward_num":          "V",
 "forward_mid":          "TAGACAGA",
 "reverse_num":          "V",
-"reverse_mid":          "TAGACAGA",
+"reverse_mid":          "TCTGTCTA",
 "barcode_num":          "VV",
 
 "primers": {

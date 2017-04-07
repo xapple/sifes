@@ -49,7 +49,7 @@
 "forward_num":          "C",
 "forward_mid":          "CAGATGCG",
 "reverse_num":          "C",
-"reverse_mid":          "CAGATGCG",
+"reverse_mid":          "CGCATCTG",
 "barcode_num":          "CC",
 
 "primers": {

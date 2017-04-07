@@ -49,7 +49,7 @@
 "forward_num":          "O",
 "forward_mid":          "GCGTGCTA",
 "reverse_num":          "O",
-"reverse_mid":          "GCGTGCTA",
+"reverse_mid":          "TAGCACGC",
 "barcode_num":          "OO",
 
 "primers": {

@@ -49,7 +49,7 @@
 "forward_num":          "U",
 "forward_mid":          "TACTGCTG",
 "reverse_num":          "U",
-"reverse_mid":          "TACTGCTG",
+"reverse_mid":          "CAGCAGTA",
 "barcode_num":          "UU",
 
 "primers": {

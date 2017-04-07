@@ -28,6 +28,8 @@ from Bio.Seq import Seq
 
 ###############################################################################
 class Demultiplexer(object):
+    """A demultiplexer for when you have only one barcode on the forward read."""
+
     # Attributes #
     short_name = "demultiplexer"
 

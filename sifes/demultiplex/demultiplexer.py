@@ -31,6 +31,8 @@ from Bio.Seq import Seq
 
 ###############################################################################
 class Demultiplexer(object):
+    """A demultiplexer for when you have one barcode on each side"""
+
     # Attributes #
     short_name = "demultiplexer"
 
@@ -138,8 +140,9 @@ class PlexFile(object):
         # Create samples #
         for s in self.samples: s.pair.create()
         # Dropped sequences #
-        not_both_primers = 0
-        unknown_barcode  = 0
+        not_both_primers     = 0
+        unknown_fwd_barcode  = 0
+        unknown_rev_barcode  = 0
         # Main loop #
         for f,r in tqdm(self.pair.parse_primers(self.primers, self.primer_mismatches)):
             # Case primers not found #
@@ -148,18 +151,18 @@ class PlexFile(object):
                 continue
             # Regular case #
             if f.fwd_match and r.rev_match:
-                fwd_barcode = f.read[fwd_start_pos-barlen:fwd_start_pos]
-                rev_barcode = r.read[rev_start_pos-barlen:rev_start_pos]
+                fwd_barcode = str(f.read[f.fwd_start_pos-barlen:f.fwd_start_pos].seq)
+                rev_barcode = str(r.read[r.rev_start_pos-barlen:r.rev_start_pos].seq)
                 case = 'regular'
             # Goofy case #
-            if r.fwd_match and f.rev_match:
-                fwd_barcode = r.read[fwd_start_pos-barlen:fwd_start_pos]
-                rev_barcode = f.read[rev_start_pos-barlen:rev_start_pos]
+            elif r.fwd_match and f.rev_match:
+                fwd_barcode = str(r.read[r.fwd_start_pos-barlen:r.fwd_start_pos].seq)
+                rev_barcode = str(f.read[f.rev_start_pos-barlen:f.rev_start_pos].seq)
                 case = 'goofy'
             # Throw away unknown barcodes #
-            if fwd_barcode not in fwd_barcodes or rev_barcode not in rev_barcodes:
-                unknown_barcode += 1
-                continue
+            if fwd_barcode not in fwd_barcodes: unknown_fwd_barcode += 1
+            if rev_barcode not in rev_barcodes: unknown_rev_barcode += 1
+            if fwd_barcode not in fwd_barcodes or rev_barcode not in rev_barcodes: continue
             # Get sample #
             s = array[fwd_barcode][rev_barcode]
             # Case it's a bad combination #
@@ -171,10 +174,24 @@ class PlexFile(object):
             if case == 'goofy':   s.pair.add(r.read, f.read.reverse_complement())
         # Close samples #
         for s in self.samples: s.pair.close()
+        1/0
 
     #-------------------------------------------------------------------------#
     def primer_statistics(self):
         """Print all primer statistics."""
+        # Check goofy or regular #
+        regular = 0
+        goofy   = 0
+        for f,r in tqdm(self.pair.parse_primers(self.primers, self.primer_mismatches)):
+            if f.fwd_match :
+                if r.rev_match:
+                    regular += 1
+            if r.fwd_match :
+                if f.rev_match:
+                    goofy += 1
+        print "Regular:", regular
+        print "Goofy:", goofy
+        # Try every primer in every direction on all reads #
         inputs = []
         for name in ("fwd", "rev"):
             fastq = getattr(self.pair, name)
@@ -193,8 +210,7 @@ class PlexFile(object):
 
     def get_primer_count(self, args):
         name, fastq, primer, sense, seq = args
-        mismatches = 2
-        pattern = regex.compile("(%s){s<=%i}" % (iupac_pattern(seq), mismatches))
+        pattern = regex.compile("(%s){s<=%i}" % (iupac_pattern(seq), self.primer_mismatches))
         count   = 0
         for r in tqdm(fastq):
             if pattern.search(str(r.seq)): count += 1
@@ -202,3 +218,23 @@ class PlexFile(object):
         message += "%.1f%%" % (100.0 * (count / len(fastq)))
         message += " (%s)" % seq
         return message
+
+    #-------------------------------------------------------------------------#
+    def guess_barcodes(self, stop_at=30000):
+        """Useful when barcodes seem wrong within a multiplexed file."""
+        fwd_barcodes = Counter()
+        rev_barcodes = Counter()
+        barlen       = len(self.samples[0].info['forward_mid'])
+        for i, pair in enumerate(self.pair.parse_primers(self.primers, self.primer_mismatches)):
+            f,r = pair
+            if i == stop_at: break
+            if not (f.fwd_match and r.rev_match) and not (r.fwd_match and f.rev_match): continue
+            if f.fwd_match and r.rev_match:
+                fwd_barcodes[str(f.read[f.fwd_start_pos-barlen:f.fwd_start_pos].seq)] += 1
+                rev_barcodes[str(r.read[r.rev_start_pos-barlen:r.rev_start_pos].seq)] += 1
+            elif r.fwd_match and f.rev_match:
+                fwd_barcodes[str(r.read[r.fwd_start_pos-barlen:r.fwd_start_pos].seq)] += 1
+                rev_barcodes[str(f.read[f.rev_start_pos-barlen:f.rev_start_pos].seq)] += 1
+        print "Forward:", '\n'.join(fwd_barcodes.most_common(30))
+        print "Reverse:", '\n'.join(rev_barcodes.most_common(30))
+        return fwd_barcodes, rev_barcodes

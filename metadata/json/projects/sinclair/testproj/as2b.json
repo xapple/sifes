@@ -49,7 +49,7 @@
 "forward_num":          "E",
 "forward_mid":          "CTAGCACG",
 "reverse_num":          "E",
-"reverse_mid":          "CTAGCACG",
+"reverse_mid":          "CGTGCTAG",
 "barcode_num":          "EE",
 
 "primers": {

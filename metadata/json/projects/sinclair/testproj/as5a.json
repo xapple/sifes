@@ -49,7 +49,7 @@
 "forward_num":          "G",
 "forward_mid":          "CTGATCTG",
 "reverse_num":          "G",
-"reverse_mid":          "CTGATCTG",
+"reverse_mid":          "CAGATCAG",
 "barcode_num":          "GG",
 
 "primers": {

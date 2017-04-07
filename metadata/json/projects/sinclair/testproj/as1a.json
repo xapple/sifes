@@ -49,7 +49,7 @@
 "forward_num":          "A",
 "forward_mid":          "CACACACA",
 "reverse_num":          "A",
-"reverse_mid":          "CACACACA",
+"reverse_mid":          "TGTGTGTG",
 "barcode_num":          "AA",
 
 "primers": {
