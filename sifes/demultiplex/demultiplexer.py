@@ -6,28 +6,24 @@ Special module to demultiplex samples.
 from __future__ import division
 
 # Built-in modules #
-import sys
+import pickle, multiprocessing
 from collections import Counter, defaultdict, OrderedDict
-import multiprocessing
 
 # Internal modules #
 from sifes.report.demultiplex import MultiplexReport
+from sifes.demultiplex        import plex_graphs as graphs
 
 # First party modules #
-from plumbing.autopaths import DirectoryPath
+from plumbing.autopaths import DirectoryPath, AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.processes import prll_map
 from fasta              import FASTQ, PairedFASTQ
 from fasta.primers      import iupac_pattern
 
 # Third party modules #
-import regex
+import regex, pandas
 from shell_command import shell_output
 from tqdm import tqdm
-from Bio.Alphabet import IUPAC
-from Bio.Seq import Seq
-
-# Constants #
 
 ###############################################################################
 class Demultiplexer(object):
@@ -38,19 +34,21 @@ class Demultiplexer(object):
 
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
 
-    def __init__(self, plexed, samples):
+    def __init__(self, plexproj, samples):
         # Attributes #
-        self.plexed  = plexed
-        self.samples = samples
+        self.plexproj = plexproj
+        self.samples  = samples
         # Check #
-        assert all([s.info.get('multiplex_group') for s in self.plexed])
+        assert all([s.info.get('multiplex_group') for s in self.plexproj])
         assert all([s.info.get('multiplexed_in')  for s in self.samples])
         # Functions #
-        get_inputs  = lambda name: [i for i in self.plexed if i.info['multiplex_group'] == name]
-        get_samples = lambda name: [s for s in self.samples if s.info['multiplexed_in'] == name]
+        get_inputs  = lambda name: [i for i in self.plexproj if i.info['multiplex_group'] == name]
+        get_samples = lambda name: [s for s in self.samples  if s.info['multiplexed_in'] == name]
         # Plexfiles #
-        self.plexfiles = sorted(list(set([s.info['multiplex_group'] for s in self.plexed])))
+        self.plexfiles = sorted(list(set([s.info['multiplex_group'] for s in self.plexproj])))
         self.plexfiles = [PlexFile(name, get_inputs(name), get_samples(name)) for name in self.plexfiles]
+        # Currently we are going to only support one plexfile #
+        self.first  = self.plexfiles[0]
         # Report #
         self.report = MultiplexReport(self)
 
@@ -72,10 +70,39 @@ class Demultiplexer(object):
 ###############################################################################
 class DemultiplexerResults(object):
 
-    def __nonzero__(self): return bool(False)
+    def __nonzero__(self): return all(f.p.tsv.exists for f in self.parent.plexfiles)
 
     def __init__(self, parent):
         self.parent = parent
+        self.first  = self.parent.plexfiles[0]
+
+    @property_cached
+    def read_counts(self):
+        return pandas.io.parsers.read_csv(self.p.flat, sep='\t', index_col=0,
+                                          encoding='utf-8', engine = 'python')
+
+    @property_cached
+    def extras(self):
+        with open(self.first.p.extras) as handle: return pickle.load(handle)
+
+    @property
+    def not_both_primers(self): return self.extras[0]
+    @property
+    def unknown_fwd_barcode(self): return self.extras[1]
+    @property
+    def unknown_rev_barcode(self): return self.extras[2]
+
+    @property_cached
+    def graphs(self):
+        """Sorry for the black magic. The result is an object whose attributes
+        are all the graphs found in plex_graphs.py initialized with this instance as
+        only argument."""
+        class Graphs(object): pass
+        result = Graphs()
+        for graph in graphs.__all__:
+            cls = getattr(graphs, graph)
+            setattr(result, cls.short_name, cls(self))
+        return result
 
 ###############################################################################
 class PlexFile(object):
@@ -85,6 +112,11 @@ class PlexFile(object):
     # Parameters #
     primer_mismatches  = 0
     barcode_mismatches = 0
+
+    all_paths = """
+    /read_counts.tsv
+    /extras.pickle
+    """
 
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
     def __nonzero__(self): return bool(self.pair)
@@ -98,7 +130,8 @@ class PlexFile(object):
         self.samples   = samples
         self.primers   = inputs[0].primers
         self.project   = inputs[0].project
-        self.base_dir  = DirectoryPath(self.project.p.lane_cat_dir + self.name + '/')
+        self.base_dir  = DirectoryPath(self.project.p.plexfiles_dir + self.name + '/')
+        self.p         = AutoPaths(self.base_dir, self.all_paths)
         self.fwd_path  = FASTQ(self.base_dir + 'fwd.fastq.gz')
         self.rev_path  = FASTQ(self.base_dir + 'rev.fastq.gz')
         self.fwd_files = [s.pair.fwd for s in self.inputs]
@@ -135,19 +168,19 @@ class PlexFile(object):
         fwd_barcodes = OrderedDict((s.info['forward_mid'], s.info['forward_num']) for s in self.samples)
         rev_barcodes = OrderedDict((s.info['reverse_mid'], s.info['reverse_num']) for s in self.samples)
         # Array of possibilities #
-        array = defaultdict(lambda: defaultdict(int))
-        for s in self.samples: array[s.info['forward_mid']][s.info['reverse_mid']] = s
+        read_counts = defaultdict(lambda: defaultdict(int))
+        for s in self.samples: read_counts[s.info['forward_mid']][s.info['reverse_mid']] = s
         # Create samples #
         for s in self.samples: s.pair.create()
         # Dropped sequences #
-        not_both_primers     = 0
-        unknown_fwd_barcode  = 0
-        unknown_rev_barcode  = 0
+        self.not_both_primers     = 0
+        self.unknown_fwd_barcode  = 0
+        self.unknown_rev_barcode  = 0
         # Main loop #
         for f,r in tqdm(self.pair.parse_primers(self.primers, self.primer_mismatches)):
             # Case primers not found #
             if not (f.fwd_match and r.rev_match) and not (r.fwd_match and f.rev_match):
-                not_both_primers += 1
+                self.not_both_primers += 1
                 continue
             # Regular case #
             if f.fwd_match and r.rev_match:
@@ -160,21 +193,28 @@ class PlexFile(object):
                 rev_barcode = str(f.read[f.rev_start_pos-barlen:f.rev_start_pos].seq)
                 case = 'goofy'
             # Throw away unknown barcodes #
-            if fwd_barcode not in fwd_barcodes: unknown_fwd_barcode += 1
-            if rev_barcode not in rev_barcodes: unknown_rev_barcode += 1
+            if fwd_barcode not in fwd_barcodes: self.unknown_fwd_barcode += 1
+            if rev_barcode not in rev_barcodes: self.unknown_rev_barcode += 1
             if fwd_barcode not in fwd_barcodes or rev_barcode not in rev_barcodes: continue
             # Get sample #
-            s = array[fwd_barcode][rev_barcode]
+            s = read_counts[fwd_barcode][rev_barcode]
             # Case it's a bad combination #
             if isinstance(s, int):
-                array[fwd_barcode][rev_barcode] += 1
+                read_counts[fwd_barcode][rev_barcode] += 1
                 continue
             # Case it's a good sample #
             if case == 'regular': s.pair.add(f.read, r.read.reverse_complement())
             if case == 'goofy':   s.pair.add(r.read, f.read.reverse_complement())
         # Close samples #
         for s in self.samples: s.pair.close()
-        1/0
+        # Save read_counts #
+        for s in self.samples: read_counts[s.info['forward_mid']][s.info['reverse_mid']] = s.short_name
+        read_counts = pandas.DataFrame(read_counts)
+        read_counts = read_counts.fillna(0)
+        read_counts.to_csv(self.p.tsv.path, sep='\t', float_format='%.5g')
+        # Save other values #
+        extras = (self.not_both_primers, self.unknown_fwd_barcode, self.unknown_rev_barcode)
+        with open(self.p.extras, 'w') as handle: pickle.dump(extras, handle)
 
     #-------------------------------------------------------------------------#
     def primer_statistics(self):

@@ -36,16 +36,41 @@ Input data
 
 Result
 ------
-* The above files were split into {{count_real_samples}} real samples using a custom barcode.
+* The above files were split into {{count_real_samples}} real samples using custom home-made (non-Illumina) barcodes.
 
-* The amount of reads that could not be assigned to any sample and were therefor lost is {{count_loss}}.
+* The amount of reads that could not be assigned to a specific sample (and therefor thrown away) was {{count_loss}}.
 
-* The samples once demultiplexed contained the following amount of reads:
+* The samples, once demultiplexed, contained the following amount of reads:
 
 {{output_table}}
 
+{{#mistags}}
+Mistags
+-------
+As a double barcode recipe was used in combination with a sparse matrix placement strategy, it is possible to evaluate the effect of mistagings. Namely, reads that contained a combination of two barcodes which should theoretically never occur. The results are represented in a heatmap below.
+
+Not included in the heatmap are:
+
+* Reads in which the forward or the reverse primer could not be identified ({{not_both_primers}}).
+
+* Reads in which the forward barcode did not match any of the known barcodes ({{unknown_fwd_barcode}}).
+
+* Reads in which the reverse barcode did not match any of the known barcodes ({{unknown_rev_barcode}}).
+
+This analysis was done while permitting:
+
+* Exactly {{primer_mismatches}} mismatches in the primer sequences
+
+* Exactly {{barcode_mismatches}} mismatches in the primer sequences
+
+{{mistag_heatmap}}
+
+{{/mistags}}
+
+{{#predictions}}
 Predictions
 -----------
 In case of troubleshooting, it can be convenient to have the barcode predictions. This is done by taking each multiplexed group and counting the most common barcodes found there (on only a subset of the sequences).
 
-{{predictions_table}}
+{{predictions}}
+{{/predictions}}

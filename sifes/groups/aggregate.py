@@ -17,7 +17,7 @@ class Aggregate(object):
     all_paths = """
     /report/report.pdf
     /graphs/
-    /lane_cat/
+    /plexfiles/
     /logs/
     /cluster/
     /results/slurm_report.csv
@@ -74,5 +74,5 @@ class Aggregate(object):
 
     @property_cached
     def cluster(self):
-        from sifes.groups.cluster import Cluster # To avoid circular import
+        from sifes.groups.cluster import Cluster # To avoid a circular import
         return Cluster(self.name, self.samples[:], self.p.cluster_dir)

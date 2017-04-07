@@ -46,17 +46,17 @@
 
 
 
-"forward_num":          "T",
+"forward_num":          "Tf",
 "forward_mid":          "TACGTATA",
-"reverse_num":          "T",
-"reverse_mid":          "TACGTATA",
+"reverse_num":          "Tr",
+"reverse_mid":          "GCACGCGA",
 "barcode_num":          "TT",
 
 "primers": {
-        "name":    "V1V2",
+        "name":    "V1V2 nSSU rDNA (18S rDNA)",
         "sense":   "5' to 3'",
-        "forward": {"name": "F", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
-        "reverse": {"name": "R", "sequence": "CCTGCTGCCTTCCTTRGA"}
+        "forward": {"name": "SSUFO4", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "SSUR22", "sequence": "CCTGCTGCCTTCCTTRGA"}
 },
 
 
@@ -69,8 +69,8 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-
-
+"forward_read_length":  "250",
+"reverse_read_length":  "250",
 
 
 

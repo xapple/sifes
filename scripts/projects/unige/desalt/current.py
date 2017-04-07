@@ -19,10 +19,4 @@ plexed        = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_p
 proj          = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/", raw_files_must_exist=False)
 demultiplexer = Demultiplexer(plexed, proj.samples)
 
-print demultiplexer.plexfiles[0].primers.fwd_seq
-print demultiplexer.plexfiles[0].primers.rev_seq
-
-demultiplexer.plexfiles[0].merge_lanes()
-demultiplexer.plexfiles[0].primer_statistics()
-
-#demultiplexer.run()
+demultiplexer.run()
