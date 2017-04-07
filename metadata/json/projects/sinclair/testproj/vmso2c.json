@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "O",
+"forward_num":          "Of",
 "forward_mid":          "GCGTGCTA",
-"reverse_num":          "O",
-"reverse_mid":          "TAGCACGC",
+"reverse_num":          "Or",
+"reverse_mid":          "GACTGAGT",
 "barcode_num":          "OO",
 
 "primers": {

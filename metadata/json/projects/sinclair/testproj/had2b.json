@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "W",
+"forward_num":          "Wf",
 "forward_mid":          "TAGTCGTG",
-"reverse_num":          "W",
-"reverse_mid":          "CACGACTA",
+"reverse_num":          "Wr",
+"reverse_mid":          "GCATGTAT",
 "barcode_num":          "WW",
 
 "primers": {

@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "U",
+"forward_num":          "Uf",
 "forward_mid":          "TACTGCTG",
-"reverse_num":          "U",
-"reverse_mid":          "CAGCAGTA",
+"reverse_num":          "Ur",
+"reverse_mid":          "GCACTAGT",
 "barcode_num":          "UU",
 
 "primers": {

@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "P",
+"forward_num":          "Pf",
 "forward_mid":          "GTAGTGTG",
-"reverse_num":          "P",
-"reverse_mid":          "CACACTAC",
+"reverse_num":          "Pr",
+"reverse_mid":          "GAGCACGT",
 "barcode_num":          "PP",
 
 "primers": {

@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "Y",
+"forward_num":          "Yf",
 "forward_mid":          "TCATGACA",
-"reverse_num":          "Y",
-"reverse_mid":          "TGTCATGA",
+"reverse_num":          "Yr",
+"reverse_mid":          "GCGCGATA",
 "barcode_num":          "YY",
 
 "primers": {

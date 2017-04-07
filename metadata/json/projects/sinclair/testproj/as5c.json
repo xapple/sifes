@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "I",
+"forward_num":          "If",
 "forward_mid":          "GAGATCGA",
-"reverse_num":          "I",
-"reverse_mid":          "TCGATCTC",
+"reverse_num":          "Ir",
+"reverse_mid":          "CACTATGC",
 "barcode_num":          "II",
 
 "primers": {

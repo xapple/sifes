@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "K",
+"forward_num":          "Kf",
 "forward_mid":          "GCAGCGTA",
-"reverse_num":          "K",
-"reverse_mid":          "TACGCTGC",
+"reverse_num":          "Kr",
+"reverse_mid":          "CAGCTCTA",
 "barcode_num":          "KK",
 
 "primers": {

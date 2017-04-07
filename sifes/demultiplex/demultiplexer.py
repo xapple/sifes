@@ -225,7 +225,7 @@ class PlexFile(object):
         fwd_barcodes = Counter()
         rev_barcodes = Counter()
         barlen       = len(self.samples[0].info['forward_mid'])
-        for i, pair in enumerate(self.pair.parse_primers(self.primers, self.primer_mismatches)):
+        for i, pair in tqdm(enumerate(self.pair.parse_primers(self.primers, self.primer_mismatches))):
             f,r = pair
             if i == stop_at: break
             if not (f.fwd_match and r.rev_match) and not (r.fwd_match and f.rev_match): continue
@@ -235,6 +235,6 @@ class PlexFile(object):
             elif r.fwd_match and f.rev_match:
                 fwd_barcodes[str(r.read[r.fwd_start_pos-barlen:r.fwd_start_pos].seq)] += 1
                 rev_barcodes[str(f.read[f.rev_start_pos-barlen:f.rev_start_pos].seq)] += 1
-        print "Forward:", '\n'.join(fwd_barcodes.most_common(30))
-        print "Reverse:", '\n'.join(rev_barcodes.most_common(30))
+        print "Forward:\n", '\n'.join(x + ': ' + str(y) for x,y in fwd_barcodes.most_common(30))
+        print "Reverse:\n", '\n'.join(x + ': ' + str(y) for x,y in rev_barcodes.most_common(30))
         return fwd_barcodes, rev_barcodes

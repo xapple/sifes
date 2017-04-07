@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "H",
+"forward_num":          "Hf",
 "forward_mid":          "GAGAGCTG",
-"reverse_num":          "H",
-"reverse_mid":          "CAGCTCTC",
+"reverse_num":          "Hr",
+"reverse_mid":          "AGCTGCAT",
 "barcode_num":          "HH",
 
 "primers": {

@@ -15,5 +15,5 @@ plexed        = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testp
 proj          = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/", raw_files_must_exist=False)
 demultiplexer = Demultiplexer(plexed, proj.samples)
 
-#demultiplexer.run()
-demultiplexer.plexfiles[0].guess_barcodes()
+demultiplexer.run()
+#demultiplexer.plexfiles[0].guess_barcodes()

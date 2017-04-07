@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "A",
+"forward_num":          "Af",
 "forward_mid":          "CACACACA",
-"reverse_num":          "Z",
-"reverse_mid":          "TGTATCGA",
+"reverse_num":          "Zr",
+"reverse_mid":          "GCGTATGA",
 "barcode_num":          "AZ",
 
 "primers": {

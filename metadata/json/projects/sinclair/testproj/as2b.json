@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "E",
+"forward_num":          "Ef",
 "forward_mid":          "CTAGCACG",
-"reverse_num":          "E",
-"reverse_mid":          "CGTGCTAG",
+"reverse_num":          "Er",
+"reverse_mid":          "AGACACGA",
 "barcode_num":          "EE",
 
 "primers": {

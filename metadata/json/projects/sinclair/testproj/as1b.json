@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "B",
+"forward_num":          "Bf",
 "forward_mid":          "CACGTGTG",
-"reverse_num":          "B",
-"reverse_mid":          "CACACGTG",
+"reverse_num":          "Br",
+"reverse_mid":          "ACACTCTA",
 "barcode_num":          "BB",
 
 "primers": {

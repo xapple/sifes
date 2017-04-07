@@ -46,10 +46,10 @@
 
 
 
-"forward_num":          "F",
+"forward_num":          "Ff",
 "forward_mid":          "CTCATAGA",
-"reverse_num":          "F",
-"reverse_mid":          "TCTATGAG",
+"reverse_num":          "Fr",
+"reverse_mid":          "AGATGTGA",
 "barcode_num":          "FF",
 
 "primers": {
