@@ -53,24 +53,24 @@
 
 
 "primers": {
-        "name":    "V1V2",
+        "name":    "V1V2 nSSU rDNA (18S rDNA)",
         "sense":   "5' to 3'",
-        "forward": {"name": "F", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
-        "reverse": {"name": "R", "sequence": "CCTGCTGCCTTCCTTRGA"}
+        "forward": {"name": "SSUFO4", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "SSUR22", "sequence": "CCTGCTGCCTTCCTTRGA"}
 },
 
 
-
+"phix_spiking":   "0.01",
 
 "library_strategy":     "AMPLICON",
 "library_source":       "METAGENOMIC",
 "library_selection":    "PCR",
 "library_layout":       "Paired",
 "platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
 
-
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 

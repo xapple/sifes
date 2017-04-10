@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-VMSO2c",
 
-
-
-
-
+"fwd_read_count":       "33556",
+"rev_read_count":       "33556",
+"fwd_md5":              "060e5945eca7a70b57d2be05d412ffda",
+"rev_md5":              "fcdb8fb01ee555cc5bd9d076a414fad3",
 
 
 

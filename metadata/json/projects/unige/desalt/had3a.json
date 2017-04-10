@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-HAD3a",
 
-
-
-
-
+"fwd_read_count":       "190462",
+"rev_read_count":       "190462",
+"fwd_md5":              "419958f5b6e95a51309d3e185772e21f",
+"rev_md5":              "450667f82bc789cb597fcd7cdbc00e23",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-21 00:00:00",
+"latitude":     ["32.42868", "N"],
+"longitude":    ["34.87028", "E"],
+"country":      "Israel",
+"location":     "Near Gedor Sea Reserve",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-HAD2a",
 
-
-
-
-
+"fwd_read_count":       "292338",
+"rev_read_count":       "292338",
+"fwd_md5":              "ee6f6e1e3131938c3959b22a81b600d2",
+"rev_md5":              "3dbbe8445aed5d210175052b9c1672b3",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-21 00:00:00",
+"latitude":     ["32.4637", "N"],
+"longitude":    ["34.87934", "E"],
+"country":      "Israel",
+"location":     "Near Orot Rabin power plant",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-AS5c",
 
-
-
-
-
+"fwd_read_count":       "273123",
+"rev_read_count":       "273123",
+"fwd_md5":              "5fb1f61812bae135a4fe2f2d6319f8fa",
+"rev_md5":              "f63ac6429a96c33dac268d77030ce61a",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-14 00:00:00",
+"latitude":     ["31.67176", "N"],
+"longitude":    ["34.54356", "E"],
+"country":      "Israel",
+"location":     "Near Ashkelon",
 
 
 

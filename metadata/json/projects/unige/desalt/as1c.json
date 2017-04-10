@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-AS1c",
 
-
-
-
-
+"fwd_read_count":       "367728",
+"rev_read_count":       "367728",
+"fwd_md5":              "047a8ee108bb27f49ed528594bf6d0a8",
+"rev_md5":              "c3bce9493fab9d4c0c8a6e81b245d466",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-14 00:00:00",
+"latitude":     ["31.63212", "N"],
+"longitude":    ["34.5167", "E"],
+"country":      "Israel",
+"location":     "Nearer Dorad power station",
 
 
 

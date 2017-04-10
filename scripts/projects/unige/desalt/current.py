@@ -3,6 +3,9 @@
 
 """
 A script to run small snippets of code.
+
+# Get report #
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
 # Built-in modules #
@@ -15,9 +18,7 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 from tqdm import tqdm
 
 ###############################################################################
-plexed        = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=False)
-proj          = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/", raw_files_must_exist=False)
-demultiplexer = Demultiplexer(plexed, proj)
+# Load multiplexed and real project #
+plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=False)
+proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=False)
 
-#demultiplexer.run()
-demultiplexer.report.generate()

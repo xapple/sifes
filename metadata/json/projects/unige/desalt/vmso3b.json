@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-VMSO3b",
 
-
-
-
-
+"fwd_read_count":       "237422",
+"rev_read_count":       "237422",
+"fwd_md5":              "95bc43f970fe906b2c532f603c74a6f3",
+"rev_md5":              "98952afae1ab47969c6b6e0017d53014",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-15 00:00:00",
+"latitude":     ["31.93166", "N"],
+"longitude":    ["34.68336", "E"],
+"country":      "Israel",
+"location":     "Palmahim coast",
 
 
 

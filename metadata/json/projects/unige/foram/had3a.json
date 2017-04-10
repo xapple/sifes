@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-HAD3a",
 
-
-
-
-
+"fwd_read_count":       "50119",
+"rev_read_count":       "50119",
+"fwd_md5":              "350412eb49eeb94f358cd8de95577d79",
+"rev_md5":              "a4ac5c60c8261a21bcf069d90326569e",
 
 
 

@@ -38,10 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-VMSO2c",
 
-
-
-
-
+"fwd_read_count":       "174238",
+"rev_read_count":       "174238",
+"fwd_md5":              "9f89a5b7d5ec2922771ff01bf1de6cec",
+"rev_md5":              "7b146d2594c149ed1c5ee5005d68e56c",
 
 
 
@@ -69,19 +69,19 @@
 "platform":             "ILLUMINA",
 "instrument_model":     "Illumina MiSeq",
 
-"forward_read_length":  "250",
-"reverse_read_length":  "250",
+"forward_read_length":  "251",
+"reverse_read_length":  "251",
 
 
 
 
 
 
-
-
-
-
-
+"date":         "2016-11-15 00:00:00",
+"latitude":     ["31.94068", "N"],
+"longitude":    ["34.68738", "E"],
+"country":      "Israel",
+"location":     "Near Palmahim",
 
 
 
