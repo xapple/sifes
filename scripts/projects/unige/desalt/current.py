@@ -14,12 +14,16 @@ rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed
 import sifes
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
+# First party modules #
+from plumbing.processes import prll_map
+from plumbing.timer     import Timer
+
 # Third party modules #
 from tqdm import tqdm
 
 ###############################################################################
 # Load multiplexed and real project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=True)
-proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=True)
+plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=False)
+proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=False)
 
 ###############################################################################

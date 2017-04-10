@@ -9,6 +9,17 @@ To first generate the JSON files:
     $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/foram_plexed/metadata_plexed.xlsx
     $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/foram/metadata.xlsx
 
+To clean everything up:
+
+    $ rm -rf ~/SIFES/raw/projects/unige/desalt
+    $ rm -rf ~/SIFES/raw/projects/unige/foram
+    $ rm -rf ~/SIFES/views/projects/unige/desalt_plexed
+    $ rm -rf ~/SIFES/views/projects/unige/foram_plexed
+    $ rm -rf ~/SIFES/views/samples/unige/desalt
+    $ rm -rf ~/SIFES/views/samples/unige/foram
+    $ rm -rf ~/SIFES/views/samples/unige/desalt_plexed
+    $ rm -rf ~/SIFES/views/samples/unige/foram_plexed
+
 """
 
 # Built-in modules #
