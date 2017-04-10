@@ -42,7 +42,7 @@ from tqdm import tqdm
 plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram_plexed/")
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram/")
 
-# Demultiplex - xh00 #
+# Demultiplex - 0h08 #
 demultiplexer = Demultiplexer(plexed, proj)
 with Timer(): demultiplexer.run()
 

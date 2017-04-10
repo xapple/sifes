@@ -37,3 +37,5 @@ proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/", 
 demultiplexer = Demultiplexer(plexed, proj)
 demultiplexer.run()
 demultiplexer.report.generate()
+proj.first.joiner.run()
+print proj.first.joiner.results.unassembled_percent

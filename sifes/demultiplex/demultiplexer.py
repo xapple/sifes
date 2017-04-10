@@ -208,8 +208,8 @@ class PlexFile(object):
                 read_counts[fwd_barcode][rev_barcode] += 1
                 continue
             # Case it's a good sample #
-            if case == 'regular': s.pair.add(f.read, reverse_compl_with_name(r.read))
-            if case == 'goofy':   s.pair.add(r.read, reverse_compl_with_name(f.read))
+            if case == 'regular': s.pair.add(f.read, r.read)
+            if case == 'goofy':   s.pair.add(r.read, f.read)
         # Close samples #
         for s in self.samples: s.pair.close()
         # Save read_counts #
