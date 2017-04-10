@@ -69,8 +69,8 @@
 "platform":             "ILLUMINA",
 
 
-
-
+"forward_read_length":  "250",
+"reverse_read_length":  "250",
 
 
 

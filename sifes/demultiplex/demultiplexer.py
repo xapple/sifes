@@ -34,10 +34,11 @@ class Demultiplexer(object):
 
     def __repr__(self): return '<%s object with %i samples>' % (self.__class__.__name__, len(self.samples))
 
-    def __init__(self, plexproj, samples):
+    def __init__(self, plexproj, realproj):
         # Attributes #
         self.plexproj = plexproj
-        self.samples  = samples
+        self.realproj = realproj
+        self.samples  = realproj.samples
         # Check #
         assert all([s.info.get('multiplex_group') for s in self.plexproj])
         assert all([s.info.get('multiplexed_in')  for s in self.samples])
@@ -73,12 +74,13 @@ class DemultiplexerResults(object):
     def __nonzero__(self): return all(f.p.tsv.exists for f in self.parent.plexfiles)
 
     def __init__(self, parent):
-        self.parent = parent
-        self.first  = self.parent.plexfiles[0]
+        self.parent  = parent
+        self.first   = self.parent.plexfiles[0]
+        self.samples = parent.samples
 
     @property_cached
     def read_counts(self):
-        return pandas.io.parsers.read_csv(self.p.flat, sep='\t', index_col=0,
+        return pandas.io.parsers.read_csv(self.first.p.tsv, sep='\t', index_col=0,
                                           encoding='utf-8', engine = 'python')
 
     @property_cached
@@ -96,12 +98,14 @@ class DemultiplexerResults(object):
     def graphs(self):
         """Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in plex_graphs.py initialized with this instance as
-        only argument."""
+        first argument and the graphs dir as second argument."""
+        base_dir = self.parent.plexproj.p.plexfiles_dir + 'graphs/'
+        base_dir.create_if_not_exists()
         class Graphs(object): pass
         result = Graphs()
         for graph in graphs.__all__:
             cls = getattr(graphs, graph)
-            setattr(result, cls.short_name, cls(self))
+            setattr(result, cls.short_name, cls(self, base_dir=base_dir))
         return result
 
 ###############################################################################

@@ -124,16 +124,16 @@ class MultiplexTemplate(ReportTemplate):
                   'primer_mismatches', 'barcode_mismatches', 'mistag_heatmap')
         return {p:getattr(self, p) for p in params}
 
-    def not_both_primers(self):     return self.plexer.first.results.not_both_primers
-    def unknown_fwd_barcode(self):  return self.plexer.first.results.unknown_fwd_barcode
-    def unknown_rev_barcode(self):  return self.plexer.first.results.unknown_rev_barcode
+    def not_both_primers(self):     return split_thousands(self.plexer.results.not_both_primers)
+    def unknown_fwd_barcode(self):  return split_thousands(self.plexer.results.unknown_fwd_barcode)
+    def unknown_rev_barcode(self):  return split_thousands(self.plexer.results.unknown_rev_barcode)
 
-    def primer_mismatches(self):   return self.plexer.first.results.primer_mismatches
-    def barcode_mismatches(self):  return self.plexer.first.results.barcode_mismatches
+    def primer_mismatches(self):   return self.plexer.first.primer_mismatches
+    def barcode_mismatches(self):  return self.plexer.first.barcode_mismatches
 
     def mistag_heatmap(self):
         caption = "Heatmap representing mistaged read pairs. Existing samples are outlined in black."
-        graph = self.plexer.results.graphs.read_counts_heatmap()
+        graph = self.plexer.results.graphs.mistag_heatmap(rerun=True)
         return str(ScaledFigure(graph.path, caption, inspect.stack()[0][3]))
 
     ############## Predictions ##############
