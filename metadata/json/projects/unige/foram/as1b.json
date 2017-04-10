@@ -1,0 +1,92 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@sinclair.bio"
+    }
+    ,
+    "contact_two": {
+        "function": "prof",
+        "name":     "Jan Pawlowski",
+        "email":    "jan.pawlowski@unige.ch"
+    }
+},
+
+"project_short_name":   "foram",
+"sample_short_name":    "as1b",
+"sample_num":           "2",
+"used":                 "yes",
+
+"fwd_filename":         "as1b_fwd.fastq",
+"rev_filename":         "as1b_rev.fastq",
+
+
+"multiplexed_in":       "foram_plexed",
+
+
+
+
+
+
+"organization":         "unige",
+"prefix":               "~/SIFES/raw/projects/unige/",
+"directory":            "foram/",
+
+
+"project_long_name":    "Desalination foram project",
+"sample_long_name":     "Foram SAL-AS1b",
+
+
+
+
+
+
+
+
+
+"forward_num":          "Bf",
+"forward_mid":          "CACATGAT",
+"reverse_num":          "Br",
+"reverse_mid":          "AGATGATG",
+"barcode_num":          "BB",
+
+"primers": {
+        "name":    "37F rDNA",
+        "sense":   "5' to 3'",
+        "forward": {"name": "14F1", "sequence": "AAGGGCACCACAAGAACGC"},
+        "reverse": {"name": "15", "sequence": "CCACCTATCACAYAATCATG"}
+},
+
+
+"phix_spiking":   "0.01",
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+
+"forward_read_length":  "151",
+"reverse_read_length":  "151",
+
+
+
+
+
+
+"date":         "2016-11-14 00:00:00",
+"latitude":     ["31.63212", "N"],
+"longitude":    ["34.5167", "E"],
+"country":      "Israel",
+"location":     "Nearer Dorad power station",
+
+
+
+
+
+
+"sentinel":             "True"
+}

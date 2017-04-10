@@ -1,0 +1,92 @@
+{
+
+"contacts": {
+    "contact_one": {
+        "function": "postdoc",
+        "name":     "Lucas Sinclair",
+        "email":    "lucas@sinclair.bio"
+    }
+    ,
+    "contact_two": {
+        "function": "prof",
+        "name":     "Jan Pawlowski",
+        "email":    "jan.pawlowski@unige.ch"
+    }
+},
+
+"project_short_name":   "foram_plexed",
+"sample_short_name":    "run_foram",
+"sample_num":           "1",
+"used":                 "yes",
+
+"fwd_filename":         "37F_S1_L001_R1_001.fastq.gz",
+"rev_filename":         "37F_S1_L001_R2_001.fastq.gz",
+
+
+
+
+
+
+
+"multiplex_group":      "foram_plexed",
+
+"organization":         "unige",
+"prefix":               "~/SIFES/raw/projects/unige/",
+"directory":            "foram_plexed/",
+"suffix":               "37F-44286271/",
+
+"project_long_name":    "Foram desalt project plexed",
+"sample_long_name":     "Single run of the foram desalt project plexed",
+
+"fwd_read_count":       "1215774",
+"rev_read_count":       "1215774",
+"fwd_md5":              "987d91f3dfd13474ecda1d077c26d0e6",
+"rev_md5":              "9e5cf6910d888e28dac7270964103558",
+
+
+
+
+
+
+
+
+
+
+"primers": {
+        "name":    "37F rDNA",
+        "sense":   "5' to 3'",
+        "forward": {"name": "14F1", "sequence": "AAGGGCACCACAAGAACGC"},
+        "reverse": {"name": "15", "sequence": "CCACCTATCACAYAATCATG"}
+},
+
+
+"phix_spiking":   "0.01",
+
+"library_strategy":     "AMPLICON",
+"library_source":       "METAGENOMIC",
+"library_selection":    "PCR",
+"library_layout":       "Paired",
+"platform":             "ILLUMINA",
+"instrument_model":     "Illumina MiSeq",
+
+"forward_read_length":  "151",
+"reverse_read_length":  "151",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"sentinel":             "True"
+}
