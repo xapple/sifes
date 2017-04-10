@@ -117,6 +117,10 @@ class MultiplexTemplate(ReportTemplate):
         # Add caption #
         return table + "\n\n   : Summary information for all final samples."
 
+    ############## Unused ##############
+    def unused_samples(self):
+        return False
+
     ############## Misstags ##############
     def mistags(self):
         if not self.plexer.results: return False

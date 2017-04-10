@@ -19,5 +19,5 @@ plexed        = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_p
 proj          = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/", raw_files_must_exist=False)
 demultiplexer = Demultiplexer(plexed, proj)
 
-demultiplexer.run()
+#demultiplexer.run()
 demultiplexer.report.generate()

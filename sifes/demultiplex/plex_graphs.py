@@ -6,9 +6,10 @@ from collections import OrderedDict
 
 # Internal modules #
 from plumbing.graphs import Graph
+from plumbing.common import split_thousands
 
 # Third party modules #
-import numpy
+import numpy, matplotlib
 from matplotlib import pyplot
 
 # Constants #
@@ -24,7 +25,10 @@ class MistagHeatmap(Graph):
     top    = 0.8
     bottom = 0.05
     left   = 0.2
-    right  = 0.78
+    right  = 0.72
+
+    x_label = "Forward barcodes"
+    y_label = "Reverse barcodes"
 
     def plot(self, **kwargs):
         # Attributes #
@@ -51,6 +55,10 @@ class MistagHeatmap(Graph):
         # Plot #
         mistag_mesh = axes.matshow(mistag_vals, cmap='winter' )
         sample_mesh = axes.matshow(sample_vals, cmap='spring')
+        # Titles #
+        axes.set_xlabel(self.x_label)
+        axes.set_ylabel(self.y_label)
+        axes.xaxis.set_label_position('top')
         # Labels #
         axes.set(xticks = numpy.arange(df.shape[1]), # fwd = df.columns
                  yticks = numpy.arange(df.shape[0])) # rev = df.rows
@@ -61,13 +69,23 @@ class MistagHeatmap(Graph):
         axes.xaxis.tick_top()
         axes.yaxis.tick_left()
         axes.tick_params(direction='out')
-        # Add dual colorbars
-        cbar = fig.colorbar(mistag_mesh, cax=fig.add_axes([0.81, 0.05, 0.04, 0.83]))
-        cbar.ax.text(0.55, 0.8, 'Mistags', rotation=90, ha='center', va='center',
-                     transform=cbar.ax.transAxes, color='black')
-        cbar = fig.colorbar(sample_mesh, cax=fig.add_axes([0.9, 0.05, 0.04, 0.83]))
-        cbar.ax.text(0.55, 0.8, 'Real samples', rotation=90, ha='center', va='center',
-                     transform=cbar.ax.transAxes, color='black')
+        # Add dual colorbars #
+        mistags_cbar = fig.colorbar(mistag_mesh, cax=fig.add_axes([0.75, 0.05, 0.04, 0.83]))
+        samples_cbar = fig.colorbar(sample_mesh, cax=fig.add_axes([0.86, 0.05, 0.04, 0.83]))
+        # Split thousands #
+        separate = lambda x,pos: split_thousands(x)
+        mistags_cbar.ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(separate))
+        samples_cbar.ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(separate))
+        # Smaller labels #
+        #for tick in mistags_cbar.ax.yaxis.get_major_ticks(): tick.label.set_fontsize(5)
+        #for tick in samples_cbar.ax.yaxis.get_major_ticks(): tick.label.set_fontsize(5)
+        mistags_cbar.ax.set_yticklabels(mistags_cbar.ax.get_yticklabels(), fontsize='smaller')
+        samples_cbar.ax.set_yticklabels(samples_cbar.ax.get_yticklabels(), fontsize='smaller')
+        # Add legend #
+        mistags_cbar.ax.text(0.55, 0.8, 'Mistags', rotation=90, ha='center', va='center',
+                     transform=mistags_cbar.ax.transAxes, color='black')
+        samples_cbar.ax.text(0.55, 0.8, 'Real samples', rotation=90, ha='center', va='center',
+                     transform=samples_cbar.ax.transAxes, color='black')
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
