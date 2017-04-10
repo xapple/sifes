@@ -13,6 +13,7 @@ from plumbing.cache     import property_cached
 from plumbing.common    import tail, flatter
 
 # Third party modules #
+import sh
 from shell_command import shell_call
 
 ###############################################################################
@@ -26,8 +27,8 @@ class Pandaseq(object):
 
     # Attributes #
     short_name = 'pandaseq'
-    long_name  = 'PANDAseq Version 2.8.1'
-    executable = 'pandaseq28'
+    long_name  = 'PANDAseq Version 2.11'
+    executable = 'pandaseq'
     url        = 'https://github.com/neufeld/pandaseq/'
     doc        = 'http://neufeldserver.uwaterloo.ca/%7Eapmasell/pandaseq_man1.html'
     license    = 'GPLv3'
@@ -67,16 +68,18 @@ class Pandaseq(object):
         print "Joining sample '%s'" % self.sample_name
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
+        # Check version #
+        assert "pandaseq 2.11" in sh.pandaseq('-v', _ok_code=[0,1]).stderr
         # Command #
-        command = 'pandaseq28 -T 1 -f %s -r %s -u %s -o %s -k %s -F 1> %s 2> %s'
-        command = command % (self.pair.fwd, self.pair.rev,
-                             self.p.unassembled,
-                             self.minimum_overlap,
-                             self.kmer_table_size,
-                             self.p.assembled,
-                             self.p.stderr)
+        self.command = 'pandaseq -T 1 -f %s -r %s -u %s -o %s -k %s -F 1> %s 2> %s'
+        self.command = self.command % (self.pair.fwd, self.pair.rev,
+                                       self.p.unassembled,
+                                       self.minimum_overlap,
+                                       self.kmer_table_size,
+                                       self.p.assembled,
+                                       self.p.stderr)
         # Call it #
-        shell_call(command)
+        shell_call(self.command)
         # Check #
         assert self.p.assembled
         # Check counts #
@@ -85,6 +88,7 @@ class Pandaseq(object):
         count_assembled   = len(self.results.assembled)
         count_unassembled = len(self.results.unassembled)
         count_input       = len(self.pair)
+        # Assertions #
         assert count_assembled + count_unassembled + count_lowqual == count_input
         assert count_noalign == count_unassembled
 
@@ -140,10 +144,3 @@ class PandaseqResults(object):
     def unassembled_percent(self):
         percent = (self.unassembled_count / len(self.parent.pair)) * 100.0
         return "%.1f%%" % percent
-
-###############################################################################
-#sh.pandaseq28('-T', 1,        # direct output to file <f>, not stdout
-#              '-f', self.fwd, # parsable table of per-sequence hits
-#              '-r', self.rev, # set RNG seed to <n>
-#              '-u', self.unassembled.path # unlimited ASCII text output line width
-#              self.assembled, # prefer accessions over names in output

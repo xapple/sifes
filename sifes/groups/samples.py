@@ -109,11 +109,8 @@ class Sample(object):
     @property_cached
     def uncompressed_pair(self):
         """Useful for a few stupid programs that don't take fastq.gz files such as mothur."""
-        result = PairedFASTQ(self.p.uncompressed_fwd_fastq, self.p.uncompressed_rev_fastq)
-        if not result.exists:
-            self.pair.fwd.ungzip_to(result.fwd)
-            self.pair.rev.ungzip_to(result.rev)
-        return result
+        if not self.pair.gzipped: return self.pair
+        return PairedFASTQ(self.p.uncompressed_fwd_fastq, self.p.uncompressed_rev_fastq)
 
     @property_cached
     def joiner(self):

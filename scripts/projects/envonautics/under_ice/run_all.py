@@ -37,7 +37,8 @@ for s in proj: print s.pair.rev.md5
 for s in proj: print len(s.pair.fwd.first)
 
 # Uncompress reads - 0h01 #
-with Timer(): prll_map(lambda s: s.uncompressed_pair, proj)
+with Timer(): prll_map(lambda s: s.pair.fwd.ungzip_to(s.uncompressed_pair.fwd), proj)
+with Timer(): prll_map(lambda s: s.pair.rev.ungzip_to(s.uncompressed_pair.rev), proj)
 for s in proj:
     assert s.uncompressed_pair.fwd.count == s.uncompressed_pair.rev.count
     assert s.pair.count                  == s.uncompressed_pair.rev.count

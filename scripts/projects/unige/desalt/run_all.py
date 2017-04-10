@@ -9,6 +9,17 @@ To first generate the JSON files:
     $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/desalt_plexed/metadata_plexed.xlsx
     $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx
 
+To clean everything up:
+
+    $ rm -rf ~/SIFES/raw/projects/unige/desalt
+    $ rm -rf ~/SIFES/raw/projects/unige/foram
+    $ rm -rf ~/SIFES/views/projects/unige/desalt_plexed
+    $ rm -rf ~/SIFES/views/projects/unige/foram_plexed
+    $ rm -rf ~/SIFES/views/samples/unige/desalt
+    $ rm -rf ~/SIFES/views/samples/unige/foram
+    $ rm -rf ~/SIFES/views/samples/unige/desalt_plexed
+    $ rm -rf ~/SIFES/views/samples/unige/foram_plexed
+
 """
 
 # Built-in modules #
@@ -28,8 +39,8 @@ from tqdm import tqdm
 
 ###############################################################################
 # Load multiplexed and real project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=False)
-proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=False)
+plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/")
+proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/")
 
 # Demultiplex - xh00 #
 demultiplexer = Demultiplexer(plexed, proj)
@@ -38,3 +49,4 @@ with Timer(): demultiplexer.run()
 # Demultiplex Report #
 with Timer(): demultiplexer.report.generate()
 
+###############################################################################

@@ -17,6 +17,7 @@ from sifes.demultiplex        import plex_graphs as graphs
 from plumbing.autopaths import DirectoryPath, AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.processes import prll_map
+from plumbing.common    import reverse_compl_with_name
 from fasta              import FASTQ, PairedFASTQ
 from fasta.primers      import iupac_pattern
 
@@ -163,7 +164,7 @@ class PlexFile(object):
         assert self.pair.fwd.first.id == self.pair.rev.first.id
 
     def extract_reads(self):
-        """Extract all reads from a plex file."""
+        """Extract all reads from a plex file with dual custom barcodes."""
         # Message #
         print "Demultiplexing plexfile '%s'" % self.fwd_path
         # Always the same barcode length #
@@ -207,8 +208,8 @@ class PlexFile(object):
                 read_counts[fwd_barcode][rev_barcode] += 1
                 continue
             # Case it's a good sample #
-            if case == 'regular': s.pair.add(f.read, r.read.reverse_complement())
-            if case == 'goofy':   s.pair.add(r.read, f.read.reverse_complement())
+            if case == 'regular': s.pair.add(f.read, reverse_compl_with_name(r.read))
+            if case == 'goofy':   s.pair.add(r.read, reverse_compl_with_name(f.read))
         # Close samples #
         for s in self.samples: s.pair.close()
         # Save read_counts #
