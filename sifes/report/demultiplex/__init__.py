@@ -136,7 +136,8 @@ class MultiplexTemplate(ReportTemplate):
     def barcode_mismatches(self):  return self.plexer.first.barcode_mismatches
 
     def mistag_heatmap(self):
-        caption = "Heatmap representing mistaged read pairs. Existing samples are outlined in black."
+        caption  = "Heatmap representing mistaged read pairs."
+        caption += " Existing samples are outlined in pink and orange, while mistags are in blue and green."
         graph = self.plexer.results.graphs.mistag_heatmap(rerun=True)
         return str(ScaledFigure(graph.path, caption, inspect.stack()[0][3]))
 

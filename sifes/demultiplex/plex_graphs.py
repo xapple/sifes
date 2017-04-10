@@ -53,7 +53,7 @@ class MistagHeatmap(Graph):
         fig = pyplot.figure()
         axes = pyplot.gca()
         # Plot #
-        mistag_mesh = axes.matshow(mistag_vals, cmap='winter' )
+        mistag_mesh = axes.matshow(mistag_vals, cmap='winter')
         sample_mesh = axes.matshow(sample_vals, cmap='spring')
         # Titles #
         axes.set_xlabel(self.x_label)
@@ -73,14 +73,17 @@ class MistagHeatmap(Graph):
         mistags_cbar = fig.colorbar(mistag_mesh, cax=fig.add_axes([0.75, 0.05, 0.04, 0.83]))
         samples_cbar = fig.colorbar(sample_mesh, cax=fig.add_axes([0.86, 0.05, 0.04, 0.83]))
         # Split thousands #
-        separate = lambda x,pos: split_thousands(x)
-        mistags_cbar.ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(separate))
-        samples_cbar.ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(separate))
+        mistags_cmap_ticks = mistags_cbar.ax.get_yticklabels()
+        samples_cmap_ticks = samples_cbar.ax.get_yticklabels()
+        for tick in mistags_cmap_ticks:
+            tick.set_text(split_thousands(tick.get_text()))
+        for tick in samples_cmap_ticks:
+            tick.set_text(split_thousands(tick.get_text()))
         # Smaller labels #
-        #for tick in mistags_cbar.ax.yaxis.get_major_ticks(): tick.label.set_fontsize(5)
-        #for tick in samples_cbar.ax.yaxis.get_major_ticks(): tick.label.set_fontsize(5)
-        mistags_cbar.ax.set_yticklabels(mistags_cbar.ax.get_yticklabels(), fontsize='smaller')
-        samples_cbar.ax.set_yticklabels(samples_cbar.ax.get_yticklabels(), fontsize='smaller')
+        mistags_cmap_ticks = mistags_cbar.ax.get_yticklabels()
+        samples_cmap_ticks = samples_cbar.ax.get_yticklabels()
+        mistags_cbar.ax.set_yticklabels(mistags_cmap_ticks, fontsize='smaller')
+        samples_cbar.ax.set_yticklabels(samples_cmap_ticks, fontsize='smaller')
         # Add legend #
         mistags_cbar.ax.text(0.55, 0.8, 'Mistags', rotation=90, ha='center', va='center',
                      transform=mistags_cbar.ax.transAxes, color='black')

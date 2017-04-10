@@ -23,5 +23,5 @@ demultiplexer = Demultiplexer(plexed, proj)
 #demultiplexer.plexfiles[0].merge_lanes()
 #demultiplexer.plexfiles[0].primer_statistics()
 
-demultiplexer.run()
+#demultiplexer.run()
 demultiplexer.report.generate()
