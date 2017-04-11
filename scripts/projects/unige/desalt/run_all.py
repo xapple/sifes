@@ -42,7 +42,7 @@ from tqdm import tqdm
 plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/")
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/")
 
-# Demultiplex - xh00 #
+# Demultiplex - 0h55 #
 demultiplexer = Demultiplexer(plexed, proj)
 with Timer(): demultiplexer.run()
 
@@ -50,3 +50,6 @@ with Timer(): demultiplexer.run()
 with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
+# Join reads - 0h0x #
+with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
+for s in proj: print s.short_name, s.joiner.results.unassembled_percent

@@ -50,3 +50,6 @@ with Timer(): demultiplexer.run()
 with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
+# Join reads - 0h01 #
+with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
+for s in proj: print s.short_name, s.joiner.results.unassembled_percent

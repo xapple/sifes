@@ -34,8 +34,11 @@ plexed = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj_ple
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/",        raw_files_must_exist=False)
 
 ###############################################################################
-demultiplexer = Demultiplexer(plexed, proj)
-demultiplexer.run()
-demultiplexer.report.generate()
-proj.first.joiner.run()
-print proj.first.joiner.results.unassembled_percent
+#demultiplexer = Demultiplexer(plexed, proj)
+#demultiplexer.run()
+#demultiplexer.report.generate()
+
+###############################################################################
+# Join reads - 0h0x #
+with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
+for s in proj: print s.short_name, s.joiner.results.unassembled_percent
