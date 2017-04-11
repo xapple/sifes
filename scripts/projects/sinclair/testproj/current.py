@@ -6,16 +6,12 @@ A script to run small snippets of code.
 
 # Get report #
 rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 
-To clean everything up:
-
-    $ rm -rf ~/SIFES/raw/projects/sinclair/testproj
-    $ rm -rf ~/SIFES/views/projects/sinclair/testproj_plexed
-    $ rm -rf ~/SIFES/views/samples/sinclair/testproj
-    $ rm -rf ~/SIFES/views/samples/sinclair/testproj_plexed
 """
 
 # Built-in modules #
+import shutil
 
 # Internal modules #
 import sifes
@@ -34,11 +30,19 @@ plexed = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj_ple
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/",        raw_files_must_exist=False)
 
 ###############################################################################
+# Parameters #
+sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
+sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450
+for s in proj: s.default_joiner = 'pandaseq'
+
+###############################################################################
 #demultiplexer = Demultiplexer(plexed, proj)
 #demultiplexer.run()
 #demultiplexer.report.generate()
 
 ###############################################################################
-# Join reads - 0h0x #
-with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), proj)
-for s in proj: print s.short_name, s.joiner.results.unassembled_percent
+proj.first.report.generate()
+
+###############################################################################

@@ -73,7 +73,7 @@ class SeqFilter(object):
         self.length_fasta.rename_with_num(self.sample_name + ':', self.renamed_fasta)
         # Check #
         if len(self.length_fasta) == 0:
-            warnings.warn("No results left after filtering the sample '%s'" % self.sample_name)
+            raise Exception("No results left after filtering the sample '%s'" % self.sample_name)
         # Return #
         return self.results.clean
 
@@ -87,9 +87,9 @@ class SeqFilter(object):
                 if r.rev_start_pos < -self.primer_max_dist:            continue
                 yield r.read[r.fwd_end_pos:r.rev_end_pos]
         # Parsing the primers, returns a GenWithLength #
-        self.parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches)
+        parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
         # Do it #
-        self.primers_fasta.write(good_primer_iterator(self.parse_primers()))
+        self.primers_fasta.write(good_primer_iterator(parse_primers()))
 
     # N base #
     def n_base_filter(self):

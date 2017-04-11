@@ -49,7 +49,7 @@ class SampleReport(Document):
         self.markdown = unicode(self.template)
         # Render to latex #
         self.make_body()
-        self.make_latex({'title': 'Sample report'})
+        self.make_latex(params={'title': 'Sample report'})
         self.make_pdf(safe=True)
         # Copy to reports directory #
         self.copy_base.directory.create(safe=True)
@@ -71,8 +71,10 @@ class SampleTemplate(ReportTemplate):
         self.report, self.parent = report, report
         self.sample    = self.parent.sample
         self.project   = self.sample.project
-        self.cluster   = self.sample.project.cluster
         self.cache_dir = self.parent.cache_dir
+
+    @property
+    def cluster(self): return self.sample.project.cluster
 
     def values_with_percent(self, val):
         percentage = lambda x,y: (len(x)/len(y))*100 if len(y) != 0 else 0
@@ -139,7 +141,7 @@ class SampleTemplate(ReportTemplate):
         return self.values_with_percent(self.sample.joiner.results.assembled)
     @property_pickled
     def unassembled_count(self):
-        return "%s (%s)" % (self.sample.joiner.results.unassembled_count,
+        return "%s (%s)" % (split_thousands(self.sample.joiner.results.unassembled_count),
                             self.sample.joiner.results.unassembled_percent)
 
     def joined_len_dist(self):
@@ -149,6 +151,14 @@ class SampleTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     ############## Filtering ##############
+    def filter(self):
+        if not self.sample.filter: return False
+        params = ('primer_max_dist', 'mismatches_allowed', 'primer_discard',
+                  'primer_left', 'n_base_discard', 'n_base_left',
+                  'min_read_length', 'max_read_length', 'length_discard',
+                  'length_left', 'percent_remaining')
+        return {p:getattr(self, p) for p in params}
+
     def primer_max_dist(self):    return self.sample.filter.primer_max_dist
     def mismatches_allowed(self): return self.sample.filter.primer_mismatches
     @property_pickled
@@ -186,8 +196,9 @@ class SampleTemplate(ReportTemplate):
 
     ############## Taxonomy ##############
     def taxonomy_table(self):
+        if not self.sample.filter:          return False
         if not self.sample in self.cluster: return False
-        else: return {'genera_table': self.genera_table}
+        return {'genera_table': self.genera_table}
 
     @property_pickled
     def genera_table(self):
@@ -209,6 +220,7 @@ class SampleTemplate(ReportTemplate):
 
     ############## Diversity ##############
     def diversity(self):
+        if not self.sample.filter:          return False
         if not self.sample in self.cluster: return False
         params = ('total_otu_sum', 'total_otu_count', 'chao1_curve',
                   'ace_curve', 'shannon_curve', 'simpson_curve')

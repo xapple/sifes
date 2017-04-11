@@ -9,6 +9,7 @@ rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed
 """
 
 # Built-in modules #
+import shutil
 
 # Internal modules #
 import sifes
@@ -27,3 +28,9 @@ plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/"
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=True)
 
 ###############################################################################
+# Parameters #
+sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
+sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450
+for s in proj: s.default_joiner = 'pandaseq'

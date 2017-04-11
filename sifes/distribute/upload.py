@@ -8,11 +8,26 @@ import sifes
 
 # Third party modules #
 import sh
-from dropbox.client import DropboxClient
+from shell_command import shell_call
 
 # Constants #
 home = os.environ.get('HOME', '~') + '/'
-dropbox_token = "_WV-ZSiONaAAAAAAAAAAINlmCV5smn1f7rwFV-g8aibak73Pu6Rhu1rA2z1Z--Om"
+
+###############################################################################
+class DropBoxRclone(object):
+    """Expects that your dropbox is configured in rclone with the name "prod"."""
+
+    def __init__(self, input_dir, output_dir):
+        self.input_dir  = input_dir.rstrip('/')
+        self.output_dir = output_dir.rstrip('/')
+
+    @property
+    def command(self):
+        return 'sync', "'" + self.input_dir + "'", "'" + 'prod:' + self.output_dir + "'"
+
+    def run(self):
+        """Just rclone it"""
+        shell_call('rclone ' + ' '.join(self.command))
 
 ###############################################################################
 class DropBoxSync(object):
@@ -33,9 +48,11 @@ class DropBoxSync(object):
 
 ###############################################################################
 class DropBoxUpload(object):
-    """http://dropbox-sdk-python.readthedocs.io/en/master/"""
+    """Uses this: http://dropbox-sdk-python.readthedocs.io/en/master/"""
+    dropbox_token = "_WV-ZSiONaAAAAAAAAAAINlmCV5smn1f7rwFV-g8aibak73Pu6Rhu1rA2z1Z--Om"
 
     def __init__(self, input_dir, output_dir='/Micans V6 analysis delivery'):
+        from dropbox.client import DropboxClient
         self.dbx = DropboxClient(dropbox_token)
         self.input_dir  = input_dir
         self.output_dir = output_dir

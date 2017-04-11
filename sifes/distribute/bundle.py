@@ -41,6 +41,8 @@ class Bundle(Aggregate):
             reports_dir = DirectoryPath(proj_dir + 'reports')
             reports_dir.create(safe=True)
             for s in p: s.report.output_path.copy(reports_dir + s.short_name + '.pdf')
+            # Early exit #
+            if not all(s.filter for s in p): return
             # Reports for cluster #
             p.cluster.report.output_path.copy(reports_dir + 'project_report.pdf')
             # Data files #

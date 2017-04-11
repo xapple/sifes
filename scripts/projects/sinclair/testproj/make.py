@@ -1,11 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-"""
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/sinclair/testproj_plexed/metadata_plexed.xlsx
-    $ ~/repos/sifes/metadata/excel_to_json.py ~/repos/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx
-"""
-
 # Built-in modules #
 from itertools import izip, islice
 
