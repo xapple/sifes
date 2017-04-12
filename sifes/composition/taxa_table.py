@@ -52,7 +52,9 @@ class TaxaTable(object):
         for i, rank_name in enumerate(self.taxonomy.results.rank_names):
             table = self.taxa_table_at_rank(i)
             path  = self.base_dir + 'taxa_table_' + rank_name.lower() + '.tsv'
-            table.to_csv(path, sep='\t', encoding='utf-8')
+            # Make a TSV #
+            table.to_csv(path.path, sep='\t', encoding='utf-8')
+            # The prepend will fail if the line containing column names is omitted #
             prepend_to_file(path, 'X')
 
     def taxa_table_at_rank(self, rank):
