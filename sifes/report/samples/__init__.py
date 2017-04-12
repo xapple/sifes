@@ -151,7 +151,7 @@ class SampleTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     ############## Filtering ##############
-    def filter(self):
+    def filtering(self):
         if not self.sample.filter: return False
         params = ('primer_max_dist', 'mismatches_allowed', 'primer_discard',
                   'primer_left', 'n_base_discard', 'n_base_left',
@@ -159,7 +159,9 @@ class SampleTemplate(ReportTemplate):
                   'length_left', 'percent_remaining')
         return {p:getattr(self, p) for p in params}
 
+    @property
     def primer_max_dist(self):    return self.sample.filter.primer_max_dist
+    @property
     def mismatches_allowed(self): return self.sample.filter.primer_mismatches
     @property_pickled
     def primer_discard(self):
@@ -179,7 +181,9 @@ class SampleTemplate(ReportTemplate):
     def n_base_left(self):
         return split_thousands(len(self.sample.filter.results.n_base_fasta))
 
+    @property
     def min_read_length(self): return self.sample.filter.min_read_length
+    @property
     def max_read_length(self): return self.sample.filter.max_read_length
     @property_pickled
     def length_discard(self):
@@ -196,8 +200,12 @@ class SampleTemplate(ReportTemplate):
 
     ############## Taxonomy ##############
     def taxonomy_table(self):
-        if not self.sample.filter:          return False
+        # Skip conditions #
+        if not self.sample.filter: return False
+        if not self.cluster:       return False
+        # Excluded sample? #
         if not self.sample in self.cluster: return False
+        # OK #
         return {'genera_table': self.genera_table}
 
     @property_pickled
@@ -220,8 +228,12 @@ class SampleTemplate(ReportTemplate):
 
     ############## Diversity ##############
     def diversity(self):
-        if not self.sample.filter:          return False
+        # Skip conditions #
+        if not self.sample.filter: return False
+        if not self.cluster:       return False
+        # Excluded sample? #
         if not self.sample in self.cluster: return False
+        # OK #
         params = ('total_otu_sum', 'total_otu_count', 'chao1_curve',
                   'ace_curve', 'shannon_curve', 'simpson_curve')
         return {p:getattr(self, p) for p in params}

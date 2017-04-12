@@ -41,15 +41,15 @@ proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram/")
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 40
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
 for s in proj: s.default_joiner = 'pandaseq'
 
-# Demultiplex - 0h08 #
+print("# Demultiplex - 0h08 #")
 demultiplexer = Demultiplexer(plexed, proj)
 with Timer(): demultiplexer.run()
 
-# Demultiplex Report #
+print("# Demultiplex Report #")
 with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
@@ -67,15 +67,60 @@ print("# Make length dist graphs - 0h01 #")
 def len_dist_graphs(s): s.joiner.results.assembled.graphs.length_dist(rerun=True)
 with Timer(): prll_map(len_dist_graphs, proj)
 
-print("# Filter - 0hxx #")
+print("# Filter - 0h03 #")
 with Timer(): prll_map(lambda s: s.filter.run(), proj)
-for s in proj: print s.short_name, s.filter.primers_fasta.count
-for s in proj: print s.short_name, s.filter.n_base_fasta.count
-for s in proj: print s.short_name, s.filter.length_fasta.count
-for s in proj: print s.short_name, s.filter.renamed_fasta.count
+
+print("# Cluster combine reads - 0h01 #")
+print proj.short_name, proj.cluster.num_dropped_samples
+print proj.short_name, [s.clean.count for s in proj.cluster.good_samples]
+print proj.short_name, [s.clean.count for s in proj.cluster.bad_samples]
+print proj.short_name, proj.cluster.read_count_cutoff
+with Timer(): proj.cluster.combine_reads()
+
+print("# Make centers  - 0h01 #")
+with Timer(): proj.cluster.centering.run(cpus=8)
+print proj.short_name, proj.cluster.centering.results.centers.count
+
+print("# Taxonomy assignment - 0h0x #")
+with Timer(): proj.cluster.taxonomy.run(cpus=8)
+print proj.short_name, len(proj.cluster.taxonomy.results.assignments)
+
+print("# Make the OTU table - 0h01 #")
+with Timer(): proj.cluster.otu_table.run()
+
+print("# Make the taxa tables - 0h01 #")
+with Timer(): proj.cluster.taxa_table.run()
+
+print("# Make diversity sample graphs - 0h0x #")
+def diversity_plot(s):
+    s.graphs.chao1(rerun=True)
+    s.graphs.ace(rerun=True)
+    s.graphs.shannon(rerun=True)
+    s.graphs.simpson(rerun=True)
+with Timer(): prll_map(diversity_plot, proj)
+
+print("# Make project graphs - 0hxx #")
+def otu_plot(p):
+    p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
+    p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    p.cluster.reads.graphs.length_dist(rerun=True)
+    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
+    if len (p.cluster) < 2: return
+    p.cluster.nmds_graph(rerun=True)
+with Timer(): otu_plot(proj)
 
 ###############################################################################
-print("# Make sample reports - 0h0x #")
+print("# Make cluster reports - 0h0x #")
+proj.cluster.report.purge_cache()
+with Timer(): proj.cluster.report.generate()
+
+print("# Attribute deletion because of odd pickling parallelization problem #")
+for s in proj: del s.joiner.results.assembled.graphs
+
+print("# Make sample reports #")
+for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
@@ -87,6 +132,8 @@ with Timer(): bundle.run()
 print("# Extra files #")
 path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/foram/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
+path = sifes.reports_dir + 'foram_plexed/demultiplexer.pdf'
+shutil.copy(path, bundle.p.demultiplexing_report)
 
 print("# Upload - 0h02 #")
 from sifes.distribute.upload import DropBoxRclone

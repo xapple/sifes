@@ -28,13 +28,14 @@ from tqdm import tqdm
 # Load multiplexed and real project #
 plexed = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj_plexed/", raw_files_must_exist=False)
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/",        raw_files_must_exist=False)
+demultiplexer = Demultiplexer(plexed, proj)
 
 ###############################################################################
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
 for s in proj: s.default_joiner = 'pandaseq'
 
 ###############################################################################
@@ -43,6 +44,7 @@ for s in proj: s.default_joiner = 'pandaseq'
 #demultiplexer.report.generate()
 
 ###############################################################################
-proj.first.report.generate()
+#proj.first.filter.run()
+#proj.first.report.generate()
 
 ###############################################################################

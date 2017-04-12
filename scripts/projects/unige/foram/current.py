@@ -26,11 +26,12 @@ from tqdm import tqdm
 # Load multiplexed and real project #
 plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram_plexed/", raw_files_must_exist=True)
 proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram/",        raw_files_must_exist=True)
+demultiplexer = Demultiplexer(plexed, proj)
 
 ###############################################################################
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 40
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
 for s in proj: s.default_joiner = 'pandaseq'

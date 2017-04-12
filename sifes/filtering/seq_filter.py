@@ -59,6 +59,8 @@ class SeqFilter(object):
         self.renamed_fasta = FASTA(self.p.renamed)
         # The final result #
         self.clean = self.renamed_fasta
+        # Useful function, returns a GenWithLength #
+        self.parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
 
     def run(self):
         # Message #
@@ -86,10 +88,8 @@ class SeqFilter(object):
                 if r.fwd_start_pos > self.primer_max_dist:             continue
                 if r.rev_start_pos < -self.primer_max_dist:            continue
                 yield r.read[r.fwd_end_pos:r.rev_end_pos]
-        # Parsing the primers, returns a GenWithLength #
-        parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
         # Do it #
-        self.primers_fasta.write(good_primer_iterator(parse_primers()))
+        self.primers_fasta.write(good_primer_iterator(self.parse_primers()))
 
     # N base #
     def n_base_filter(self):
@@ -101,18 +101,24 @@ class SeqFilter(object):
 
     # Length #
     def len_filter(self):
-        def good_len_iterator(reads):
+        def good_len_iterator(reads, verbose=False):
             for r in reads:
                 if self.min_read_length > 0:
-                    if len(r.seq) < self.min_read_length: continue
+                    if len(r.seq) < self.min_read_length:
+                        if verbose: print "Discard"
+                        continue
                 if self.max_read_length > 0:
-                    if len(r.seq) > self.max_read_length: continue
+                    if len(r.seq) > self.max_read_length:
+                        if verbose: print "Discard"
+                        continue
+                if verbose: print "Keep"
                 yield r
         self.length_fasta.write(good_len_iterator(self.n_base_fasta))
 
     #-------------------------------------------------------------------------#
     @property_cached
     def primer_positions(self):
+        """Useful for diagnostics"""
         # Count positions #
         all_fwd_pos, all_rev_pos = Counter(), Counter()
         for r in self.parse_primers():
@@ -121,6 +127,7 @@ class SeqFilter(object):
         # Return results #
         return all_fwd_pos, all_rev_pos
 
+    #-------------------------------------------------------------------------#
     @property_cached
     def results(self):
         results = SeqFilterResults(self)
@@ -141,5 +148,3 @@ class SeqFilterResults(object):
         self.renamed_fasta = parent.renamed_fasta
         # The final result #
         self.clean         = self.renamed_fasta
-
-###############################################################################

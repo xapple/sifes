@@ -53,7 +53,7 @@ class OtuTable(object):
         self.make_filtered_centers()
 
     def make_otu_table(self):
-        """Ask the counts from the OTU class and do some modifications.
+        """Ask the counts from the OTU making class and do some modifications.
         OTUs are columns and sample names are rows."""
         # Main objects #
         cluster_table = self.centering.results.cluster_counts_table.copy()
@@ -65,7 +65,7 @@ class OtuTable(object):
                 cluster_table = cluster_table.drop(otu_name, 1)
         # Convert to CSV #
         cluster_table.to_csv(self.p.flat.path, sep='\t', encoding='utf-8')
-        # Symbolic X in the corner #
+        # Symbolic X in the upper left corner #
         prepend_to_file(self.p.flat, 'X')
 
     def make_otu_table_norm(self):

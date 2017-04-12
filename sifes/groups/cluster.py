@@ -26,6 +26,7 @@ class Cluster(Aggregate):
     """Analyzes a group of samples."""
 
     # Parameters #
+    default_taxonomy = "mothur"
     read_count_cutoff_factor = 0.01
 
     all_paths = """
@@ -39,6 +40,10 @@ class Cluster(Aggregate):
     /graphs/
     /report/report.pdf
     """
+
+    def __nonzero__(self):
+        """When we havn't run anything yet, return False."""
+        return bool(self.reads)
 
     def __init__(self, name, samples, out_dir=None):
         # Directory #
@@ -76,9 +81,11 @@ class Cluster(Aggregate):
     @property_cached
     def taxonomy(self):
         """Will predict the taxonomy."""
-        return MothurClassify(self.centering.results.centers, 'silva123', self.p.taxonomy_dir)
-        return Rdp(           self.centering.results.centers, 'internal', self.p.taxonomy_dir)
-        return Crest(         self.centering.results.centers, 'silva123', self.p.taxonomy_dir)
+        choices = {'mothur': (MothurClassify, (self.centering.results.centers, 'silva', self.p.taxonomy_dir)),
+                   'rdp':    (Rdp,            (self.centering.results.centers, 'self',  self.p.taxonomy_dir)),
+                   'crest':  (Crest,          (self.centering.results.centers, 'silva', self.p.taxonomy_dir))}
+        cls, params = choices.get(self.default_taxonomy)
+        return cls(*params)
 
     @property_cached
     def otu_table(self):

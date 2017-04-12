@@ -1,20 +1,16 @@
 # Built-in modules #
-import os, multiprocessing
+import os, multiprocessing, glob
 
 # Internal modules #
-import sifes
 
 # First party modules #
 from plumbing.autopaths import AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.autopaths import FilePath
+from seqsearch.databases.silva_mothur import silva_mothur
 
 # Third party modules #
 import sh
-
-# Constants #
-silva_path    = sifes.home + 'databases/silva_mothur_v123/silva.nr_v123.fasta'
-taxonomy_path = sifes.home + 'databases/silva_mothur_v123/silva.nr_v123.tax'
 
 ###############################################################################
 class MothurClassify(object):
@@ -28,7 +24,7 @@ class MothurClassify(object):
     database_name = 'the non-redundant, no-gaps Silva version 123 database'
 
     # Parameters #
-    bootstrap_cutoff = 60
+    bootstrap_cutoff = 70
 
     all_paths = """
     /stdout.txt
@@ -36,6 +32,7 @@ class MothurClassify(object):
     /centers.fasta
     /assignments.txt
     /summary.txt
+    /flipped.txt
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
@@ -49,6 +46,10 @@ class MothurClassify(object):
         # Auto paths #
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
+        # The database to use #
+        if self.database == 'silva': self.database = silva_mothur
+        else:
+            raise NotImplemented()
 
     def run(self, cpus=None, bootstrap_cutoff=None):
         # Message #
@@ -61,23 +62,35 @@ class MothurClassify(object):
         self.p.centers.link_from(self.centers)
         current_dir = os.getcwd()
         os.chdir(self.base_dir)
+        # Clean #
+        self.p.assignments.remove()
+        self.p.summary.remove()
+        self.p.flipped.remove()
+        for p in glob.glob('mothur.*.logfile'): os.remove(p)
         # Run #
-        command = "#classify.seqs(fasta=%s, template=%s, taxonomy=%s, processors=%s, cutoff=%s, probs=F);"
-        sh.mothur(command % (self.p.centers, silva_path, taxonomy_path, cpus, cutoff),
-                  _out=self.p.stdout.path,_err=self.p.stderr.path)
+        command = ("#classify.seqs(", # The command
+                   " fasta=%s,"     , # The input file
+                   " reference=%s," , # The database (was also called 'template')
+                   " taxonomy=%s,"  , # The taxonomy file
+                   " processors=%s,", # The number of threads
+                   " cutoff=%s,"    , # At 0 you get a full taxonomy for every sequence.
+                   " probs=F);")      # Disable the output of bootstrap values with your taxonomy
+        command = ''.join(command)
+        sh.mothur(command % (self.p.centers, self.database.alignment, self.database.taxonomy, cpus, cutoff),
+                             _out=self.p.stdout.path, _err=self.p.stderr.path)
         # Check output #
         if "ERROR" in self.p.stdout.contents:
             raise Exception("Mothur classify didn't run correctly.")
         # Back #
         os.chdir(current_dir)
         # Outputs #
-        self.assignments = FilePath(self.base_dir + "centers.nr_v123.wang.taxonomy")
-        self.summary     = FilePath(self.base_dir + "centers.nr_v123.wang.tax.summary")
+        self.assignments = FilePath(self.base_dir + "centers.%s.wang.taxonomy"    % self.database.nickname)
+        self.summary     = FilePath(self.base_dir + "centers.%s.wang.tax.summary" % self.database.nickname)
+        self.flipped     = FilePath(self.base_dir + "centers.%s.wang.flip.accnos" % self.database.nickname)
         # Move #
-        self.p.assignments.remove()
-        self.p.summary.remove()
         self.assignments.move_to(self.p.assignments)
         self.summary.move_to(self.p.summary)
+        if self.flipped: self.flipped.move_to(self.p.flipped)
         # Check #
         pass
 

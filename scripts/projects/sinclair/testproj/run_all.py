@@ -40,15 +40,15 @@ proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/", 
 # Parameters #
 sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450
+sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
+sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
 for s in proj: s.default_joiner = 'pandaseq'
 
-# Demultiplex - 0h55 #
+print("# Demultiplex #")
 demultiplexer = Demultiplexer(plexed, proj)
 with Timer(): demultiplexer.run()
 
-# Demultiplex Report #
+print("# Demultiplex Report #")
 with Timer(): demultiplexer.report.generate()
 
 ###############################################################################
@@ -68,13 +68,58 @@ with Timer(): prll_map(len_dist_graphs, proj)
 
 print("# Filter #")
 with Timer(): prll_map(lambda s: s.filter.run(), proj)
-for s in proj: print s.short_name, s.filter.primers_fasta.count
-for s in proj: print s.short_name, s.filter.n_base_fasta.count
-for s in proj: print s.short_name, s.filter.length_fasta.count
-for s in proj: print s.short_name, s.filter.renamed_fasta.count
+
+print("# Cluster combine reads #")
+print proj.short_name, proj.cluster.num_dropped_samples
+print proj.short_name, [s.clean.count for s in proj.cluster.good_samples]
+print proj.short_name, [s.clean.count for s in proj.cluster.bad_samples]
+print proj.short_name, proj.cluster.read_count_cutoff
+with Timer(): proj.cluster.combine_reads()
+
+print("# Make centers #")
+with Timer(): proj.cluster.centering.run(cpus=8)
+print proj.short_name, proj.cluster.centering.results.centers.count
+
+print("# Taxonomy assignment #")
+with Timer(): proj.cluster.taxonomy.run(cpus=8)
+print proj.short_name, len(proj.cluster.taxonomy.results.assignments)
+
+print("# Make the OTU table #")
+with Timer(): proj.cluster.otu_table.run()
+
+print("# Make the taxa tables #")
+with Timer(): proj.cluster.taxa_table.run()
+
+print("# Make diversity sample graphs #")
+def diversity_plot(s):
+    s.graphs.chao1(rerun=True)
+    s.graphs.ace(rerun=True)
+    s.graphs.shannon(rerun=True)
+    s.graphs.simpson(rerun=True)
+with Timer(): prll_map(diversity_plot, proj)
+
+print("# Make project graphs #")
+def otu_plot(p):
+    p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
+    p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
+    p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    p.cluster.reads.graphs.length_dist(rerun=True)
+    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
+    if len (p.cluster) < 2: return
+    p.cluster.nmds_graph(rerun=True)
+with Timer(): otu_plot(proj)
 
 ###############################################################################
+print("# Make cluster reports #")
+proj.cluster.report.purge_cache()
+with Timer(): proj.cluster.report.generate()
+
+print("# Attribute deletion because of odd pickling parallelization problem #")
+for s in proj: del s.joiner.results.assembled.graphs
+
 print("# Make sample reports #")
+for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
@@ -86,6 +131,8 @@ with Timer(): bundle.run()
 print("# Extra files #")
 path = sifes.home + "deploy/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
+path = sifes.reports_dir + 'testproj_plexed/demultiplexer.pdf'
+shutil.copy(path, bundle.p.demultiplexing_report)
 
 print("# Upload #")
 from sifes.distribute.upload import DropBoxRclone
