@@ -113,7 +113,6 @@ with Timer(): otu_plot(proj)
 
 ###############################################################################
 print("# Make cluster reports - 0h0x #")
-proj.cluster.report.purge_cache()
 with Timer(): proj.cluster.report.generate()
 
 print("# Attribute deletion because of odd pickling parallelization problem #")
