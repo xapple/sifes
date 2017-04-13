@@ -59,8 +59,6 @@ class SeqFilter(object):
         self.renamed_fasta = FASTA(self.p.renamed)
         # The final result #
         self.clean = self.renamed_fasta
-        # Useful function, returns a GenWithLength #
-        self.parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
 
     def run(self):
         # Message #
@@ -88,8 +86,10 @@ class SeqFilter(object):
                 if r.fwd_start_pos > self.primer_max_dist:             continue
                 if r.rev_start_pos < -self.primer_max_dist:            continue
                 yield r.read[r.fwd_end_pos:r.rev_end_pos]
+        # Useful function, returns a GenWithLength #
+        parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
         # Do it #
-        self.primers_fasta.write(good_primer_iterator(self.parse_primers()))
+        self.primers_fasta.write(good_primer_iterator(parse_primers()))
 
     # N base #
     def n_base_filter(self):
@@ -121,7 +121,8 @@ class SeqFilter(object):
         """Useful for diagnostics"""
         # Count positions #
         all_fwd_pos, all_rev_pos = Counter(), Counter()
-        for r in self.parse_primers():
+        parse_primers = lambda: self.input.parse_primers(self.primers, self.primer_mismatches, revcompl=True)
+        for r in parse_primers():
             if r.fwd_start_pos is not None: all_fwd_pos.update((r.fwd_start_pos,))
             if r.rev_start_pos is not None: all_rev_pos.update((r.rev_start_pos,))
         # Return results #
