@@ -17,7 +17,6 @@ from sifes.demultiplex        import plex_graphs as graphs
 from plumbing.autopaths import DirectoryPath, AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.processes import prll_map
-from plumbing.common    import reverse_compl_with_name
 from fasta              import FASTQ, PairedFASTQ
 from fasta.primers      import iupac_pattern
 

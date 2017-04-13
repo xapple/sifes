@@ -118,7 +118,7 @@ class ClusterTemplate(ReportTemplate):
         string = ""
         for loc_map in self.cluster.locations_maps:
             caption = "Map of samples in the group '%s'" % loc_map.group_name
-            path    = loc_map(rerun=True) #TODO
+            path    = loc_map()
             label   = "location_" + loc_map.group_name.lower()
             string += str(ScaledFigure(path, caption, label)) + '\n\n'
         # Return the long string with all the figures #
@@ -186,13 +186,13 @@ class ClusterTemplate(ReportTemplate):
         rank    = self.parent.default_taxa_graph_levels[1]
         graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
         caption = "Relative abundances per sample on the '%s' level" % graph.label
-        label   = "level_one_barstack"
+        label   = "level_two_barstack"
         return str(ScaledFigure(graph, caption, label))
     def level_three_barstack(self):
         rank    = self.parent.default_taxa_graph_levels[2]
         graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
         caption = "Relative abundances per sample on the '%s' level" % graph.label
-        label   = "level_one_barstack"
+        label   = "level_three_barstack"
         return str(ScaledFigure(graph, caption, label))
 
     # Comparison #

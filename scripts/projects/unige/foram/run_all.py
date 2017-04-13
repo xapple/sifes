@@ -12,6 +12,7 @@ To first generate the JSON files:
 To clean everything up:
 
     $ rm -rf ~/SIFES/raw/projects/unige/foram
+    $ rm -rf ~/SIFES/views/projects/unige/foram
     $ rm -rf ~/SIFES/views/projects/unige/foram_plexed
     $ rm -rf ~/SIFES/views/samples/unige/foram
     $ rm -rf ~/SIFES/views/samples/unige/foram_plexed
@@ -93,7 +94,7 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables - 0h01 #")
 with Timer(): proj.cluster.taxa_table.run()
 
-print("# Make diversity sample graphs - 0h0x #")
+print("# Make sample graphs - 0h0x #")
 def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
@@ -109,17 +110,17 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
-    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
+    for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
+    for g in p.cluster.locations_maps: g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
-    for g in p.cluster.locations_maps: g(rerun=True)
 with Timer(): otu_plot(proj)
 
 ###############################################################################
-print("# Make cluster reports - 0h0x #")
+print("# Make cluster reports - 0h01 #")
 with Timer(): proj.cluster.report.generate()
 
-print("# Make sample reports #")
+print("# Make sample reports  - 0h0x #")
 for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 

@@ -23,14 +23,16 @@ class TaxaBarstack(Graph):
     """Distribution of named taxa by sample (at different ranks)."""
     base_rank  = -1
 
-    short_name = 'taxa_barstack'
-    width      = 24.0
-    height     = 14.0
-    bottom     = 0.25
-    top        = 0.97
-    left       = 0.04
-    right      = 0.98
-    legend_anchor = -0.10
+    short_name    = 'taxa_barstack'
+    width         = 16.0
+    height        = 10.0
+    bottom        = 0.35
+    top           = 0.97
+    left          = 0.04
+    right         = 0.98
+    legend_anchor = -0.15
+    x_label       = 'Sample short names'
+    y_label       = 'Relative abundances in percent'
 
     def plot(self, **kwargs):
         # Data #
@@ -46,10 +48,12 @@ class TaxaBarstack(Graph):
         title = 'Taxonomic relative abundances per sample at rank %i (%s).'
         title = title % (self.base_rank, self.parent.taxonomy.results.rank_names[self.base_rank-1])
         axes.set_title(title)
-        axes.set_ylabel('Relative abundances in percent')
         axes.set_ylim([0,100])
         # Put a legend below current axis
         axes.legend(loc='upper center', bbox_to_anchor=(0.5, self.legend_anchor), fancybox=True, shadow=True, ncol=5)
+        # Change font of sample names #
+        axes.set_xticklabels(axes.get_xticklabels(), fontname='Menlo', fontweight='bold', size= 'large')
+        #for label in (plot.get_xticklabels() + plot.get_yticklabels()):  label.set_fontproperties(font)
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)

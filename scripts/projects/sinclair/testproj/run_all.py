@@ -13,6 +13,7 @@ To clean everything up:
 
     $ rm -rf ~/SIFES/raw/projects/sinclair/testproj
     $ rm -rf ~/SIFES/views/projects/sinclair/testproj_plexed
+    $ rm -rf ~/SIFES/views/projects/sinclair/testproj
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj_plexed
 """
@@ -90,7 +91,7 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables #")
 with Timer(): proj.cluster.taxa_table.run()
 
-print("# Make diversity sample graphs #")
+print("# Make sample graphs - 0h0x #")
 def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
@@ -106,10 +107,10 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
-    for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
+    for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
+    for g in p.cluster.locations_maps: g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
-    for g in p.cluster.locations_maps: g(rerun=True)
 with Timer(): otu_plot(proj)
 
 ###############################################################################

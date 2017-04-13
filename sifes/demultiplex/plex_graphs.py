@@ -1,5 +1,6 @@
 # Font files directory #
 # /home/lucas/.local/lib/python2.7/site-packages/matplotlib/mpl-data/fonts/ttf/
+# rm -rf ~/.cache/matplotlib/
 
 # Built-in modules #
 from collections import OrderedDict
@@ -9,7 +10,7 @@ from plumbing.graphs import Graph
 from plumbing.common import split_thousands
 
 # Third party modules #
-import numpy, matplotlib
+import numpy
 from matplotlib import pyplot
 
 # Constants #
