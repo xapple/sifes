@@ -7,6 +7,7 @@ A script to run small snippets of code.
 # Get report #
 rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 
 """
 
@@ -45,6 +46,7 @@ sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 
 ###############################################################################
 #proj.first.filter.run()
-proj.first.report.generate()
+#proj.first.report.generate()
 
 ###############################################################################
+proj.cluster.report.generate()

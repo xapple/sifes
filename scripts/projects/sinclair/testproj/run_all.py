@@ -109,6 +109,7 @@ def otu_plot(p):
     for g in p.cluster.taxa_table.results.graphs.__dict__.values(): g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
+    for g in p.cluster.locations_maps: g(rerun=True)
 with Timer(): otu_plot(proj)
 
 ###############################################################################

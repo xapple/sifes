@@ -110,7 +110,7 @@ class SampleTemplate(ReportTemplate):
         if not self.sample.latitude or not self.sample.longitude: return False
         # The figure #
         caption = "Map of sample collection location"
-        path    = self.sample.graphs.location_map(rerun=True)
+        path    = self.sample.graphs.location_map()
         label   = "location"
         return {'location' : str(ScaledFigure(path, caption, label))}
 

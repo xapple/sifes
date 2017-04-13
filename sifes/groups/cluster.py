@@ -4,6 +4,7 @@
 import sifes
 from sifes.report.clusters          import ClusterReport
 from sifes.groups.aggregate         import Aggregate
+from sifes.groups.cluster_graphs    import ClusterLocationMap
 from sifes.centering.uparse         import Uparse
 from sifes.taxonomy.crest           import Crest
 from sifes.taxonomy.rdp             import Rdp
@@ -108,6 +109,17 @@ class Cluster(Aggregate):
     def unifrac_matrix(self):
         """Will produce the UniFrac distance matrix."""
         return UniFrac(self.otu_table, self.p.distances_dir)
+
+    @property_cached
+    def locations_maps(self):
+        """Make as many maps as there are custom groupings."""
+        maps   = []
+        groups = set(s.grouping for s in self.samples)
+        for g in groups:
+            samples = [s for s in self.samples if s.grouping == g]
+            short_name = 'location_map_' + g.lower()
+            maps.append(ClusterLocationMap(g, samples, self, short_name=short_name))
+        return maps
 
     @property_cached
     def report(self):

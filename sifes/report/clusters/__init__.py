@@ -109,6 +109,21 @@ class ClusterTemplate(ReportTemplate):
         # Add caption #
         return table + "\n\n   : Summary information for all samples."
 
+    # Location #
+    def location(self):
+        # Check GPS data #
+        if not all(s.latitude  for s in self.samples): return False
+        if not all(s.longitude for s in self.samples): return False
+        # There are as many maps as there are custom groupings #
+        string = ""
+        for loc_map in self.cluster.locations_maps:
+            caption = "Map of samples in the group '%s'" % loc_map.group_name
+            path    = loc_map(rerun=True) #TODO
+            label   = "location_" + loc_map.group_name.lower()
+            string += str(ScaledFigure(path, caption, label)) + '\n\n'
+        # Return the long string with all the figures #
+        return {'location': string}
+
     # Input data #
     def count_sequences(self): return split_thousands(len(self.cluster.reads))
     def input_length_dist(self):
