@@ -82,12 +82,12 @@
 
 
 "date":         "2016-11-15 00:00:00",
-"latitude":     ["07:42:42", "N"],
-"longitude":    ["31.94068", "E"],
-"country":      "34.68738",
-"location":     "Israel",
+"latitude":     ["31.94068", "N"],
+"longitude":    ["34.68738", "E"],
+"country":      "Israel",
+"location":     "Near Palmahim",
 
-"design_description": "Near Palmahim",
+
 
 
 

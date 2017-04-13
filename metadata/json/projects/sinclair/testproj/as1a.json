@@ -82,12 +82,12 @@
 
 
 "date":         "2016-11-14 00:00:00",
-"latitude":     ["13:01:15", "N"],
-"longitude":    ["31.63212", "E"],
-"country":      "34.5167",
-"location":     "Israel",
+"latitude":     ["31.63212", "N"],
+"longitude":    ["34.5167", "E"],
+"country":      "Israel",
+"location":     "Nearer Dorad power station",
 
-"design_description": "Nearer Dorad power station",
+
 
 
 

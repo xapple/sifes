@@ -82,12 +82,12 @@
 
 
 "date":         "2016-11-21 00:00:00",
-"latitude":     ["09:52:02", "N"],
-"longitude":    ["32.42868", "E"],
-"country":      "34.87028",
-"location":     "Israel",
+"latitude":     ["32.42868", "N"],
+"longitude":    ["34.87028", "E"],
+"country":      "Israel",
+"location":     "Near Gedor Sea Reserve",
 
-"design_description": "Near Gedor Sea Reserve",
+
 
 
 

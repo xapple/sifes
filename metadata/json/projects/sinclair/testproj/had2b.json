@@ -82,12 +82,12 @@
 
 
 "date":         "2016-11-21 00:00:00",
-"latitude":     ["06:34:58", "N"],
-"longitude":    ["32.4637", "E"],
-"country":      "34.87934",
-"location":     "Israel",
+"latitude":     ["32.4637", "N"],
+"longitude":    ["34.87934", "E"],
+"country":      "Israel",
+"location":     "Near Orot Rabin power plant",
 
-"design_description": "Near Orot Rabin power plant",
+
 
 
 
