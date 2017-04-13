@@ -96,6 +96,7 @@ def diversity_plot(s):
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
+    s.graphs.location_map(rerun=True)
 with Timer(): prll_map(diversity_plot, proj)
 
 print("# Make project graphs #")

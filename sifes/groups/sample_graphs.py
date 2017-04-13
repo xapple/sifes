@@ -102,6 +102,5 @@ class LocationMap(MapFigure):
     short_name = 'location_map'
 
     def plot(self, **kwargs):
-        lat, lng = self.parent.info.get('latitude'), self.parent.info.get('longitude')
-        self.add_marker(lat, lng)
+        self.add_marker(self.parent.latitude, self.parent.longitude)
         self.save_map(**kwargs)

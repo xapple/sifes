@@ -106,9 +106,12 @@ class Sample(object):
         if self.primer_fwd and self.primer_rev:
             self.primers = TwoPrimers(self.primer_fwd, self.primer_rev)
         # Optional grouping attributes #
-        self.grouping  = self.info.get('custom_grouping',  '')
-        self.attribute = self.info.get('custom_attribute', '')
-        self.replicate = self.info.get('replicate_id',     '')
+        self.grouping  = self.info.get('custom_grouping')
+        self.attribute = self.info.get('custom_attribute')
+        self.replicate = self.info.get('replicate_id')
+        # Other optional metadata #
+        self.latitude  = float(self.info.get('latitude')[0])  if 'latitude'  in self.info else None
+        self.longitude = float(self.info.get('longitude')[0]) if 'longitude' in self.info else None
 
     @property_cached
     def uncompressed_pair(self):

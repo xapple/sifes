@@ -107,12 +107,12 @@ class SampleTemplate(ReportTemplate):
     ############## Location ##############
     def location(self):
         # Check GPS data #
-        if not self.sample.info.get('latitude') or not self.sample.info.get('longitude'): return False
+        if not self.sample.latitude or not self.sample.longitude: return False
         # The figure #
         caption = "Map of sample collection location"
-        path    = self.sample.graphs.location_map()
+        path    = self.sample.graphs.location_map(rerun=True)
         label   = "location"
-        return str(ScaledFigure(path, caption, label))
+        return {'location' : str(ScaledFigure(path, caption, label))}
 
     ############## Raw data ##############
     def fwd_size(self):  return str(self.sample.pair.fwd.size)
