@@ -15,8 +15,9 @@ from plumbing.common    import prepend_to_file
 # Third party modules #
 import pandas
 
-# Constants #
-class Dummy(object): pass
+# Graphs #
+class Dummy(object):
+    def __iter__(self): return iter()
 
 ###############################################################################
 class TaxaTable(object):
@@ -123,10 +124,13 @@ class TaxaTableResults(object):
     def graphs(self):
         """Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in taxa_table_graphs.py initialized with this
-        instance as only argument."""
+        instance as only argument. The graphs are also in a list."""
         result = Dummy()
+        result.by_rank = []
         for graph in taxa_table_graphs.__all__:
             cls = getattr(taxa_table_graphs, graph)
-            setattr(result, cls.short_name, cls(self))
+            g = cls(self)
+            setattr(result, cls.short_name, g)
+            result.by_rank.append(g)
         return result
 

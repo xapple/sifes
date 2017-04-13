@@ -45,6 +45,7 @@ sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'
+sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (4, 5, 6)
 
 print("# Demultiplex - 0h08 #")
 demultiplexer = Demultiplexer(plexed, proj)

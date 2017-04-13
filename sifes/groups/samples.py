@@ -105,6 +105,10 @@ class Sample(object):
         self.primer_rev = self.info.get('primers', {}).get('reverse', {}).get('sequence')
         if self.primer_fwd and self.primer_rev:
             self.primers = TwoPrimers(self.primer_fwd, self.primer_rev)
+        # Optional grouping attributes #
+        self.grouping  = self.info.get('custom_grouping',  '')
+        self.attribute = self.info.get('custom_attribute', '')
+        self.replicate = self.info.get('replicate_id',     '')
 
     @property_cached
     def uncompressed_pair(self):

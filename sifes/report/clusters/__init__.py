@@ -24,6 +24,9 @@ from tabulate import tabulate
 class ClusterReport(Document):
     """A full report generated in PDF for every Cluster object."""
 
+    # Parameters #
+    default_taxa_graph_levels = (2, 3, 4)
+
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.parent)
 
     def __init__(self, cluster):
@@ -158,21 +161,24 @@ class ClusterTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, label))
 
     # Composition #
-    def phylum_barstack(self):
-        caption = "Relative abundances per sample on the phyla level"
-        path    = self.taxa_table.results.graphs.taxa_barstack_phyla
-        label   = "phylum_barstack"
-        return str(ScaledFigure(path, caption, label))
-    def class_barstack(self):
-        caption = "Relative abundances per sample on the class level"
-        path    = self.taxa_table.results.graphs.taxa_barstack_class
-        label   = "class_barstack"
-        return str(ScaledFigure(path, caption, label))
-    def order_barstack(self):
-        caption = "Relative abundances per sample on the order level"
-        path    = self.taxa_table.results.graphs.taxa_barstack_order
-        label   = "order_barstack"
-        return str(ScaledFigure(path, caption, label))
+    def level_one_barstack(self):
+        rank    = self.parent.default_taxa_graph_levels[0]
+        graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
+        caption = "Relative abundances per sample on the '%s' level" % graph.label
+        label   = "level_one_barstack"
+        return str(ScaledFigure(graph, caption, label))
+    def level_two_barstack(self):
+        rank    = self.parent.default_taxa_graph_levels[1]
+        graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
+        caption = "Relative abundances per sample on the '%s' level" % graph.label
+        label   = "level_one_barstack"
+        return str(ScaledFigure(graph, caption, label))
+    def level_three_barstack(self):
+        rank    = self.parent.default_taxa_graph_levels[2]
+        graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
+        caption = "Relative abundances per sample on the '%s' level" % graph.label
+        label   = "level_one_barstack"
+        return str(ScaledFigure(graph, caption, label))
 
     # Comparison #
     def comparison(self):

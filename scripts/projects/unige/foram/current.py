@@ -5,7 +5,7 @@
 A script to run small snippets of code.
 
 # Get report #
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
 # Built-in modules #
@@ -14,6 +14,7 @@ import shutil
 # Internal modules #
 import sifes
 from sifes.taxonomy import mothur_classify
+from sifes.report   import clusters
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
@@ -37,3 +38,4 @@ sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'
+sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (4, 5, 6)
