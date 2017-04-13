@@ -115,9 +115,6 @@ with Timer(): otu_plot(proj)
 print("# Make cluster reports - 0h0x #")
 with Timer(): proj.cluster.report.generate()
 
-print("# Attribute deletion because of odd pickling parallelization problem #")
-for s in proj: del s.joiner.results.assembled.graphs
-
 print("# Make sample reports #")
 for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)

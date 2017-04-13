@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-AS2b",
 
+"custom_grouping":    "Ashqelon",
+"custom_attribute":     "Midway",
+"replicate_id":     "2",
+
 "fwd_read_count":       "242696",
 "rev_read_count":       "242696",
 "fwd_md5":              "d35cdb5a4f9cfe18797f424464de12f5",

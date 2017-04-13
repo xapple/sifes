@@ -15,6 +15,10 @@ corr = {
     u'Directory':                            'directory',
     u'Suffix':                               'suffix',
 
+    u'Custom grouping':                      'custom_grouping',
+    u'Custom attribute':                     'custom_attribute',
+    u'Replicate identification':             'replicate_id',
+
     u'Contact 1 function':                   'contact_one_function',
     u'Contact 1 name':                       'contact_one_name',
     u'Contact 1 email':                      'contact_one_email',

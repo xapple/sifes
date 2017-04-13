@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-VMSO2a",
 
+"custom_grouping":    "Soreq",
+"custom_attribute":     "Midway",
+"replicate_id":     "5",
+
 "fwd_read_count":       "47675",
 "rev_read_count":       "47675",
 "fwd_md5":              "d7faff67644df2793cbce1a40ac4f45a",

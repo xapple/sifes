@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-VMSO1a",
 
+"custom_grouping":    "Soreq",
+"custom_attribute":     "Proximal",
+"replicate_id":     "4",
+
 "fwd_read_count":       "134807",
 "rev_read_count":       "134807",
 "fwd_md5":              "50a4524c32be2c5429e4bca8ea093fd6",

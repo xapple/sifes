@@ -13,6 +13,7 @@ import shutil
 
 # Internal modules #
 import sifes
+from sifes.taxonomy import mothur_classify
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #

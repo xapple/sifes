@@ -37,7 +37,7 @@ class SampleReport(Document):
         self.copy_base = FilePath(self.copy_base)
         # Where should we cache stuff #
         self.cache_dir = DirectoryPath(self.base_dir + 'cached/')
-        self.cache_dir.create(safe=True)
+        self.cache_dir.create_if_not_exists()
 
     @property_cached
     def template(self): return SampleTemplate(self)

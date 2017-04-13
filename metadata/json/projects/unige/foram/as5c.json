@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-AS5c",
 
+"custom_grouping":    "Ashqelon",
+"custom_attribute":     "Distant",
+"replicate_id":     "3",
+
 "fwd_read_count":       "51746",
 "rev_read_count":       "51746",
 "fwd_md5":              "d79368211e8201a2f1ab8008d98d3666",

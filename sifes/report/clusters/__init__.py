@@ -122,7 +122,7 @@ class ClusterTemplate(ReportTemplate):
 
     # Classification #
     def classify_citation(self):    return "the '%s' method" % self.taxonomy.long_name
-    def classify_database(self):    return self.taxonomy.database_name
+    def classify_database(self):    return self.taxonomy.database.long_name
     def otu_classified_table(self):
         info = OrderedDict((('Rank',         lambda i: "**" + self.taxonomy.results.rank_names[i] + "**"),
                             ('Classified',   lambda i:        self.taxonomy.results.count_assigned[i]),

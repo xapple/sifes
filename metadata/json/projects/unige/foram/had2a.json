@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-HAD2a",
 
+"custom_grouping":    "Hadera",
+"custom_attribute":     "Midway",
+"replicate_id":     "8",
+
 "fwd_read_count":       "52815",
 "rev_read_count":       "52815",
 "fwd_md5":              "062bef8745397c4a515e918b15394a36",

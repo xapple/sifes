@@ -38,6 +38,10 @@
 "project_long_name":    "Testproj project",
 "sample_long_name":     "Desalt SAL-VMSO3b",
 
+"custom_grouping":    "Soreq",
+"custom_attribute":     "Distant",
+"replicate_id":     "6",
+
 
 
 

@@ -38,6 +38,10 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-HAD2b",
 
+"custom_grouping":    "Hadera",
+"custom_attribute":     "Midway",
+"replicate_id":     "8",
+
 "fwd_read_count":       "269103",
 "rev_read_count":       "269103",
 "fwd_md5":              "cdb5f0be86fbaeea45931f2731ec9fca",
