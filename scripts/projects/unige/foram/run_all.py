@@ -94,7 +94,7 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables - 0h01 #")
 with Timer(): proj.cluster.taxa_table.run()
 
-print("# Make sample graphs - 0h0x #")
+print("# Make sample graphs - 0h02 #")
 def diversity_plot(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
@@ -103,7 +103,7 @@ def diversity_plot(s):
     s.graphs.location_map(rerun=True)
 with Timer(): prll_map(diversity_plot, proj)
 
-print("# Make project graphs - 0hxx #")
+print("# Make project graphs - 0h01 #")
 def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sizes_dist(rerun=True)
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
@@ -120,7 +120,7 @@ with Timer(): otu_plot(proj)
 print("# Make cluster reports - 0h01 #")
 with Timer(): proj.cluster.report.generate()
 
-print("# Make sample reports  - 0h0x #")
+print("# Make sample reports  - 0h02 #")
 for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
