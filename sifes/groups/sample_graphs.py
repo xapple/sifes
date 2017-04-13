@@ -7,6 +7,9 @@ http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html
 from functools import partial
 
 # Internal modules #
+from sifes.location.map_figure import MapFigure
+
+# First party modules #
 from plumbing.graphs import Graph
 
 # Third party modules #
@@ -19,7 +22,8 @@ from numpy           import linspace
 __all__ = ['Chao1',
            'Ace',
            'Shannon',
-           'Simpson',]
+           'Simpson',
+           'LocationMap']
 
 ###############################################################################
 class AlphaDiversityGraph(Graph):
@@ -91,3 +95,13 @@ class Simpson(AlphaDiversityGraph):
 
     @property
     def div_fn(self): return partial(alpha_diversity, 'simpson')
+
+###############################################################################
+class LocationMap(MapFigure):
+    """Map of sample location."""
+    short_name = 'location_map'
+
+    def plot(self, **kwargs):
+        lat, lng = self.parent.info.get('latitude'), self.parent.info.get('longitude')
+        self.add_marker(lat, lng)
+        self.save_map(**kwargs)

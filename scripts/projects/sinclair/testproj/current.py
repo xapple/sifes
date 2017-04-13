@@ -45,6 +45,6 @@ sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 
 ###############################################################################
 #proj.first.filter.run()
-#proj.first.report.generate()
+proj.first.report.generate()
 
 ###############################################################################
