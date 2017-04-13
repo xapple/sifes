@@ -15,6 +15,9 @@ from plumbing.common    import prepend_to_file
 # Third party modules #
 import pandas
 
+# Constants #
+class Dummy(object): pass
+
 ###############################################################################
 class TaxaTable(object):
     """Takes the otu table and assignments to make taxa tables."""
@@ -121,8 +124,7 @@ class TaxaTableResults(object):
         """Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in taxa_table_graphs.py initialized with this
         instance as only argument."""
-        class Graphs(object): pass
-        result = Graphs()
+        result = Dummy()
         for graph in taxa_table_graphs.__all__:
             cls = getattr(taxa_table_graphs, graph)
             setattr(result, cls.short_name, cls(self))

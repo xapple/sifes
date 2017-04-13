@@ -34,4 +34,5 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 40
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
-for s in proj: s.default_joiner = 'pandaseq'
+sifes.groups.samples.Sample.default_joiner = 'pandaseq'
+sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'

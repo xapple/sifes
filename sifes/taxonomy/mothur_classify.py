@@ -7,7 +7,10 @@ import os, multiprocessing, glob
 from plumbing.autopaths import AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.autopaths import FilePath
+
+# Different databases #
 from seqsearch.databases.silva_mothur import silva_mothur
+from seqsearch.databases.foraminifera import foraminifera
 
 # Third party modules #
 import sh
@@ -24,6 +27,7 @@ class MothurClassify(object):
     database_name = 'the non-redundant, no-gaps Silva version 123 database'
 
     # Parameters #
+    default_database = 'silva'
     bootstrap_cutoff = 70
 
     all_paths = """
@@ -38,18 +42,20 @@ class MothurClassify(object):
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
     def __nonzero__(self): return bool(self.p.assignments)
 
-    def __init__(self, centers, database, result_dir):
+    def __init__(self, centers, result_dir, database=None):
         # Attributes #
         self.centers    = centers
-        self.database   = database
         self.result_dir = result_dir
         # Auto paths #
         self.base_dir = self.result_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
+        # Default or user specified #
+        if database is None: self.database = self.default_database
+        else:                self.database = database
         # The database to use #
-        if self.database == 'silva': self.database = silva_mothur
-        else:
-            raise NotImplemented()
+        if   self.database == 'silva':        self.database = silva_mothur
+        elif self.database == 'foraminifera': self.database = foraminifera
+        else: raise NotImplemented()
 
     def run(self, cpus=None, bootstrap_cutoff=None):
         # Message #

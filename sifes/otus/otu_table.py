@@ -15,6 +15,9 @@ from plumbing.cache     import property_cached
 # Third party modules #
 import pandas, numpy
 
+# Constants #
+class Dummy(object): pass
+
 ###############################################################################
 class OtuTable(object):
     """Takes centers and assignments and makes an OTU table."""
@@ -118,8 +121,7 @@ class OtuTableResults(object):
         """Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in otu_table_graphs.py initialized with this
         instance as only argument."""
-        class Graphs(object): pass
-        result = Graphs()
+        result = Dummy()
         for graph in otu_table_graphs.__all__:
             cls = getattr(otu_table_graphs, graph)
             setattr(result, cls.short_name, cls(self))

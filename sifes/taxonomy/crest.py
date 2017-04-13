@@ -45,7 +45,7 @@ class Crest(object):
 
     def __nonzero__(self): return bool(self.p.assignments)
 
-    def __init__(self, centers, database, result_dir):
+    def __init__(self, centers, result_dir):
         # Parent #
         self.centers    = centers
         self.database   = database

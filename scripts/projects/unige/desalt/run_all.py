@@ -43,7 +43,7 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
-for s in proj: s.default_joiner = 'pandaseq'
+sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 
 print("# Demultiplex - 0h55 #")
 demultiplexer = Demultiplexer(plexed, proj)
