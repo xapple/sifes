@@ -212,7 +212,7 @@ class ClusterTemplate(ReportTemplate):
     def down_sampled_to(self):
         return split_thousands(min(sum(s.otu_counts) for s in self.samples))
     def alpha_diversity_table(self):
-        from skbio.diversity import alpha_diversity as alphadiv
+        from skbio.diversity import alpha_diversity  as alphadiv
         from skbio.stats     import subsample_counts as subsample
         k = min(sum(s.otu_counts) for s in self.samples)
         info = OrderedDict((

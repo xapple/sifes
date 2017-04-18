@@ -2,25 +2,25 @@
 
 The acronym `sifes` stands for **S**pecies **I**​dentification **F**​rom **E**​nvironmental **S**​equencing.
 
-This project is a python pipeline handling the analysis -- from start to finish -- of 16S rRNA microbial amplicon sequencing data.
+This project is a python pipeline handling the analysis -- from start to finish -- of microbial amplicon sequencing data (e.g. 16S rRNA or other regions).
 
 This source code is propriety of Lucas Sinclair <lucas@envonautics.com>, co-founder of Envonautics Ltd. (https://www.envonautics.com)
 
 ## Introduction
 
-At first, the main focus when developing `sifes` was to test the functioning of the new protocol we developed in our lab when switching from 454 to Illumina sequencers and to check the coherence and validity of the results obtained. Thus, the pipeline built fits our current needs and is designed to be easily used by the bioinformaticians in our company to quickly analyze the 16S experiments that lots of researchers are generating.
+At first, the main focus when developing `sifes` was to test the functioning of the new protocol we developed in our lab when switching from 454 to Illumina sequencers and to check the coherence and validity of the results obtained. Thus, the pipeline built fits our current needs and is designed to be easily used by the bioinformaticians in our company to quickly analyze the amplicon data that lots of researchers are generating.
 
 The previous version of this pipeline was published under the name `illumitag` here:
 
 [Microbial Community Composition and Diversity via 16S rRNA Gene Amplicons: Evaluating the Illumina Platform](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0116955)
 
-Hence, the `sifes` project is *not* a biologist-oriented tool that supports all the possible use cases one could have with 16S rRNA sequence reads out of the box. For instance, it does not have a graphical interface to operate, nor any bash/sh/csh commands. Indeed, as each sequencing experiment will have different goals and different scientific questions associated to it, there cannot be a standard set of procedures to apply to every dataset. To illustrate this, one could asks ourselves what should the following command do ?
+Hence, the `sifes` project is *not* a biologist-oriented tool that supports all the possible use cases one could have with amplicon sequence reads out of the box. For instance, it does not have a graphical interface to operate, nor any bash/sh/csh commands. Indeed, as each sequencing experiment will have different goals and different scientific questions associated to it, there cannot be a standard set of procedures to apply to every dataset. To illustrate this, one could asks ourselves what should the following command do ?
 
     $ sifes --forward reads_fwd.fasta --reverse reads_rev.fasta
 
 Hard to say. To solve all the underlying questions, the scientist would have to specify an endless list of options and the design of a tool supporting so many different cases would be greatly complicated.
 
-    $ sifes --forward reads_fwd.fasta --reverse reads_rev.fasta --barcode_single TRUE --barcode_only_in_reverse_reads TRUE --discard_missmatch_barcode 2 --remove_sequences_from "Plastid, Mitochondrion, Thaumarchaeota" --seperate_phyla_in_graph_when_larger_than 3000 --version_of_silva_to_use SSURef111 etc...
+    $ sifes --forward reads_fwd.fasta --reverse reads_rev.fasta --barcode_single TRUE --barcode_only_in_reverse_reads TRUE --use_illumina_i5 FALSE --discard_missmatch_barcode 2 --remove_sequences_from "Plastid, Mitochondrion, Thaumarchaeota" --seperate_phyla_in_graph_when_larger_than 3000 --version_of_silva_to_use SSURef111 etc...
 
 Instead, the `sifes` project *is* a flexible and modular collections of packages written in proper, clean and commented object-oriented python which enables the user to survey, modify and extend the code-base easily -- provided he has a sufficient knowledge in programming. It is a basis upon which the scientist can set up the processing and analysis that he sees fit for his own data sparing him from having to develop lots of the infrastructure needed himself.
 
@@ -103,7 +103,7 @@ Check that you have a working installation of R. Either the system version, or a
     $ pip install --user future
     $ pip install --user scikit-bio==0.4.2
 
-And some extra home made ones:
+And some extra first party ones:
 
     $ pip install --user plumbing
     $ pip install --user fasta
@@ -112,10 +112,6 @@ And some extra home made ones:
 Don't forget to rehash the binary links at the end:
 
     $ pyenv rehash
-
-Special libraries:
-
-    $ pip install git+https://github.com/uqfoundation/pathos.git@master
 
 #### Step 5: Check you have all the required executables
 `sifes` will search for several different binaries as it processes your data. Please check all of these are available in your `$PATH`:
@@ -131,9 +127,6 @@ Special libraries:
 `sifes` will use some R packages that need to be installed. If you do not have them already, please install them:
 
     $ R install 'vegan'
-
-#### Step 7: Make a working directory with the raw data linked
-By default, `sifes` will search for the sequence data in a directory called `SIFES` placed in your home directory. This can be modified of course for your own setup. Each specific collection of sequence data should have an associated `json` file placed in the `metadata/json` directory of the repository telling `sifes` exactly what the name of the raw input files are.
 
 #### Step 8: Start typing python commands to analyze your data
 
