@@ -22,7 +22,6 @@ class MothurClassify(Classify):
     doc           = 'http://www.mothur.org/wiki/Classify.seqs'
 
     # Parameters #
-    default_database = 'silva'
     bootstrap_cutoff = 70
 
     all_paths = """

@@ -9,15 +9,6 @@ from plumbing.graphs import Graph, cool_colors
 # Third party modules #
 from matplotlib import pyplot
 
-# Constants #
-__all__ = ['CompositionDomain',
-           'CompositionPhyla',
-           'CompositionClass',
-           'CompositionOrder',
-           'CompositionFamily',
-           'CompositionGenus',
-           'CompositionSpecies']
-
 ################################################################################
 class TaxaBarstack(Graph):
     """Distribution of named taxa by sample (at different ranks)."""
@@ -57,39 +48,3 @@ class TaxaBarstack(Graph):
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
-
-################################################################################
-class CompositionDomain(TaxaBarstack):
-    base_rank  = 1
-    label      = "Domain"
-    short_name = 'taxa_barstack_domain'
-
-class CompositionPhyla(TaxaBarstack):
-    base_rank  = 2
-    label      = "Phyla"
-    short_name = 'taxa_barstack_phyla'
-
-class CompositionClass(TaxaBarstack):
-    base_rank  = 3
-    label      = "Class"
-    short_name = 'taxa_barstack_class'
-
-class CompositionOrder(TaxaBarstack):
-    base_rank  = 4
-    label      = "Order"
-    short_name = 'taxa_barstack_order'
-
-class CompositionFamily(TaxaBarstack):
-    base_rank  = 5
-    label      = "Family"
-    short_name = 'taxa_barstack_family'
-
-class CompositionGenus(TaxaBarstack):
-    base_rank  = 6
-    label      = "Genus"
-    short_name = 'taxa_barstack_genus'
-
-class CompositionSpecies(TaxaBarstack):
-    base_rank  = 7
-    label      = "Species"
-    short_name = 'taxa_barstack_species'

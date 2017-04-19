@@ -9,6 +9,8 @@ from plumbing.autopaths import AutoPaths
 ###############################################################################
 class Classify(object):
 
+    default_database = 'silva_mothur'
+
     def __init__(self, centers, result_dir, database=None):
         # Attributes #
         self.centers    = centers
@@ -17,7 +19,7 @@ class Classify(object):
         if database is None: self.database = self.default_database
         else:                self.database = database
         # The database to use #
-        if   self.database == 'silva':        self.database = silva_mothur
+        if   self.database == 'silva_mothur': self.database = silva_mothur
         elif self.database == 'foraminifera': self.database = foraminifera
         elif self.database == 'pr_two':       self.database = pr_two
         else: raise NotImplemented()

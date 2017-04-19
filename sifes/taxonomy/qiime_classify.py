@@ -1,5 +1,6 @@
 # Built-in modules #
 import os
+from collections import Counter
 
 # Internal modules #
 from sifes.taxonomy import Classify
@@ -32,9 +33,6 @@ class QiimeClassify(Classify):
                      home + 'programs/qiime/local/bin/assign_taxonomy.py')
     doc           = 'http://qiime.org/scripts/assign_taxonomy.html'
 
-    # Parameters #
-    default_database = 'silva'
-
     all_paths = """
     /stdout.txt
     /stderr.txt
@@ -43,7 +41,7 @@ class QiimeClassify(Classify):
     """
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.centers)
-    def __nonzero__(self): return bool(self.p.assignments)
+    def __nonzero__(self): return bool(self.p.assignments_txt)
 
     def run(self, cpus=None):
         # Message #
@@ -71,35 +69,36 @@ class QiimeClassify(Classify):
 ###############################################################################
 class QiimeClassifyResults(object):
 
-    def __nonzero__(self): return False
-    def __len__(self):     return len(self.p.assignments)
+    def __nonzero__(self): return bool(self.p.assignments_txt)
+    def __len__(self):     return len(self.p.assignments_txt)
 
     def __init__(self, qiime):
         # Attributes #
-        self.qiime = qiime
-        self.p     = qiime.p
+        self.qiime    = qiime
+        self.database = qiime.database
+        self.p        = qiime.p
+
+    @property
+    def rank_names(self): return self.database.rank_names
 
     @property_cached
     def assignments(self):
         result = {}
-        with open(self.p.assignments, 'r') as handle:
+        with open(self.p.assignments_txt, 'r') as handle:
             for line in handle:
                 line = line.strip('\n')
                 otu_name, species, confidence, hits = line.split('\t')
-                result[otu_name] = tuple(i for i in species.split(';'))
+                result[otu_name] = tuple(i for i in species.split(';') if i)
         return result
 
     @property_cached
     def count_unassigned(self):
-        """How many did not get a prediction at each level."""
-        return [sum((1 for x in self.assignments.values() if x[0] == 'unknown')),      # Domain
-                sum((1 for x in self.assignments.values() if 'unclassified' in x[1])), # Phylum
-                sum((1 for x in self.assignments.values() if 'unclassified' in x[2])), # Class
-                sum((1 for x in self.assignments.values() if 'unclassified' in x[3])), # Order
-                sum((1 for x in self.assignments.values() if 'unclassified' in x[4])), # Family
-                sum((1 for x in self.assignments.values() if 'unclassified' in x[5])), # Genus
-                sum((1 for x in self.assignments.values() if x[6] == '')),             # Species
-                ]
+        """How many did not get a prediction at each level. Must be monotonically increasing."""
+        result = [sum(1 for x in self.assignments.values() if x[0] == 'Unassigned')]
+        for i, rank_name in enumerate(self.rank_names):
+            if i == 0: continue
+            result.append(sum(1 for x in self.assignments.values() if len(x) < i+1))
+        return result
 
     @property_cached
     def count_assigned(self):

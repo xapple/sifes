@@ -5,7 +5,7 @@ from __future__ import division
 from collections import defaultdict
 
 # Internal modules #
-from sifes.composition  import taxa_table_graphs
+from sifes.composition.taxa_table_graphs import TaxaBarstack
 
 # First party modules #
 from plumbing.autopaths import AutoPaths, FilePath, DirectoryPath
@@ -27,10 +27,12 @@ class TaxaTable(object):
 
     all_paths = """
     /taxa_table_domain.tsv
+    /taxa_table_kingdom.tsv
     /taxa_table_phylum.tsv
     /taxa_table_class.tsv
     /taxa_table_order.tsv
     /taxa_table_family.tsv
+    /taxa_table_tribe.tsv
     /taxa_table_genus.tsv
     /taxa_table_species.tsv
     /graphs/
@@ -44,15 +46,17 @@ class TaxaTable(object):
         self.otu_table  = otu_table
         self.taxonomy   = taxonomy
         self.result_dir = result_dir
+        # Short cuts #
+        self.rank_names = self.taxonomy.results.rank_names
         # Auto paths #
         self.base_dir = self.result_dir
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self):
         # Message #
-        print "Making taxa tables with '%s'" % self.otu_table
+        print "Making all taxa tables with '%s'" % self.otu_table
         # Do it #
-        for i, rank_name in enumerate(self.taxonomy.results.rank_names):
+        for i, rank_name in enumerate(self.rank_names):
             table = self.taxa_table_at_rank(i)
             path  = self.base_dir + 'taxa_table_' + rank_name.lower() + '.tsv'
             # Make a TSV #
@@ -66,7 +70,8 @@ class TaxaTable(object):
         for sample_name, column in self.otu_table.results.otu_table.iterrows():
             for otu_name, count in column.iteritems():
                 assignment = self.taxonomy.results.assignments[otu_name]
-                taxa_term = assignment[rank]
+                if rank >= len(assignment): taxa_term = "Unassigned"
+                else:                       taxa_term = assignment[rank]
                 result[taxa_term][sample_name] += count
         # Fill the holes #
         result = pandas.DataFrame(result)
@@ -93,43 +98,31 @@ class TaxaTableResults(object):
 
     def __init__(self, table):
         # Attributes #
-        self.table    = table
-        self.p        = table.p
-        self.taxonomy = table.taxonomy
+        self.table      = table
+        self.p          = table.p
+        self.taxonomy   = table.taxonomy
+        self.rank_names = table.rank_names
 
     def load_table(self, path):
         return pandas.io.parsers.read_csv(path, sep='\t', index_col=0, encoding='utf-8')
 
     @property_cached
-    def taxa_table_domain(self):  return self.load_table(self.p.domain)
-    @property_cached
-    def taxa_table_phylum(self):  return self.load_table(self.p.phylum)
-    @property_cached
-    def taxa_table_class(self):   return self.load_table(self.p('class'))
-    @property_cached
-    def taxa_table_order(self):   return self.load_table(self.p.order)
-    @property_cached
-    def taxa_table_family(self):  return self.load_table(self.p.family)
-    @property_cached
-    def taxa_table_genus(self):   return self.load_table(self.p.genus)
-    @property_cached
-    def taxa_table_species(self): return self.load_table(self.p.species)
-
-    @property_cached
     def taxa_tables_by_rank(self):
-        return [getattr(self, 'taxa_table_' + n.lower()) for n in self.taxonomy.results.rank_names]
+        return [self.load_table('taxa_table_' + n.lower()) for n in self.rank_names + '.tsv']
 
     @property_cached
     def graphs(self):
-        """Sorry for the black magic. The result is an object whose attributes
-        are all the graphs found in taxa_table_graphs.py initialized with this
-        instance as only argument. The graphs are also in a list."""
+        """The result is an object whose attributes
+        are all the graphs initialized with this
+        instance as only argument.
+        The graphs are also in a list."""
         result = Dummy()
         result.by_rank = []
-        for graph in taxa_table_graphs.__all__:
-            cls = getattr(taxa_table_graphs, graph)
-            g = cls(self)
-            setattr(result, cls.short_name, g)
-            result.by_rank.append(g)
+        for i, rank_name in enumerate(self.rank_names):
+            attributes = dict(base_rank  = i,
+                              label      = rank_name,
+                              short_name = "taxa_barstack_" + rank_name.lower())
+            graph = type("Composition" + rank_name, (TaxaBarstack,), attributes)(self)
+            setattr(result, graph.short_name, graph)
+            result.by_rank.append(graph)
         return result
-
