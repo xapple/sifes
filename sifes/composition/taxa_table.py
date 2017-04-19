@@ -16,8 +16,7 @@ from plumbing.common    import prepend_to_file
 import pandas
 
 # Graphs #
-class Dummy(object):
-    def __iter__(self): return iter()
+class Dummy(object): pass
 
 ###############################################################################
 class TaxaTable(object):

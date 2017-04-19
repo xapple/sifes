@@ -2,21 +2,17 @@
 import os, multiprocessing, glob
 
 # Internal modules #
+from sifes.taxonomy import Classify
 
 # First party modules #
-from plumbing.autopaths import AutoPaths
 from plumbing.cache     import property_cached
 from plumbing.autopaths import FilePath
-
-# Different databases #
-from seqsearch.databases.silva_mothur import silva_mothur
-from seqsearch.databases.foraminifera import foraminifera
 
 # Third party modules #
 import sh
 
 ###############################################################################
-class MothurClassify(object):
+class MothurClassify(Classify):
     """A wrapper to mothur classify"""
 
     # Attributes #
@@ -38,27 +34,12 @@ class MothurClassify(object):
     /flipped.txt
     """
 
-    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.pair)
+    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.centers)
     def __nonzero__(self): return bool(self.p.assignments)
-
-    def __init__(self, centers, result_dir, database=None):
-        # Attributes #
-        self.centers    = centers
-        self.result_dir = result_dir
-        # Auto paths #
-        self.base_dir = self.result_dir + self.short_name + '/'
-        self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Default or user specified #
-        if database is None: self.database = self.default_database
-        else:                self.database = database
-        # The database to use #
-        if   self.database == 'silva':        self.database = silva_mothur
-        elif self.database == 'foraminifera': self.database = foraminifera
-        else: raise NotImplemented()
 
     def run(self, cpus=None, bootstrap_cutoff=None):
         # Message #
-        print "Classifying file '%s'" % self.centers
+        print self.message
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Bootstrap cutoff #
@@ -71,6 +52,7 @@ class MothurClassify(object):
         self.p.assignments.remove()
         self.p.summary.remove()
         self.p.flipped.remove()
+        self.p.stderr.remove()
         for p in glob.glob('mothur.*.logfile'): os.remove(p)
         # Run #
         command = ("#classify.seqs(", # The command
@@ -98,10 +80,6 @@ class MothurClassify(object):
         if self.flipped: self.flipped.move_to(self.p.flipped)
         # Check #
         pass
-
-    def clean(self):
-        self.p.stderr.remove()
-        self.p.assembled.remove()
 
     @property_cached
     def results(self):

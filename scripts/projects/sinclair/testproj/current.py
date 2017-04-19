@@ -16,6 +16,9 @@ import shutil
 
 # Internal modules #
 import sifes
+from sifes.taxonomy import mothur_classify
+from sifes.report   import clusters
+from sifes.groups   import cluster
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
@@ -37,7 +40,14 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
+
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
+sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (2, 3, 4)
+
+sifes.groups.cluster.Cluster.default_taxonomy = 'qiime'
+sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'pr_two'
+sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
+
 
 ###############################################################################
 #demultiplexer = Demultiplexer(plexed, proj)

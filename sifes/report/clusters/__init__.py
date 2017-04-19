@@ -124,6 +124,15 @@ class ClusterTemplate(ReportTemplate):
         # Return the long string with all the figures #
         return {'location': string}
 
+    # Replicates #
+    def replicates(self):
+        """A user inputted optional figure."""
+        # Check it exists #
+        if not self.cluster.p.replicates: return False
+        # Return #
+        caption = "Sampling strategy and replicates."
+        return {'replicates': str(ScaledFigure(self.cluster.p.replicates, caption, "replicates"))}
+
     # Input data #
     def count_sequences(self): return split_thousands(len(self.cluster.reads))
     def input_length_dist(self):

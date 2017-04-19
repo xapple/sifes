@@ -9,6 +9,7 @@ from sifes.centering.uparse         import Uparse
 from sifes.taxonomy.crest           import Crest
 from sifes.taxonomy.rdp             import Rdp
 from sifes.taxonomy.mothur_classify import MothurClassify
+from sifes.taxonomy.qiime_classify  import QiimeClassify
 from sifes.otus.otu_table           import OtuTable
 from sifes.composition.taxa_table   import TaxaTable
 from sifes.statistics.nmds          import GraphNMDS
@@ -40,6 +41,7 @@ class Cluster(Aggregate):
     /distances/
     /graphs/
     /report/report.pdf
+    /report/replicates.pdf
     """
 
     def __nonzero__(self):
@@ -83,6 +85,7 @@ class Cluster(Aggregate):
     def taxonomy(self):
         """Will predict the taxonomy."""
         choices = {'mothur': (MothurClassify, (self.centering.results.centers, self.p.taxonomy_dir)),
+                   'qiime':  (QiimeClassify,  (self.centering.results.centers, self.p.taxonomy_dir)),
                    'rdp':    (Rdp,            (self.centering.results.centers, self.p.taxonomy_dir)),
                    'crest':  (Crest,          (self.centering.results.centers, self.p.taxonomy_dir))}
         cls, params = choices.get(self.default_taxonomy)

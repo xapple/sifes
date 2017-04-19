@@ -92,13 +92,13 @@ print("# Make the taxa tables #")
 with Timer(): proj.cluster.taxa_table.run()
 
 print("# Make sample graphs - 0h0x #")
-def diversity_plot(s):
+def sample_plots(s):
     s.graphs.chao1(rerun=True)
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
     s.graphs.location_map(rerun=True)
-with Timer(): prll_map(diversity_plot, proj)
+with Timer(): prll_map(sample_plots, proj)
 
 print("# Make project graphs #")
 def otu_plot(p):
