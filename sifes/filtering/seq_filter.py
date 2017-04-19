@@ -60,9 +60,9 @@ class SeqFilter(object):
         # The final result #
         self.clean = self.renamed_fasta
 
-    def run(self):
+    def run(self, verbose=False):
         # Message #
-        print "Filtering sample '%s'" % self.sample_name
+        if verbose: print "Filtering sample '%s'" % self.sample_name
         # Primers #
         self.primer_filter()
         # N bases #

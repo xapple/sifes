@@ -149,7 +149,7 @@ class ClusterTemplate(ReportTemplate):
 
     # Classification #
     def classify_citation(self):    return "the '%s' method" % self.taxonomy.long_name
-    def classify_database(self):    return self.taxonomy.database.long_name
+    def classify_database(self):    return "'" + self.taxonomy.database.long_name + "'"
     def otu_classified_table(self):
         info = OrderedDict((('Rank',         lambda i: "**" + self.taxonomy.results.rank_names[i] + "**"),
                             ('Classified',   lambda i:        self.taxonomy.results.count_assigned[i]),
@@ -159,7 +159,7 @@ class ClusterTemplate(ReportTemplate):
         return table + "\n\n   : Summary information for all samples."
 
     # OTU table filtering #
-    def unwanted_phyla(self):       return andify(self.otu_table.unwanted_phyla)
+    def unwanted_taxa(self):       return andify(self.otu_table.unwanted_taxa)
     def otus_filtered(self):        return split_thousands(len(self.otu_table.results.centers))
     def otu_sizes_graph(self):
         caption = "Distribution of OTU sizes"

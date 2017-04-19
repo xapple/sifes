@@ -27,7 +27,7 @@ class TaxaBarstack(Graph):
 
     def plot(self, **kwargs):
         # Data #
-        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank - 1]
+        taxa_table = self.parent.taxa_tables_by_rank[self.base_rank]
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
         # Special case where there is only one taxa e.g. only 'Bacteria' #
         if len(self.frame.columns) < 2 : colors = 'gray'
@@ -37,14 +37,13 @@ class TaxaBarstack(Graph):
         fig = pyplot.gcf()
         # Other #
         title = 'Taxonomic relative abundances per sample at rank %i (%s).'
-        title = title % (self.base_rank, self.parent.taxonomy.results.rank_names[self.base_rank-1])
+        title = title % (self.base_rank, self.parent.taxonomy.results.rank_names[self.base_rank])
         axes.set_title(title)
         axes.set_ylim([0,100])
         # Put a legend below current axis
         axes.legend(loc='upper center', bbox_to_anchor=(0.5, self.legend_anchor), fancybox=True, shadow=True, ncol=5)
         # Change font of sample names #
         axes.set_xticklabels(axes.get_xticklabels(), fontname='Menlo', fontweight='bold', size= 'large')
-        #for label in (plot.get_xticklabels() + plot.get_yticklabels()):  label.set_fontproperties(font)
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)

@@ -23,16 +23,17 @@ To clean everything up:
 import shutil
 
 # Internal modules #
-import sifes.filtering.seq_filter
+import sifes
+from sifes.taxonomy import mothur_classify
+from sifes.report   import clusters
+from sifes.groups   import cluster
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
-from plumbing.processes import prll_map
 from plumbing.timer     import Timer
-from plumbing.autopaths import FilePath
 
-# Third party modules #
-from tqdm import tqdm
+# Parallelization strategy #
+from plumbing.processes import prll_map
 
 ###############################################################################
 # Load multiplexed and real project #
@@ -44,10 +45,17 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
+
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
+sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (3, 4, 5)
+
+sifes.groups.cluster.Cluster.default_taxonomy = 'mothur'
+sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'pr_two'
+sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
+
+demultiplexer = Demultiplexer(plexed, proj)
 
 print("# Demultiplex - 0h55 #")
-demultiplexer = Demultiplexer(plexed, proj)
 with Timer(): demultiplexer.run()
 
 print("# Demultiplex Report #")
@@ -109,7 +117,7 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
-    for g in p.cluster.locations_maps: g(rerun=True)
+    #for g in p.cluster.locations_maps: g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)

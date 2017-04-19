@@ -100,6 +100,7 @@ class TaxaTableResults(object):
         # Attributes #
         self.table      = table
         self.p          = table.p
+        self.base_dir   = table.base_dir
         self.taxonomy   = table.taxonomy
         self.rank_names = table.rank_names
 
@@ -108,7 +109,7 @@ class TaxaTableResults(object):
 
     @property_cached
     def taxa_tables_by_rank(self):
-        return [self.load_table('taxa_table_' + n.lower()) for n in self.rank_names + '.tsv']
+        return [self.load_table(self.base_dir + 'taxa_table_' + n.lower() + '.tsv') for n in self.rank_names]
 
     @property_cached
     def graphs(self):

@@ -159,3 +159,6 @@ class MothurClassifyResults(object):
         minus_unassigned = lambda u: len(self.assignments) - u
         return map(minus_unassigned, self.count_unassigned)
 
+    @property
+    def assignments_file(self):
+        return self.p.assignments

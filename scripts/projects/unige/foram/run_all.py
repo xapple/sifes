@@ -23,16 +23,17 @@ To clean everything up:
 import shutil
 
 # Internal modules #
-import sifes.filtering.seq_filter
+import sifes
+from sifes.taxonomy import mothur_classify
+from sifes.report   import clusters
+from sifes.groups   import cluster
 from sifes.demultiplex.demultiplexer import Demultiplexer
 
 # First party modules #
-from plumbing.processes import prll_map
 from plumbing.timer     import Timer
-from plumbing.autopaths import FilePath
 
-# Third party modules #
-from tqdm import tqdm
+# Parallelization strategy #
+from plumbing.processes import prll_map
 
 ###############################################################################
 # Load multiplexed and real project #
@@ -44,12 +45,17 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 40
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
+
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
-sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'
 sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (4, 5, 6)
 
-print("# Demultiplex - 0h08 #")
+sifes.groups.cluster.Cluster.default_taxonomy = 'qiime'
+sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'foraminifera'
+sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'
+
 demultiplexer = Demultiplexer(plexed, proj)
+
+print("# Demultiplex - 0h08 #")
 with Timer(): demultiplexer.run()
 
 print("# Demultiplex Report #")
@@ -111,7 +117,7 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
-    for g in p.cluster.locations_maps: g(rerun=True)
+    #for g in p.cluster.locations_maps: g(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)

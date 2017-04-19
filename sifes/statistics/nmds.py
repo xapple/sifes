@@ -38,7 +38,15 @@ class GraphNMDS(Graph):
 
     def run_via_R(self):
         # Module on demand #
-        from rpy2 import robjects as ro
+        from rpy2 import robjects   as ro
+        from rpy2 import rinterface as ri
+        # Disable stdout writing #
+        self.stdout = []
+        self.stderr = []
+        def add_to_stdout(line): self.stdout.append(line)
+        def add_to_stderr(line): self.stderr.append(line)
+        ri.set_writeconsole_regular(add_to_stdout)
+        ri.set_writeconsole_warnerror(add_to_stderr)
         # Load dataframe #
         ro.r("library(vegan)")
         ro.r("table = read.table('%s', sep='\t', header=TRUE, row.names='X')" % (self.tsv))

@@ -42,9 +42,9 @@ class SampleReport(Document):
     @property_cached
     def template(self): return SampleTemplate(self)
 
-    def generate(self):
+    def generate(self, verbose=False):
         # Message #
-        print "Making report for sample '%s'" % self.sample.short_name
+        if verbose: print "Making report for sample '%s'" % self.sample.short_name
         # Dynamic templates #
         self.markdown = unicode(self.template)
         # Render to latex #
@@ -55,7 +55,7 @@ class SampleReport(Document):
         self.copy_base.directory.create(safe=True)
         shutil.copy(self.output_path, self.copy_base)
         # Message #
-        print "Report for sample '%s' is done." % self.sample.short_name
+        if verbose: print "Report for sample '%s' is done." % self.sample.short_name
         # Return #
         return self.output_path
 
@@ -223,7 +223,9 @@ class SampleTemplate(ReportTemplate):
         # Check #
         if not self.cluster.taxa_table: return False
         # The data #
-        row             = self.cluster.taxa_table.results.taxa_table_genus.loc[self.sample.short_name]
+        rank            = self.cluster.taxa_table.rank_names.index("Genus")
+        table           = self.cluster.taxa_table.results.taxa_tables_by_rank[rank]
+        row             = table.loc[self.sample.short_name]
         row             = row.sort_values(ascending=False)
         frame           = pandas.DataFrame(index=range(len(row)))
         frame['#']      = range(1, len(row)+1)

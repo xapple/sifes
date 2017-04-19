@@ -46,11 +46,11 @@ class QiimeClassify(Classify):
     def run(self, cpus=None):
         # Message #
         print self.message
-        # Prepare #
-        self.p.centers.link_from(self.centers)
         # It's a virtual env #
         qiime = sh.Command(self.executable[0])
-        assert "1.9.1" in qiime(self.executable[1])
+        assert "1.9.1" in qiime(self.executable[1], '--version')
+        # Output dir must exist #
+        self.base_dir.create_if_not_exists()
         # Run #
         command = ("-i", self.centers,            # Path to the input fasta file
                    "-m", "uclust",                # Taxon assignment method
@@ -106,3 +106,6 @@ class QiimeClassifyResults(object):
         minus_unassigned = lambda u: len(self.assignments) - u
         return map(minus_unassigned, self.count_unassigned)
 
+    @property
+    def assignments_file(self):
+        return self.p.assignments_txt

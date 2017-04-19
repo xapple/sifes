@@ -26,7 +26,7 @@ class OtuTable(object):
     short_name = 'otu_table'
 
     # Properties #
-    unwanted_phyla = ['Plastid', 'Mitochondrion'] #, 'Thaumarchaeota', 'Crenarchaeota', 'Euryarchaeota']
+    unwanted_taxa = ['Plastid', 'Mitochondrion'] #, 'Thaumarchaeota', 'Crenarchaeota', 'Euryarchaeota']
 
     all_paths = """
     /otu_table_flat.tsv
@@ -64,7 +64,7 @@ class OtuTable(object):
         # Remove unwanted #
         for otu_name in cluster_table:
             species = assignments[otu_name]
-            if any(bad in species[2] for bad in self.unwanted_phyla):
+            if any(bad in species for bad in self.unwanted_taxa):
                 cluster_table = cluster_table.drop(otu_name, 1)
         # Convert to CSV #
         cluster_table.to_csv(self.p.flat.path, sep='\t', encoding='utf-8')

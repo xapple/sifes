@@ -56,7 +56,7 @@ class Pandaseq(object):
         self.base_dir = DirectoryPath(self.result_dir + self.short_name)
         self.p = AutoPaths(self.base_dir, self.all_paths)
 
-    def run(self, cpus=1):
+    def run(self, cpus=1, verbose=False):
         """-N: Eliminate uncalled bases
            -F: Keep qual scores though they are conceptually different.
            -T: The number of threads to spawn.
@@ -65,7 +65,7 @@ class Pandaseq(object):
            -o: Miniumum overlap.
            -k: K-mer table size."""
         # Message #
-        print "Joining sample '%s'" % self.sample_name
+        if verbose: print "Joining sample '%s'" % self.sample_name
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check version #
