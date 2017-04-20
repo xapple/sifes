@@ -21,7 +21,9 @@ To clean everything up:
 rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-execfile("~/deploy/sifes/scripts/projects/unige/foram/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/unige/foram/load.py")
 
 ###############################################################################
 print("# Demultiplex - 0h08 #")
@@ -101,16 +103,15 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
 print("# Bundle and upload - 0h0x #")
-from sifes.distribute.bundle import Bundle
 bundle = Bundle("desalt_37f", proj.samples)
-with Timer(): bundle.run()
-
-path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/foram/metadata.xlsx"
-shutil.copy(path, bundle.p.samples_xlsx)
-path = sifes.reports_dir + 'foram_plexed/demultiplexer.pdf'
-shutil.copy(path, bundle.p.demultiplexing_report)
-
-from sifes.distribute.upload import DropBoxRclone
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt 37F delivery')
-with Timer(): dbx_sync.run()
+
+with Timer():
+    bundle.run()
+    path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/foram/metadata.xlsx"
+    shutil.copy(path, bundle.p.samples_xlsx)
+    path = sifes.reports_dir + 'foram_plexed/demultiplexer.pdf'
+    shutil.copy(path, bundle.p.demultiplexing_report)
+    dbx_sync.run()
+
 print("Total delivery: %s" % bundle.base_dir.size)

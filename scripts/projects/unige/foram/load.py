@@ -10,9 +10,10 @@ import shutil
 
 # Internal modules #
 import sifes
-from sifes.taxonomy import mothur_classify
-from sifes.report   import clusters
-from sifes.groups   import cluster
+from sifes.taxonomy  import mothur_classify
+from sifes.report    import clusters
+from sifes.groups    import cluster
+from sifes.filtering import seq_filter
 from sifes.demultiplex.demultiplexer import Demultiplexer
 from sifes.distribute.bundle         import Bundle
 from sifes.distribute.upload         import DropBoxRclone
@@ -38,9 +39,10 @@ sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
 sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 40
 sifes.filtering.seq_filter.SeqFilter.min_read_length   = 140 - 8 - 8 - 19 - 20
 sifes.filtering.seq_filter.SeqFilter.max_read_length   = 250 - 8 - 8 - 19 - 20
+sifes.filtering.seq_filter.SeqFilter.search_for_region = "GACAG"
 
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
-sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (2, 3, 4)
+sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (4, 5, 6)
 
 sifes.groups.cluster.Cluster.default_taxonomy                  = 'qiime'
 sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'foraminifera'

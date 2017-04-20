@@ -23,7 +23,9 @@ rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/re
 rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-execfile("~/deploy/sifes/scripts/projects/unige/desalt/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/unige/desalt/load.py")
 
 ###############################################################################
 print("# Demultiplex - 0h55 #")
@@ -93,6 +95,12 @@ def otu_plot(p):
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
 
+print("# Make sub taxa graphs - 0h0x #")
+with Timer():
+    prll_map(lambda sub:sub.run(), p.cluster.sub_taxa_tables)
+    graphs = (g for sub in p.cluster.sub_taxa_tables for g in sub.results.graphs.by_rank)
+    prll_map(lambda g:g(rerun=True), graphs)
+
 ###############################################################################
 print("# Make cluster reports - 0h01 #")
 with Timer(): proj.cluster.report.generate()
@@ -103,14 +111,15 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
 print("# Bundle and upload - 0h0x #")
-bundle = Bundle("desalt_v1v2", proj.samples)
-with Timer(): bundle.run()
-
-path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx"
-shutil.copy(path, bundle.p.samples_xlsx)
-path = sifes.reports_dir + 'desalt_plexed/demultiplexer.pdf'
-shutil.copy(path, bundle.p.demultiplexing_report)
-
+bundle   = Bundle("desalt_v1v2", proj.samples)
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt V1V2 delivery')
-with Timer(): dbx_sync.run()
+
+with Timer():
+    bundle.run()
+    path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx"
+    shutil.copy(path, bundle.p.samples_xlsx)
+    path = sifes.reports_dir + 'desalt_plexed/demultiplexer.pdf'
+    shutil.copy(path, bundle.p.demultiplexing_report)
+    dbx_sync.run()
+
 print("Total delivery: %s" % bundle.base_dir.size)

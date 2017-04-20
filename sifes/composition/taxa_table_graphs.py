@@ -12,9 +12,9 @@ from matplotlib import pyplot
 ################################################################################
 class TaxaBarstack(Graph):
     """Distribution of named taxa by sample (at different ranks)."""
-    base_rank  = -1
-
+    base_rank     = -1
     short_name    = 'taxa_barstack'
+
     width         = 16.0
     height        = 10.0
     bottom        = 0.35
@@ -37,7 +37,7 @@ class TaxaBarstack(Graph):
         fig = pyplot.gcf()
         # Other #
         title = 'Taxonomic relative abundances per sample at rank %i (%s).'
-        title = title % (self.base_rank, self.parent.taxonomy.results.rank_names[self.base_rank])
+        title = title % (self.base_rank, self.parent.rank_names[self.base_rank])
         axes.set_title(title)
         axes.set_ylim([0,100])
         # Put a legend below current axis

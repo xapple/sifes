@@ -1,5 +1,5 @@
 # Built-in modules #
-import os
+import os, subprocess
 
 # Internal modules #
 import sifes
@@ -8,7 +8,6 @@ import sifes
 
 # Third party modules #
 import sh
-from shell_command import shell_call
 
 # Constants #
 home = os.environ.get('HOME', '~') + '/'
@@ -27,7 +26,7 @@ class DropBoxRclone(object):
 
     def run(self):
         """Just rclone it"""
-        shell_call('rclone ' + ' '.join(self.command))
+        self.stdout = subprocess.check_call('rclone ' + ' '.join(self.command), shell=True)
 
 ###############################################################################
 class DropBoxSync(object):

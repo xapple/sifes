@@ -166,7 +166,9 @@ class SampleTemplate(ReportTemplate):
         params = ('primer_max_dist', 'mismatches_allowed', 'primer_discard',
                   'primer_left', 'n_base_discard', 'n_base_left',
                   'min_read_length', 'max_read_length', 'length_discard',
-                  'length_left', 'percent_remaining')
+                  'length_left', 'percent_remaining',
+                  'region_nucleotides', 'region_discard', 'region_left',
+                  )
         return {p:getattr(self, p) for p in params}
 
     @property
@@ -203,6 +205,16 @@ class SampleTemplate(ReportTemplate):
     @property_pickled
     def length_left(self):
         return split_thousands(len(self.sample.filter.results.length_fasta))
+
+    def region_nucleotides(self): return str(self.sample.filter.search_for_region)
+    @property_pickled
+    def region_discard(self):
+        before = self.sample.filter.results.length_fasta
+        after  = self.sample.filter.results.region_fasta
+        return split_thousands(len(before) - len(after))
+    @property_pickled
+    def region_left(self):
+        return split_thousands(len(self.sample.filter.results.region_fasta))
 
     @property_pickled
     def percent_remaining(self):

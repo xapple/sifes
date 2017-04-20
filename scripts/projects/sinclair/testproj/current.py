@@ -5,7 +5,9 @@
 A script to run small snippets of code.
 """
 
-execfile("~/deploy/sifes/scripts/projects/sinclair/testproj/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 
 ###############################################################################
 #demultiplexer = Demultiplexer(plexed, proj)

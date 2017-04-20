@@ -1,5 +1,5 @@
 # Built-in modules #
-import warnings
+import re
 from collections import Counter
 
 # Internal modules #
@@ -33,10 +33,15 @@ class SeqFilter(object):
     min_read_length   = 400
     max_read_length   = 560
 
+    # Options #
+    search_for_region = None
+
+    # Paths #
     all_paths = """
     /primers.fasta
     /n_base.fasta
     /length.fasta
+    /region.fasta
     /renamed.fasta
     """
 
@@ -56,6 +61,7 @@ class SeqFilter(object):
         self.primers_fasta = FASTA(self.p.primers)
         self.n_base_fasta  = FASTA(self.p.n_base)
         self.length_fasta  = FASTA(self.p.length)
+        self.region_fasta  = FASTA(self.p.region)
         self.renamed_fasta = FASTA(self.p.renamed)
         # The final result #
         self.clean = self.renamed_fasta
@@ -69,8 +75,11 @@ class SeqFilter(object):
         self.n_base_filter()
         # Length #
         self.len_filter()
-        # Rename wit number #
-        self.length_fasta.rename_with_num(self.sample_name + ':', self.renamed_fasta)
+        # Region #
+        if self.search_for_region: self.region_filter()
+        else: self.region_fasta.link_from(self.length_fasta)
+        # Rename with a number #
+        self.region_fasta.rename_with_num(self.sample_name + ':', self.renamed_fasta)
         # Check #
         if len(self.length_fasta) == 0:
             raise Exception("No results left after filtering the sample '%s'" % self.sample_name)
@@ -115,6 +124,17 @@ class SeqFilter(object):
                 yield r
         self.length_fasta.write(good_len_iterator(self.n_base_fasta))
 
+    # Region #
+    def region_filter(self):
+        """Useful when you want to pick-out just a conserved region."""
+        def good_region_iterator(reads, verbose=False):
+            regex = re.compile(self.search_for_region)
+            for r in reads:
+                match = regex.search(str(r.seq))
+                if not match: continue
+                yield r[match.end():]
+        self.region_fasta.write(good_region_iterator(self.length_fasta))
+
     #-------------------------------------------------------------------------#
     @property_cached
     def primer_positions(self):
@@ -146,6 +166,7 @@ class SeqFilterResults(object):
         self.primers_fasta = parent.primers_fasta
         self.n_base_fasta  = parent.n_base_fasta
         self.length_fasta  = parent.length_fasta
+        self.region_fasta  = parent.region_fasta
         self.renamed_fasta = parent.renamed_fasta
         # The final result #
         self.clean         = self.renamed_fasta

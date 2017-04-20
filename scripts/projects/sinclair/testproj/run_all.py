@@ -23,7 +23,9 @@ rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as
 rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-execfile("~/deploy/sifes/scripts/projects/sinclair/testproj/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 
 ###############################################################################
 print("# Demultiplex #")
@@ -102,17 +104,16 @@ for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
-print("# Bundle and upload #")
-from sifes.distribute.bundle import Bundle
+print("# Bundle and upload - 0h0x #")
 bundle = Bundle("testproj", proj.samples)
-with Timer(): bundle.run()
-
-path = sifes.home + "deploy/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx"
-shutil.copy(path, bundle.p.samples_xlsx)
-path = sifes.reports_dir + 'testproj_plexed/demultiplexer.pdf'
-shutil.copy(path, bundle.p.demultiplexing_report)
-
-from sifes.distribute.upload import DropBoxRclone
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Testproj delivery')
-with Timer(): dbx_sync.run()
+
+with Timer():
+    bundle.run()
+    path = sifes.home + "deploy/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx"
+    shutil.copy(path, bundle.p.samples_xlsx)
+    path = sifes.reports_dir + 'testproj_plexed/demultiplexer.pdf'
+    shutil.copy(path, bundle.p.demultiplexing_report)
+    dbx_sync.run()
+
 print("Total delivery: %s" % bundle.base_dir.size)

@@ -30,7 +30,7 @@ class QiimeClassify(Classify):
     short_name    = 'qiime_classify'
     long_name     = 'Qiime Version 1.9.1'
     executable    = (home + 'programs/qiime/bin/python',
-                     home + 'programs/qiime/local/bin/assign_taxonomy.py')
+                     home + 'programs/qiime/bin/assign_taxonomy.py')
     doc           = 'http://qiime.org/scripts/assign_taxonomy.html'
 
     all_paths = """

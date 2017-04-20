@@ -44,17 +44,18 @@ class TaxaTable(object):
     def __init__(self, otu_table, taxonomy, result_dir):
         # Attributes #
         self.otu_table  = otu_table
+        self.otu_df     = otu_table.results.otu_table
         self.taxonomy   = taxonomy
         self.result_dir = result_dir
         # Short cuts #
         self.rank_names = self.taxonomy.results.rank_names
         # Auto paths #
         self.base_dir = self.result_dir
-        self.p = AutoPaths(self.base_dir, self.all_paths)
+        self.p        = AutoPaths(self.base_dir, self.all_paths)
 
-    def run(self):
+    def run(self, verbose=False):
         # Message #
-        print "Making all taxa tables with '%s'" % self.otu_table
+        if verbose: print "Making all taxa tables in '%s'" % self.result_dir
         # Do it #
         for i, rank_name in enumerate(self.rank_names):
             table = self.taxa_table_at_rank(i)
@@ -67,7 +68,7 @@ class TaxaTable(object):
     def taxa_table_at_rank(self, rank):
         # Build a new frame #
         result = defaultdict(lambda: defaultdict(int))
-        for sample_name, column in self.otu_table.results.otu_table.iterrows():
+        for sample_name, column in self.otu_df.iterrows():
             for otu_name, count in column.iteritems():
                 assignment = self.taxonomy.results.assignments[otu_name]
                 if rank >= len(assignment): taxa_term = "Unassigned"
@@ -97,11 +98,9 @@ class TaxaTableResults(object):
     def __nonzero__(self): return bool(self.p.taxa_table_phylum)
 
     def __init__(self, table):
-        # Attributes #
         self.table      = table
         self.p          = table.p
         self.base_dir   = table.base_dir
-        self.taxonomy   = table.taxonomy
         self.rank_names = table.rank_names
 
     def load_table(self, path):
@@ -113,16 +112,14 @@ class TaxaTableResults(object):
 
     @property_cached
     def graphs(self):
-        """The result is an object whose attributes
-        are all the graphs initialized with this
-        instance as only argument.
-        The graphs are also in a list."""
+        """The result is an object whose attributes are all the graphs initialized with
+        this instance as only argument. The graphs are also in a list."""
         result = Dummy()
         result.by_rank = []
         for i, rank_name in enumerate(self.rank_names):
             attributes = dict(base_rank  = i,
                               label      = rank_name,
-                              short_name = "taxa_barstack_" + rank_name.lower())
+                              short_name ='taxa_barstack_' + rank_name.lower())
             graph = type("Composition" + rank_name, (TaxaBarstack,), attributes)(self)
             setattr(result, graph.short_name, graph)
             result.by_rank.append(graph)

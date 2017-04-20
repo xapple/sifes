@@ -5,11 +5,13 @@
 A script to run small snippets of code.
 """
 
-execfile("~/deploy/sifes/scripts/projects/unige/desalt/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/unige/desalt/load.py")
 
 ###############################################################################
 
-for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
+for g in proj.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
 with Timer(): proj.cluster.report.generate()
 
 ###############################################################################

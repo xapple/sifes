@@ -5,6 +5,8 @@
 A script to run small snippets of code.
 """
 
-execfile("~/deploy/sifes/scripts/projects/unige/foram/load.py")
+import os
+home = os.environ.get('HOME', '~') + '/'
+execfile(home + "deploy/sifes/scripts/projects/unige/foram/load.py")
 
 ###############################################################################

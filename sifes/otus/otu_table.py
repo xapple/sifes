@@ -20,7 +20,7 @@ class Dummy(object): pass
 
 ###############################################################################
 class OtuTable(object):
-    """Takes centers and assignments and makes an OTU table."""
+    """Takes the centers and the assignments and makes an OTU table."""
 
     # Attributes #
     short_name = 'otu_table'

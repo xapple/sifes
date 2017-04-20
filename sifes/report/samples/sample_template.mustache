@@ -71,6 +71,7 @@ Next, we filter the sequences based on several criteria. These many sequences ar
 * Checking for the presence of both primers within at least {{primer_max_dist}} base pairs of the read ends and with at most {{mismatches_allowed}} mismatches allowed discards {{primer_discard}} sequences ({{primer_left}} left).
 * Checking for the absence of undetermined "N" bases anywhere in the reads (expect in the primers) discards {{n_base_discard}} sequences ({{n_base_left}} left).
 * Checking that no sequence is shorter than {{min_read_length}} base pairs and no sequence is longer than {{max_read_length}} base pairs discards {{length_discard}} sequences ({{length_left}} left).
+* Searching for the specific "{{region_nucleotides}}" region and trimming sequences at that position discards {{region_discard}} sequences ({{region_left}} left).
 
 This leaves us with {{percent_remaining}} of this sample's sequences.
 

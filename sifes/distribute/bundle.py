@@ -49,9 +49,9 @@ class Bundle(Aggregate):
             # Data files #
             data_dir = DirectoryPath(proj_dir + 'data')
             data_dir.create(safe=True)
-            p.cluster.centering.results.centers.copy(data_dir)         # centers
-            p.cluster.taxonomy.results.assignments_file.copy(data_dir) # assignments
-            p.cluster.otu_table.p.flat.copy(data_dir)                  # otu_table
+            p.cluster.centering.results.centers.copy(data_dir + 'centers.fasta')           # centers
+            p.cluster.taxonomy.results.assignments_file.copy(data_dir + 'assignments.txt') # assignments
+            p.cluster.otu_table.p.flat.copy(data_dir + 'otu_table.tsv')                    # otu_table
             # Optional extras #
             #p.cluster.reads.link_to(data_dir, safe=True)             # all_reads.fasta
             #p.cluster.centering.readmap.link_to(data_dir, safe=True) # readmap.uc

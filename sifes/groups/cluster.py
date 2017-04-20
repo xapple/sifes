@@ -2,18 +2,19 @@
 
 # Internal modules #
 import sifes
-from sifes.report.clusters          import ClusterReport
-from sifes.groups.aggregate         import Aggregate
-from sifes.groups.cluster_graphs    import ClusterLocationMap
-from sifes.centering.uparse         import Uparse
-from sifes.taxonomy.crest           import Crest
-from sifes.taxonomy.rdp             import Rdp
-from sifes.taxonomy.mothur_classify import MothurClassify
-from sifes.taxonomy.qiime_classify  import QiimeClassify
-from sifes.otus.otu_table           import OtuTable
-from sifes.composition.taxa_table   import TaxaTable
-from sifes.statistics.nmds          import GraphNMDS
-from sifes.distances.unifrac        import UniFrac
+from sifes.report.clusters            import ClusterReport
+from sifes.groups.aggregate           import Aggregate
+from sifes.groups.cluster_graphs      import ClusterLocationMap
+from sifes.centering.uparse           import Uparse
+from sifes.taxonomy.crest             import Crest
+from sifes.taxonomy.rdp               import Rdp
+from sifes.taxonomy.mothur_classify   import MothurClassify
+from sifes.taxonomy.qiime_classify    import QiimeClassify
+from sifes.otus.otu_table             import OtuTable
+from sifes.composition.taxa_table     import TaxaTable
+from sifes.composition.sub_taxa_table import SubTaxaTable
+from sifes.statistics.nmds            import GraphNMDS
+from sifes.distances.unifrac          import UniFrac
 
 # First party modules #
 from fasta import FASTA
@@ -31,6 +32,10 @@ class Cluster(Aggregate):
     default_taxonomy = "mothur"
     read_count_cutoff_factor = 0.01
 
+    # Options #
+    sub_taxa = []
+
+    # Paths #
     all_paths = """
     /logs/
     /reads/all_reads.fasta
@@ -100,6 +105,11 @@ class Cluster(Aggregate):
     def taxa_table(self):
         """Will produce the taxonomy-based tables."""
         return TaxaTable(self.otu_table, self.taxonomy, self.p.taxa_table_dir)
+
+    @property_cached
+    def sub_taxa_tables(self):
+        """Will produce the sub taxa tables."""
+        return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir  for rank,taxa in self.sub_taxa]
 
     @property_cached
     def nmds_graph(self):
