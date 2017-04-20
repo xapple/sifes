@@ -3,49 +3,25 @@
 
 """
 A script to run small snippets of code.
-
-# Get report #
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-# Built-in modules #
-import shutil
-
-# Internal modules #
-import sifes
-from sifes.taxonomy import mothur_classify
-from sifes.report   import clusters
-from sifes.groups   import cluster
-from sifes.demultiplex.demultiplexer import Demultiplexer
-
-# First party modules #
-from plumbing.processes import prll_map
-from plumbing.timer     import Timer
-
-# Third party modules #
-from tqdm import tqdm
+execfile("~/deploy/sifes/scripts/projects/unige/desalt/load.py")
 
 ###############################################################################
-# Load multiplexed and real project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/", raw_files_must_exist=True)
-proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/",        raw_files_must_exist=True)
-demultiplexer = Demultiplexer(plexed, proj)
+
+for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
+with Timer(): proj.cluster.report.generate()
 
 ###############################################################################
-# Parameters #
-sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
-sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
+print("# Bundle and upload - 0h0x #")
+bundle = Bundle("desalt_v1v2", proj.samples)
+with Timer(): bundle.run()
 
-sifes.groups.samples.Sample.default_joiner = 'pandaseq'
-sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (3, 4, 5)
+path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx"
+shutil.copy(path, bundle.p.samples_xlsx)
+path = sifes.reports_dir + 'desalt_plexed/demultiplexer.pdf'
+shutil.copy(path, bundle.p.demultiplexing_report)
 
-sifes.groups.cluster.Cluster.default_taxonomy = 'mothur'
-sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'pr_two'
-sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
-
-###############################################################################
-#proj.cluster.report.generate()
+dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt V1V2 delivery')
+with Timer(): dbx_sync.run()
+print("Total delivery: %s" % bundle.base_dir.size)

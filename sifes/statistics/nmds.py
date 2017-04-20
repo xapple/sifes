@@ -57,3 +57,6 @@ class GraphNMDS(Graph):
         ro.r("loadings = nmds$species")
         # Retrieve values #
         self.coords = r_matrix_to_dataframe(ro.r.coord)
+
+    @property
+    def stress_value(self): return self.stdout[-1]

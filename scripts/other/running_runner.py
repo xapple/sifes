@@ -37,6 +37,7 @@ for line in script:
        sections.append(current)
        current = []
    current.append(line)
+else: sections.append(current)
 
 # Get the header #
 header = sections.pop(0)
@@ -51,7 +52,7 @@ out, err = sys.stdout, sys.stderr
 for i, section in enumerate(sections):
     path = directory + "section_%i.py" % i
     path.writelines(header + ['\n\n\n\n\n\n\n'] + section)
-    print Color.f_ylw + "-- Section %i --" % i + Color.end
+    print Color.f_ylw + "-- Section %i/%i --" % (i, len(sections)) + Color.end
     sh.ipython(path, _out=sys.stdout, _err=sys.stderr)
     sys.stdout.flush()
     sys.stderr.flush()

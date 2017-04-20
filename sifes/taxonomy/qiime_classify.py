@@ -72,14 +72,14 @@ class QiimeClassifyResults(object):
     def __nonzero__(self): return bool(self.p.assignments_txt)
     def __len__(self):     return len(self.p.assignments_txt)
 
+    @property
+    def rank_names(self): return self.database.rank_names
+
     def __init__(self, qiime):
         # Attributes #
         self.qiime    = qiime
         self.database = qiime.database
         self.p        = qiime.p
-
-    @property
-    def rank_names(self): return self.database.rank_names
 
     @property_cached
     def assignments(self):

@@ -9,8 +9,6 @@ from plumbing.autopaths import FilePath
 
 # Third party modules #
 import folium
-from pyvirtualdisplay import Display
-from selenium import webdriver
 
 # Constants #
 color_num_dict = {
@@ -43,7 +41,9 @@ class MapFigure(Graph):
         # Append #
         self.markers.append(folium.Marker([lng, lat], icon=folium.Icon(color=color, icon=icon)))
 
-    def save_map(self, **kwargs):
+    def save_map(self, verbose=True, **kwargs):
+        # Message #
+        if verbose: print "Drawing a map."
         # Prepare #
         self.select_lng_lat()
         self.map = folium.Map(location=(self.lng, self.lat), zoom_start=self.default_zoom)
@@ -57,6 +57,8 @@ class MapFigure(Graph):
 
     @property
     def browser(self):
+        from pyvirtualdisplay import Display
+        from selenium import webdriver
         if len(self.browser_singleton) == 0:
             self.browser_singleton.append(Display(visible=0, size=self.default_size))
             self.browser_singleton[0].start()

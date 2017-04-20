@@ -115,6 +115,9 @@ class MothurClassifyResults(object):
     def __nonzero__(self): return bool(self.p.stdout)
     def __len__(self):     return len(self.p.assignments)
 
+    @property
+    def rank_names(self): return self.database.rank_names
+
     def __init__(self, mothur):
         # Attributes #
         self.mothur = mothur
@@ -129,17 +132,6 @@ class MothurClassifyResults(object):
                 species           = [i.strip('\n') for i in species.split(';')]
                 result[otu_name]  = tuple(species)
         return result
-
-    @property
-    def rank_names(self):
-        """The names of the ranks. Mothur skips Kingdom."""
-        return ['Domain',
-                'Phylum',
-                'Class',
-                'Order',
-                'Family',
-                'Genus',
-                'Species']
 
     @property_cached
     def count_unassigned(self):

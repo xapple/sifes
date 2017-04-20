@@ -17,44 +17,15 @@ To clean everything up:
     $ rm -rf ~/SIFES/views/samples/unige/desalt
     $ rm -rf ~/SIFES/views/samples/unige/desalt_plexed
 
+# Get report #
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-# Built-in modules #
-import shutil
-
-# Internal modules #
-import sifes
-from sifes.taxonomy import mothur_classify
-from sifes.report   import clusters
-from sifes.groups   import cluster
-from sifes.demultiplex.demultiplexer import Demultiplexer
-
-# First party modules #
-from plumbing.timer     import Timer
-
-# Parallelization strategy #
-from plumbing.processes import prll_map
+execfile("~/deploy/sifes/scripts/projects/unige/desalt/load.py")
 
 ###############################################################################
-# Load multiplexed and real project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt_plexed/")
-proj   = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/")
-
-# Parameters #
-sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
-sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
-
-sifes.groups.samples.Sample.default_joiner = 'pandaseq'
-sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (3, 4, 5)
-
-sifes.groups.cluster.Cluster.default_taxonomy = 'mothur'
-sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'pr_two'
-sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
-
-demultiplexer = Demultiplexer(plexed, proj)
-
 print("# Demultiplex - 0h55 #")
 with Timer(): demultiplexer.run()
 
@@ -106,7 +77,7 @@ def sample_plots(s):
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
-    s.graphs.location_map(rerun=True)
+    #s.graphs.location_map(rerun=True)
 with Timer(): prll_map(sample_plots, proj)
 
 print("# Make project graphs - 0h04 #")
@@ -126,24 +97,20 @@ with Timer(): otu_plot(proj)
 print("# Make cluster reports - 0h01 #")
 with Timer(): proj.cluster.report.generate()
 
-print("# Make sample reports  - 0h0x #")
+print("# Make sample reports - 0h0x #")
 for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
-print("# Bundle - 0h02 #")
-from sifes.distribute.bundle import Bundle
+print("# Bundle and upload - 0h0x #")
 bundle = Bundle("desalt_v1v2", proj.samples)
 with Timer(): bundle.run()
 
-print("# Extra files #")
 path = sifes.home + "deploy/sifes/metadata/excel/projects/unige/desalt/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
 path = sifes.reports_dir + 'desalt_plexed/demultiplexer.pdf'
 shutil.copy(path, bundle.p.demultiplexing_report)
 
-print("# Upload - 0h02 #")
-from sifes.distribute.upload import DropBoxRclone
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt V1V2 delivery')
 with Timer(): dbx_sync.run()
 print("Total delivery: %s" % bundle.base_dir.size)

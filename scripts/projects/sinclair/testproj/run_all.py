@@ -16,47 +16,16 @@ To clean everything up:
     $ rm -rf ~/SIFES/views/projects/sinclair/testproj
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj_plexed
+    
+# Get report #
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
-# Built-in modules #
-import shutil
-
-# Internal modules #
-import sifes
-from sifes.taxonomy import mothur_classify
-from sifes.report   import clusters
-from sifes.groups   import cluster
-from sifes.demultiplex.demultiplexer import Demultiplexer
-
-# First party modules #
-from plumbing.timer import Timer
-
-# Parallelization strategy #
-from plumbing.processes import prll_map
-#from pathos.pp_map import pp_map
-#from functools import partial
-#prll_map = partial(pp_map, ncpus=16)
+execfile("~/deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 
 ###############################################################################
-# Load multiplexed and real project #
-plexed = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj_plexed/", raw_files_must_exist=False)
-proj   = sifes.load("~/deploy/sifes/metadata/json/projects/sinclair/testproj/",        raw_files_must_exist=False)
-
-# Parameters #
-sifes.filtering.seq_filter.SeqFilter.primer_mismatches = 0
-sifes.filtering.seq_filter.SeqFilter.primer_max_dist   = 50
-sifes.filtering.seq_filter.SeqFilter.min_read_length   = 370 - 8 - 8 - 21 - 18
-sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
-
-sifes.groups.samples.Sample.default_joiner = 'pandaseq'
-sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (3, 4, 5)
-
-sifes.groups.cluster.Cluster.default_taxonomy = 'qiime'
-sifes.taxonomy.qiime_classify.QiimeClassify.default_database = 'pr_two'
-sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
-
-demultiplexer = Demultiplexer(plexed, proj)
-
 print("# Demultiplex #")
 with Timer(): demultiplexer.run()
 
@@ -108,7 +77,7 @@ def sample_plots(s):
     s.graphs.ace(rerun=True)
     s.graphs.shannon(rerun=True)
     s.graphs.simpson(rerun=True)
-    s.graphs.location_map(rerun=True)
+    #s.graphs.location_map(rerun=True)
 with Timer(): prll_map(sample_plots, proj)
 
 print("# Make project graphs #")
@@ -133,18 +102,16 @@ for s in proj: s.report.purge_cache()
 with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
-print("# Bundle #")
+print("# Bundle and upload #")
 from sifes.distribute.bundle import Bundle
 bundle = Bundle("testproj", proj.samples)
 with Timer(): bundle.run()
 
-print("# Extra files #")
 path = sifes.home + "deploy/sifes/metadata/excel/projects/sinclair/testproj/metadata.xlsx"
 shutil.copy(path, bundle.p.samples_xlsx)
 path = sifes.reports_dir + 'testproj_plexed/demultiplexer.pdf'
 shutil.copy(path, bundle.p.demultiplexing_report)
 
-print("# Upload #")
 from sifes.distribute.upload import DropBoxRclone
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Testproj delivery')
 with Timer(): dbx_sync.run()
