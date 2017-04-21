@@ -47,4 +47,4 @@ sifes.groups.cluster.Cluster.default_taxonomy                  = 'qiime'
 sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'pr_two'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
 
-sifes.groups.cluster.Cluster.default_taxonomy                  = ((2,'Metazoa'),)
+sifes.groups.cluster.Cluster.sub_taxa                          = ((2,'Metazoa'),)

@@ -190,19 +190,22 @@ class ClusterTemplate(ReportTemplate):
         graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
         caption = "Relative abundances per sample on the '%s' level" % graph.label
         label   = "level_one_barstack"
-        return str(ScaledFigure(graph, caption, label))
+        path    = graph()
+        return str(ScaledFigure(path, caption, label))
     def level_two_barstack(self):
         rank    = self.parent.default_taxa_graph_levels[1]
         graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
         caption = "Relative abundances per sample on the '%s' level" % graph.label
         label   = "level_two_barstack"
-        return str(ScaledFigure(graph, caption, label))
+        path    = graph()
+        return str(ScaledFigure(path, caption, label))
     def level_three_barstack(self):
         rank    = self.parent.default_taxa_graph_levels[2]
         graph   = [g for g in self.taxa_table.results.graphs.by_rank if g.base_rank == rank][0]
         caption = "Relative abundances per sample on the '%s' level" % graph.label
         label   = "level_three_barstack"
-        return str(ScaledFigure(graph, caption, label))
+        path    = graph()
+        return str(ScaledFigure(path, caption, label))
 
     # Comparison #
     def comparison(self):
@@ -233,6 +236,24 @@ class ClusterTemplate(ReportTemplate):
         table = [[i+1] + [f(s) for f in info.values()] for i,s in enumerate(self.samples)]
         table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
         return table + "\n\n   : Summary of diversity estimates for all samples."
+
+    # Subtaxa #
+    def sub_taxa(self):
+        """Optional extra figures."""
+        # Check it exists #
+        if not self.cluster.sub_taxa: return False
+        # There can be many figures #
+        string = ""
+        for sub in self.cluster.sub_taxa_tables:
+            rank    = sub.filter_rank + 2
+            graph   = [g for g in sub.results.graphs.by_rank if g.base_rank == rank][0]
+            caption = "Subtaxonomic filter on '%s' (rank %i) displayed on the '%s' level (rank %i)"
+            caption = caption % (sub.filter_name, sub.filter_rank, graph.label, rank)
+            path    = graph()
+            label   = "subtaxa_" + sub.filter_name.lower().replace(' ', '_')
+            string += str(ScaledFigure(path, caption, label)) + '\n\n'
+        # Return the long string with all the figures #
+        return {'sub_taxa': string}
 
     # Beta-dispersion #
     pass

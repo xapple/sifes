@@ -97,9 +97,9 @@ with Timer(): otu_plot(proj)
 
 print("# Make sub taxa graphs - 0h0x #")
 with Timer():
-    prll_map(lambda sub:sub.run(), p.cluster.sub_taxa_tables)
-    graphs = (g for sub in p.cluster.sub_taxa_tables for g in sub.results.graphs.by_rank)
-    prll_map(lambda g:g(rerun=True), graphs)
+    map(lambda sub:sub.run(), proj.cluster.sub_taxa_tables)
+    graphs = (g for sub in proj.cluster.sub_taxa_tables for g in sub.results.graphs.by_rank)
+    map(lambda g:g(rerun=True), graphs)
 
 ###############################################################################
 print("# Make cluster reports - 0h01 #")

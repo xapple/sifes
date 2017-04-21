@@ -22,7 +22,8 @@ class SubTaxaTable(TaxaTable):
         self.filter_name = filter_name
         self.result_dir  = result_dir
         # Short cuts #
-        self.rank_names = self.taxa_table.rank_names
+        self.rank_names  = self.taxa_table.rank_names
+        self.assignments = self.taxa_table.assignments
         # Auto paths #
         self.base_dir = self.result_dir + self.filter_name.lower().replace(' ', '_') + '/'
         self.p        = AutoPaths(self.base_dir, self.all_paths)
@@ -36,7 +37,7 @@ class SubTaxaTable(TaxaTable):
         # Remove unwanted #
         for otu_name in otu_df:
             species = assignments[otu_name]
-            if not self.filter_name in species[self.filter_rank]:
+            if len(species) <= self.filter_rank or self.filter_name not in species[self.filter_rank]:
                 otu_df = otu_df.drop(otu_name, 1)
         # Return #
         return otu_df

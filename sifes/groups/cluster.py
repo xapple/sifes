@@ -43,6 +43,7 @@ class Cluster(Aggregate):
     /otu_table/
     /taxa_table/
     /taxonomy/
+    /sub_taxa/
     /distances/
     /graphs/
     /report/report.pdf
@@ -109,7 +110,7 @@ class Cluster(Aggregate):
     @property_cached
     def sub_taxa_tables(self):
         """Will produce the sub taxa tables."""
-        return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir  for rank,taxa in self.sub_taxa]
+        return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir) for rank,taxa in self.sub_taxa]
 
     @property_cached
     def nmds_graph(self):

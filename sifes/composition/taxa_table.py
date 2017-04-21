@@ -44,18 +44,21 @@ class TaxaTable(object):
     def __init__(self, otu_table, taxonomy, result_dir):
         # Attributes #
         self.otu_table  = otu_table
-        self.otu_df     = otu_table.results.otu_table
         self.taxonomy   = taxonomy
         self.result_dir = result_dir
         # Short cuts #
-        self.rank_names = self.taxonomy.results.rank_names
+        self.rank_names  = self.taxonomy.results.rank_names
+        self.otu_df      = self.otu_table.results.otu_table
+        self.assignments = self.taxonomy.results.assignments
         # Auto paths #
         self.base_dir = self.result_dir
         self.p        = AutoPaths(self.base_dir, self.all_paths)
 
     def run(self, verbose=False):
         # Message #
-        if verbose: print "Making all taxa tables in '%s'" % self.result_dir
+        if verbose: print "Making all taxa tables in '%s'" % self.base_dir
+        # Make directory #
+        self.base_dir.create_if_not_exists()
         # Do it #
         for i, rank_name in enumerate(self.rank_names):
             table = self.taxa_table_at_rank(i)
@@ -70,7 +73,7 @@ class TaxaTable(object):
         result = defaultdict(lambda: defaultdict(int))
         for sample_name, column in self.otu_df.iterrows():
             for otu_name, count in column.iteritems():
-                assignment = self.taxonomy.results.assignments[otu_name]
+                assignment = self.assignments[otu_name]
                 if rank >= len(assignment): taxa_term = "Unassigned"
                 else:                       taxa_term = assignment[rank]
                 result[taxa_term][sample_name] += count

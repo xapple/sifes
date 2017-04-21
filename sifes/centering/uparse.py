@@ -43,7 +43,6 @@ class Uparse(object):
     /taxonomy_unite/
     /taxonomy_rdp/
     /graphs/
-    /seqenv/
     """
 
     def __repr__(self): return '<%s object of %s>' % (self.__class__.__name__, self.parent)
