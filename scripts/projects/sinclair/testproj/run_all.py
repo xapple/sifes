@@ -17,10 +17,15 @@ To clean everything up:
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj
     $ rm -rf ~/SIFES/views/samples/sinclair/testproj_plexed
     
-# Get report #
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+To run everything:
+
+    time ~/deploy/sifes/scripts/other/running_runner.py ~/deploy/sifes/scripts/projects/sinclair/testproj/run_all.py --start_at=0
+    
+To get report:
+
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
 import os

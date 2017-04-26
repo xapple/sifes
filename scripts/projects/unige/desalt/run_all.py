@@ -17,10 +17,15 @@ To clean everything up:
     $ rm -rf ~/SIFES/views/samples/unige/desalt
     $ rm -rf ~/SIFES/views/samples/unige/desalt_plexed
 
-# Get report #
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+To run everything:
+
+    time ~/deploy/sifes/scripts/other/running_runner.py ~/deploy/sifes/scripts/projects/unige/desalt/run_all.py --start_at=0
+    
+To get report:
+
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
 import os

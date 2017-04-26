@@ -17,8 +17,13 @@ To clean everything up:
     $ rm -rf ~/SIFES/views/samples/unige/foram
     $ rm -rf ~/SIFES/views/samples/unige/foram_plexed
 
-# Get report #
-rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+To run everything:
+
+    time ~/deploy/sifes/scripts/other/running_runner.py ~/deploy/sifes/scripts/projects/unige/foram/run_all.py --start_at=0
+    
+To get report:
+
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
 """
 
 import os

@@ -2,7 +2,7 @@
 from __future__ import division
 
 # Built-in modules #
-import shutil
+import shutil, multiprocessing
 
 # Internal modules #
 from plumbing.autopaths import AutoPaths
@@ -21,13 +21,17 @@ class Seqenv(object):
     /output/
     """
 
-    def __init__(self, parent, base_dir=None, N=3000, threshold=3.0):
+    default_N         = 2000
+    default_threshold = 3.0
+    default_threads   = 1
+
+    def __init__(self, parent, base_dir=None):
         # Parent #
-        self.otu, self.parent = parent, parent
-        self.taxonomy = self.parent.taxonomy
+        self.cluster, self.parent = parent, parent
         # Other #
-        self.N = N
-        self.threshold = threshold
+        self.N         = self.default_N
+        self.threshold = self.default_threshold
+        self.cpus      = self.default_threads
         # Directory #
         if base_dir is None: self.base_dir = self.parent.p.seqenv_dir
         else: self.base_dir = base_dir
@@ -37,20 +41,17 @@ class Seqenv(object):
 
     @property_cached
     def analysis(self):
-        return seqenv.Analysis(self.taxonomy.centers,
+        return seqenv.Analysis(self.parent.otu_table.results.centers,
                                out_dir      = self.p.output_dir,
                                abundances   = self.abundances,
                                N            = self.N,
                                num_threads  = self.cpus,
                                min_identity = (100 - self.threshold) / 100)
 
-    def run(self, cleanup=False, cpus=16):
-        # Number of cores #
-        self.cpus = cpus
-        if cpus is None: self.cpus = min(multiprocessing.cpu_count(), 32)
+    def run(self, cleanup=True):
         # Clean up #
         if cleanup: shutil.rmtree(self.p.output_dir)
         # Make the abundances file #
-        self.taxonomy.otu_csv_norm.transpose(self.abundances, d='\t')
+        self.parent.otu_table.results.p.norm.transpose(self.abundances, d='\t')
         # Do it #
         self.analysis.run()

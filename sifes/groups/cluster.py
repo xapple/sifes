@@ -2,6 +2,7 @@
 
 # Internal modules #
 import sifes
+from sifes.location.seqenv_wrapper    import Seqenv
 from sifes.report.clusters            import ClusterReport
 from sifes.groups.aggregate           import Aggregate
 from sifes.groups.cluster_graphs      import ClusterLocationMap
@@ -45,6 +46,7 @@ class Cluster(Aggregate):
     /taxonomy/
     /sub_taxa/
     /distances/
+    /seqenv/
     /graphs/
     /report/report.pdf
     /report/replicates.pdf
@@ -111,6 +113,11 @@ class Cluster(Aggregate):
     def sub_taxa_tables(self):
         """Will produce the sub taxa tables."""
         return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir) for rank,taxa in self.sub_taxa]
+
+    @property_cached
+    def seqenv(self):
+        """Will produce the isolation source linear combination predictions."""
+        return Seqenv(self)
 
     @property_cached
     def nmds_graph(self):
