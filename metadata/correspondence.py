@@ -78,11 +78,16 @@ corr = {
 
     u'Bioproject':                           'bioproject',
     u'Biosample':                            'biosample',
+
+    u'Depth [m]':                            'depth',
+    u'Boat name (vessel)':                   'boat_name',
 }
 
 ###############################################################################
+reverse_corr = dict((v,k) for k,v in corr.iteritems())
+
+###############################################################################
 extras = {
-    u'Depth [m]':                            'lorem',
     u'pH':                                   'lorem',
     u'Temperature [℃]':                      'lorem',
     u'Oxygen (O2) [mg/L]':                   'lorem',

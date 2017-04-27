@@ -38,9 +38,9 @@
 "project_long_name":    "Testproj project",
 "sample_long_name":     "Desalt SAL-HAD1b",
 
-"custom_grouping":    "Hadera",
+"custom_grouping":      "Hadera",
 "custom_attribute":     "Proximal",
-"replicate_id":     "7",
+"replicate_id":         "7",
 
 
 
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":   "3.8",
+"boat_name":    "Dingui"
 
 "sentinel":             "True"
 }

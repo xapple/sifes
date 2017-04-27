@@ -38,9 +38,9 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-HAD1c",
 
-"custom_grouping":    "Hadera",
+"custom_grouping":      "Hadera",
 "custom_attribute":     "Proximal",
-"replicate_id":     "7",
+"replicate_id":         "7",
 
 "fwd_read_count":       "406279",
 "rev_read_count":       "406279",
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":                "3.8",
+"boat_name":            "Dingui"
 
 "sentinel":             "True"
 }

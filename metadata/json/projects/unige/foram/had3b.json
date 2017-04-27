@@ -38,9 +38,9 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-HAD3b",
 
-"custom_grouping":    "Hadera",
+"custom_grouping":      "Hadera",
 "custom_attribute":     "Distant",
-"replicate_id":     "9",
+"replicate_id":         "9",
 
 "fwd_read_count":       "22752",
 "rev_read_count":       "22752",
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":                "6.5",
+"boat_name":            "MedEx"
 
 "sentinel":             "True"
 }

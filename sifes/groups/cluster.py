@@ -117,7 +117,7 @@ class Cluster(Aggregate):
     @property_cached
     def seqenv(self):
         """Will produce the isolation source linear combination predictions."""
-        return Seqenv(self)
+        return Seqenv(self, self.p.seqenv_dir)
 
     @property_cached
     def nmds_graph(self):

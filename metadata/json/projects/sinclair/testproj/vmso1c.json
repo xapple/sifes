@@ -38,9 +38,9 @@
 "project_long_name":    "Testproj project",
 "sample_long_name":     "Desalt SAL-VMSO1c",
 
-"custom_grouping":    "Soreq",
+"custom_grouping":      "Soreq",
 "custom_attribute":     "Proximal",
-"replicate_id":     "4",
+"replicate_id":         "4",
 
 
 
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":   "18",
+"boat_name":    "MedEx"
 
 "sentinel":             "True"
 }

@@ -38,9 +38,9 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-AS2b",
 
-"custom_grouping":    "Ashqelon",
+"custom_grouping":      "Ashqelon",
 "custom_attribute":     "Midway",
-"replicate_id":     "2",
+"replicate_id":         "2",
 
 "fwd_read_count":       "28768",
 "rev_read_count":       "28768",
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":                "10",
+"boat_name":            "MedEx"
 
 "sentinel":             "True"
 }

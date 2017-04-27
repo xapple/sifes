@@ -92,7 +92,6 @@ class Sample(object):
             self.fwd_path.must_exist()
             self.rev_path.must_exist()
         # For speed let's update the sequence count cache if available #
-        if self.info.get('fwd_read_count') is not None:
             self.pair.fwd.count = int(self.info['fwd_read_count'])
         if self.info.get('rev_read_count') is not None:
             self.pair.rev.count = int(self.info['rev_read_count'])

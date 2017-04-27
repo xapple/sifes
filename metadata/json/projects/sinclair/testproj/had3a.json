@@ -38,9 +38,9 @@
 "project_long_name":    "Testproj project",
 "sample_long_name":     "Desalt SAL-HAD3a",
 
-"custom_grouping":    "Hadera",
+"custom_grouping":      "Hadera",
 "custom_attribute":     "Distant",
-"replicate_id":     "9",
+"replicate_id":         "9",
 
 
 
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":   "6.5",
+"boat_name":    "MedEx"
 
 "sentinel":             "True"
 }

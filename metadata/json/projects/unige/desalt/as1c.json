@@ -38,9 +38,9 @@
 "project_long_name":    "Desalination V1V2 project",
 "sample_long_name":     "Desalt SAL-AS1c",
 
-"custom_grouping":    "Ashqelon",
+"custom_grouping":      "Ashqelon",
 "custom_attribute":     "Proximal",
-"replicate_id":     "1",
+"replicate_id":         "1",
 
 "fwd_read_count":       "367728",
 "rev_read_count":       "367728",
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":                "1.5",
+"boat_name":            "Dingui"
 
 "sentinel":             "True"
 }

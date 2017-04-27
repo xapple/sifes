@@ -63,15 +63,15 @@ for i, row in df.iterrows():
                      } if content.get('contact_two_name') else False
     content['second_contact'] = second_contact
 
-    # Figure out the path #
-    path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
-    path = path % (content['organization'].strip('"'),
-                   content['project_short_name'].strip('"'),
-                   content['sample_short_name'].strip('"'))
+    # Figure out the output path #
+    out_path = home + "repos/sifes/metadata/json/projects/%s/%s/%s.json"
+    out_path = out_path % (content['organization'].strip('"'),
+                           content['project_short_name'].strip('"'),
+                           content['sample_short_name'].strip('"'))
 
     # Create directory if it doesn't exist #
-    dir_path = os.path.dirname(path)
-    if not os.path.exists(dir_path): os.makedirs(dir_path)
+    out_dir = os.path.dirname(out_path)
+    if not os.path.exists(out_dir): os.makedirs(out_dir)
 
     # Get the template and a renderer #
     template = JsonTemplate(content)
@@ -83,4 +83,4 @@ for i, row in df.iterrows():
     text = renderer.render(template, content)
 
     # Write it #
-    with codecs.open(path, 'w', encoding='utf-8') as handle: handle.write(text)
+    with codecs.open(out_path, 'w', encoding='utf-8') as handle: handle.write(text)

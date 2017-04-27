@@ -38,9 +38,9 @@
 "project_long_name":    "Desalination foram project",
 "sample_long_name":     "Foram SAL-VMSO1a",
 
-"custom_grouping":    "Soreq",
+"custom_grouping":      "Soreq",
 "custom_attribute":     "Proximal",
-"replicate_id":     "4",
+"replicate_id":         "4",
 
 "fwd_read_count":       "51956",
 "rev_read_count":       "51956",
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":                "18",
+"boat_name":            "MedEx"
 
 "sentinel":             "True"
 }

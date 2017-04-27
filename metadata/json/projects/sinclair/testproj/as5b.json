@@ -38,9 +38,9 @@
 "project_long_name":    "Testproj project",
 "sample_long_name":     "Desalt SAL-AS5b",
 
-"custom_grouping":    "Ashqelon",
+"custom_grouping":      "Ashqelon",
 "custom_attribute":     "Distant",
-"replicate_id":     "3",
+"replicate_id":         "3",
 
 
 
@@ -91,6 +91,9 @@
 
 
 
+
+"depth":   "5",
+"boat_name":    "MedEx"
 
 "sentinel":             "True"
 }
