@@ -2,15 +2,22 @@
 from __future__ import division
 
 # Built-in modules #
-import shutil, multiprocessing
+import shutil
 
 # Internal modules #
-from plumbing.autopaths import AutoPaths
-from plumbing.cache import property_cached
+from sifes.location import seqenv_graphs
+
+# First party modules #
+import seqenv
+from plumbing.autopaths  import AutoPaths
+from plumbing.cache      import property_cached
 from plumbing.csv_tables import TSVTable
 
 # Third party modules #
-import seqenv
+import pandas
+
+# Constants #
+class Dummy(object): pass
 
 ###############################################################################
 class Seqenv(object):
@@ -18,7 +25,8 @@ class Seqenv(object):
 
     all_paths = """
     /abundances.tsv
-    /output/
+    /output/samples_to_names.tsv
+    /graphs/
     """
 
     default_N         = 2000
@@ -55,3 +63,38 @@ class Seqenv(object):
         self.parent.otu_table.results.p.norm.transpose(self.abundances, d='\t')
         # Do it #
         self.analysis.run()
+
+    @property_cached
+    def results(self):
+        results = SeqenvResults(self)
+        message = "You can't access results from seqenv before running the algorithm."
+        if not results: raise Exception(message)
+        return results
+
+###############################################################################
+class SeqenvResults(object):
+
+    def __nonzero__(self): return bool(self.p.samples_to_names)
+
+    def __init__(self, wrapper):
+        # Attributes #
+        self.wrapper  = wrapper
+        self.p        = wrapper.p
+        self.analysis = wrapper.analysis
+        self.cluster  = wrapper.cluster
+        self.samples  = wrapper.cluster.samples
+
+    @property_cached
+    def samples_to_names(self):
+        return pandas.io.parsers.read_csv(self.p.samples_to_names, sep='\t', index_col=0, encoding='utf-8')
+
+    @property_cached
+    def graphs(self):
+        """Sorry for the black magic. The result is an object whose attributes
+        are all the graphs found in otu_table_graphs.py initialized with this
+        instance as only argument."""
+        result = Dummy()
+        for graph in seqenv_graphs.__all__:
+            cls = getattr(seqenv_graphs, graph)
+            setattr(result, cls.short_name, cls(self))
+        return result

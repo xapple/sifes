@@ -37,7 +37,6 @@ class SampleReport(Document):
         self.copy_base = FilePath(self.copy_base)
         # Where should we cache stuff #
         self.cache_dir = DirectoryPath(self.base_dir + 'cached/')
-        self.cache_dir.create_if_not_exists()
 
     @property_cached
     def template(self): return SampleTemplate(self)
@@ -45,6 +44,8 @@ class SampleReport(Document):
     def generate(self, verbose=False):
         # Message #
         if verbose: print "Making report for sample '%s'" % self.sample.short_name
+        # Make sure the cache directory exists #
+        self.cache_dir.create_if_not_exists()
         # Dynamic templates #
         self.markdown = unicode(self.template)
         # Render to latex #

@@ -26,6 +26,8 @@ To get report:
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/seqenv/graphs/seqenv_heatmap.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
+
 """
 
 import os
@@ -99,6 +101,12 @@ def otu_plot(p):
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
+
+print("# Make sub taxa graphs - 0h0x #")
+with Timer():
+    map(lambda sub:sub.run(), proj.cluster.sub_taxa_tables)
+    graphs = (g for sub in proj.cluster.sub_taxa_tables for g in sub.results.graphs.by_rank)
+    map(lambda g:g(rerun=True), graphs)
 
 ###############################################################################
 print("# Make cluster reports #")

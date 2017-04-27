@@ -10,14 +10,14 @@ import shutil
 
 # Internal modules #
 import sifes
-from sifes.taxonomy  import mothur_classify
-from sifes.report    import clusters
-from sifes.groups    import cluster
-from sifes.filtering import seq_filter
+from sifes.taxonomy                  import mothur_classify
+from sifes.report                    import clusters
+from sifes.groups                    import cluster
+from sifes.filtering                 import seq_filter
 from sifes.demultiplex.demultiplexer import Demultiplexer
 from sifes.distribute.bundle         import Bundle
 from sifes.distribute.upload         import DropBoxRclone
-
+from sifes.location.seqenv_graphs    import SeqenvHeatmap
 # First party modules #
 from plumbing.timer     import Timer
 
@@ -53,3 +53,5 @@ sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'pr_two'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
 
 sifes.groups.cluster.Cluster.sub_taxa                          = ((2,'Metazoa'),)
+
+sifes.location.seqenv_graphs.SeqenvHeatmap.custom_metadata     =

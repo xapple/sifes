@@ -38,7 +38,7 @@ class TaxaTable(object):
     /graphs/
     """
 
-    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.centering.results.centers)
+    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.result_dir)
     def __nonzero__(self): return bool(self.p.taxa_table_phylum)
 
     def __init__(self, otu_table, taxonomy, result_dir):

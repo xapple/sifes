@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A script to run all the procedure on our foram desalt project.
+A script to run all the procedure on our 37F desalt project.
 
 To first generate the JSON files:
 
@@ -97,6 +97,12 @@ def otu_plot(p):
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
+
+print("# Make sub taxa graphs - 0h0x #")
+with Timer():
+    map(lambda sub:sub.run(), proj.cluster.sub_taxa_tables)
+    graphs = (g for sub in proj.cluster.sub_taxa_tables for g in sub.results.graphs.by_rank)
+    map(lambda g:g(rerun=True), graphs)
 
 ###############################################################################
 print("# Make cluster reports - 0h01 #")
