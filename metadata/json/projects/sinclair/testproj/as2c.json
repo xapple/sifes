@@ -92,8 +92,8 @@
 
 
 
-"depth":   "10",
-"boat_name":    "MedEx"
+"depth":                "10",
+"boat_name":            "MedEx",
 
 "sentinel":             "True"
 }

@@ -92,8 +92,8 @@
 
 
 
-"depth":   "3.8",
-"boat_name":    "Dingui"
+"depth":                "3.8",
+"boat_name":            "Dingui",
 
 "sentinel":             "True"
 }

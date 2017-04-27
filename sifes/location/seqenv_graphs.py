@@ -54,7 +54,7 @@ class SeqenvHeatmap(Graph):
         self.patches    = [mpatches.Patch(color=row_colors[i], label=g) for i,g in enumerate(custom_groups)]
         # Row right labels #
         if self.custom_metadata:
-            name_to_md        = lambda n: row_colors[custom_groups.index(self.parent.cluster[n].grouping)]
+            name_to_md        = lambda n: self.parent.cluster[n].info.get(self.custom_metadata)
             self.custom_md_fn = lambda n: "" if pandas.isnull(name_to_md(n)) else "%.2f" % name_to_md(n)
         # Functions #
         salinity  = lambda n: 45
