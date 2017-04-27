@@ -248,7 +248,7 @@ class ClusterTemplate(ReportTemplate):
     def seqenv_database(self):    return self.cluster.seqenv.database
     def seqenv_publication(self): return self.cluster.seqenv.article
     def seqenv_heatmap(self):
-        caption = "Heatmap of most significant isolation source controlled vocabulary"
+        caption = "Heatmap of most significant 'isolation source' controlled vocabulary"
         path    = self.cluster.seqenv.results.graphs.seqenv_heatmap()
         label   = "seqenv_heatmap"
         return str(ScaledFigure(path, caption, label))

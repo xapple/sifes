@@ -19,4 +19,5 @@ execfile(home + "deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 #proj.first.report.generate()
 
 ###############################################################################
-proj.cluster.report.generate()
+proj.cluster.seqenv.results.graphs.seqenv_heatmap(rerun=True)
+print proj.cluster.report.generate()

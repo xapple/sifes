@@ -24,17 +24,21 @@ class Dummy(object): pass
 class Seqenv(object):
     """Base class for Seqenv results processing."""
 
+    # Parameters #
     short_name = 'seqenv'
     long_name  = 'Seqenv version ' + seqenv.__version__
-    article    = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
+    article    = "https://peerj.com/articles/2690/"
+    base_url   = "https://github.com/xapple/seqenv"
     database   = nt.long_name
 
+    # Paths #
     all_paths = """
     /abundances.tsv
     /output/samples_to_names.tsv
     /graphs/
     """
 
+    # Options #
     default_N         = 2000
     default_threshold = 3.0
     default_threads   = 1

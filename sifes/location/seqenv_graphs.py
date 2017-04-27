@@ -44,7 +44,7 @@ class SeqenvHeatmap(Graph):
 
     # Options #
     custom_metadata = None
-    max_columns     = 25
+    max_columns     = 24
 
     def plot(self, **kwargs):
         # Data #
@@ -96,7 +96,12 @@ class SeqenvHeatmap(Graph):
         # Y labels names #
         self.clustergrid.ax_row_colors.set_ylabel("Sample names")
         if self.custom_metadata: self.axes.set_ylabel(reverse_corr.get(self.custom_metadata, self.custom_metadata))
+        # Remove the 'None' x label #
+        self.clustergrid.ax_row_colors.set_xticklabels([])
         # Add legend #
         pyplot.legend(handles=self.patches, bbox_to_anchor=(1, 1), bbox_transform=self.fig.transFigure)
+        # Change font of sample names #
+        ticks = self.clustergrid.ax_row_colors.get_yticklabels()
+        self.clustergrid.ax_row_colors.set_yticklabels(ticks, fontname='Menlo', fontweight='bold', size='medium')
         # Save it #
         self.save_plot(self.fig, self.axes, **kwargs)

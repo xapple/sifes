@@ -43,7 +43,7 @@ class TaxaBarstack(Graph):
         # Put a legend below current axis
         axes.legend(loc='upper center', bbox_to_anchor=(0.5, self.legend_anchor), fancybox=True, shadow=True, ncol=5)
         # Change font of sample names #
-        axes.set_xticklabels(axes.get_xticklabels(), fontname='Menlo', fontweight='bold', size= 'large')
+        axes.set_xticklabels(axes.get_xticklabels(), fontname='Menlo', fontweight='bold', size='large')
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
