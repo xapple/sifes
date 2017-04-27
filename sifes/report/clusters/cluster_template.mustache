@@ -146,11 +146,17 @@ For each individual sample, we can compute several diversity estimators. More de
 -------
 {{/alpha_diversity}}
 
+{{#seqenv}}
 Environmental tags
 ------------------
-Relying on different kinds of databases and their meta-data, we can try to infer and assign a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This method is also available upon request:
+Relying on different kinds of databases and their meta-data, we can try to infer and assign a typical environmental tag to each sequence. This, in turn, enables us to assign a linear combination of environmental tags to each sample and to the cluster as a whole. This is done using {{seqenv_citation}} and {{seqenv_database}}. The publication is available at:
 
-> <https://github.com/xapple/seqenv>
+> <{{seqenv_publication}}>
+
+{{seqenv_heatmap}}
+
+-------
+{{/seqenv}}
 
 {{#sub_taxa}}
 Sub taxonomic focus

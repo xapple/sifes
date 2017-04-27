@@ -9,9 +9,10 @@ from sifes.location import seqenv_graphs
 
 # First party modules #
 import seqenv
-from plumbing.autopaths  import AutoPaths
-from plumbing.cache      import property_cached
-from plumbing.csv_tables import TSVTable
+from seqsearch.databases.nt import nt
+from plumbing.autopaths     import AutoPaths
+from plumbing.cache         import property_cached
+from plumbing.csv_tables    import TSVTable
 
 # Third party modules #
 import pandas
@@ -23,6 +24,11 @@ class Dummy(object): pass
 class Seqenv(object):
     """Base class for Seqenv results processing."""
 
+    short_name = 'seqenv'
+    long_name  = 'Seqenv version ' + seqenv.__version__
+    article    = "http://www.nature.com/doifinder/10.1038/nmeth.2604"
+    database   = nt.long_name
+
     all_paths = """
     /abundances.tsv
     /output/samples_to_names.tsv
@@ -32,6 +38,8 @@ class Seqenv(object):
     default_N         = 2000
     default_threshold = 3.0
     default_threads   = 1
+
+    def __nonzero__(self): return bool(self.p.samples_to_names)
 
     def __init__(self, parent, base_dir=None):
         # Parent #

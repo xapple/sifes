@@ -237,6 +237,22 @@ class ClusterTemplate(ReportTemplate):
         table = tabulate(table, headers=['#'] + info.keys(), numalign="right", tablefmt="pipe")
         return table + "\n\n   : Summary of diversity estimates for all samples."
 
+    # Seqenv #
+    def seqenv(self):
+        if not self.cluster.seqenv: return False
+        params = ('seqenv_citation', 'seqenv_database', 'seqenv_publication',
+                  'seqenv_heatmap')
+        return {p:getattr(self, p) for p in params}
+
+    def seqenv_citation(self):    return self.cluster.seqenv.long_name
+    def seqenv_database(self):    return self.cluster.seqenv.database
+    def seqenv_publication(self): return self.cluster.seqenv.article
+    def seqenv_heatmap(self):
+        caption = "Heatmap of most significant isolation source controlled vocabulary"
+        path    = self.cluster.seqenv.results.graphs.seqenv_heatmap()
+        label   = "seqenv_heatmap"
+        return str(ScaledFigure(path, caption, label))
+
     # Subtaxa #
     def sub_taxa(self):
         """Optional extra figures."""

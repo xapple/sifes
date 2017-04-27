@@ -80,6 +80,9 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables #")
 with Timer(): proj.cluster.taxa_table.run()
 
+print("# Run seqenv #")
+with Timer(): proj.cluster.seqenv.run(cleanup=True)
+
 print("# Make sample graphs #")
 def sample_plots(s):
     s.graphs.chao1(rerun=True)
@@ -95,6 +98,7 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    p.cluster.seqenv.results.graphs.seqenv_heatmap(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
     #for g in p.cluster.locations_maps: g(rerun=True)

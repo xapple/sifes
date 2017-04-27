@@ -5,6 +5,9 @@ from __future__ import division
 import warnings
 
 # Internal modules #
+from sifes.metadata.correspondence import reverse_corr
+
+# First party modules #
 from plumbing.graphs import Graph
 
 # Third party modules #
@@ -29,7 +32,7 @@ row_colors = [(0.510530904690042, 0.6614299289084904, 0.1930849118538962),
 
 ################################################################################
 class SeqenvHeatmap(Graph):
-    """xxxx."""
+    """A cool clustered heatmap."""
 
     # Parameters #
     short_name = 'seqenv_heatmap'
@@ -41,10 +44,15 @@ class SeqenvHeatmap(Graph):
 
     # Options #
     custom_metadata = None
+    max_columns     = 25
 
     def plot(self, **kwargs):
         # Data #
-        self.df = self.parent.samples_to_names
+        self.df = self.parent.samples_to_names.copy()
+        # Filter #
+        best_columns = self.df.sum(axis=1).sort_values(ascending=False).index[0:self.max_columns]
+        self.df = self.df.reindex_axis(best_columns)
+        # Transform #
         self.df = self.df.transpose()
         self.df = self.df.applymap(numpy.sqrt)
         # Row colors #
@@ -55,12 +63,7 @@ class SeqenvHeatmap(Graph):
         # Row right labels #
         if self.custom_metadata:
             name_to_md        = lambda n: self.parent.cluster[n].info.get(self.custom_metadata)
-            self.custom_md_fn = lambda n: "" if pandas.isnull(name_to_md(n)) else "%.2f" % name_to_md(n)
-        # Functions #
-        salinity  = lambda n: 45
-        sal_name  = lambda n: "" if pandas.isnull(salinity(n)) else "%.2f" % salinity(n)
-        age_name  = lambda n: 21
-
+            self.custom_md_fn = lambda n: "" if pandas.isnull(name_to_md(n)) else name_to_md(n)
         # Custom color map #
         start_color   = (1.0,   1.0,   0.15)
         sentinel_cl   = (0.95,  0.5,   0.15)
@@ -92,7 +95,7 @@ class SeqenvHeatmap(Graph):
             self.axes.set_yticklabels(labels)
         # Y labels names #
         self.clustergrid.ax_row_colors.set_ylabel("Sample names")
-        if self.custom_metadata: self.axes.set_ylabel(self.custom_metadata)
+        if self.custom_metadata: self.axes.set_ylabel(reverse_corr.get(self.custom_metadata, self.custom_metadata))
         # Add legend #
         pyplot.legend(handles=self.patches, bbox_to_anchor=(1, 1), bbox_transform=self.fig.transFigure)
         # Save it #

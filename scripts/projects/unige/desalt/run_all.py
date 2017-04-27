@@ -26,7 +26,8 @@ To get report:
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt_plexed/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/samples/unige/desalt/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
-    
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/desalt/cluster/desalt/seqenv/graphs/seqenv_heatmap.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
+
 """
 
 import os
@@ -79,6 +80,9 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables - 0h01 #")
 with Timer(): proj.cluster.taxa_table.run()
 
+print("# Run seqenv - 1h38 #")
+with Timer(): proj.cluster.seqenv.run(cleanup=True)
+
 print("# Make sample graphs - 0h05 #")
 def sample_plots(s):
     s.graphs.chao1(rerun=True)
@@ -94,6 +98,7 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    p.cluster.seqenv.results.graphs.seqenv_heatmap(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
     #for g in p.cluster.locations_maps: g(rerun=True)

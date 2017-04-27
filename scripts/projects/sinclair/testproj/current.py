@@ -19,4 +19,4 @@ execfile(home + "deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 #proj.first.report.generate()
 
 ###############################################################################
-#proj.cluster.report.generate()
+proj.cluster.report.generate()

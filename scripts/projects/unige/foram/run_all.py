@@ -24,6 +24,8 @@ To run everything:
 To get report:
 
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/seqenv/graphs/seqenv_heatmap.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
+
 """
 
 import os
@@ -76,6 +78,9 @@ with Timer(): proj.cluster.otu_table.run()
 print("# Make the taxa tables - 0h01 #")
 with Timer(): proj.cluster.taxa_table.run()
 
+print("# Run seqenv - 0hxx #")
+with Timer(): proj.cluster.seqenv.run(cleanup=True)
+
 print("# Make sample graphs - 0h02 #")
 def sample_plots(s):
     s.graphs.chao1(rerun=True)
@@ -91,6 +96,7 @@ def otu_plot(p):
     p.cluster.otu_table.results.graphs.otu_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.sample_sums_graph(rerun=True)
     p.cluster.otu_table.results.graphs.cumulative_presence(rerun=True)
+    p.cluster.seqenv.results.graphs.seqenv_heatmap(rerun=True)
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
     #for g in p.cluster.locations_maps: g(rerun=True)
