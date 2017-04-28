@@ -2,13 +2,13 @@
 from __future__ import division
 
 # Built-in modules #
-import shutil
+import inspect, shutil
 from collections import OrderedDict
 
 # Internal modules #
-
 import sifes
 from sifes.report import ReportTemplate
+from sifes.metadata.correspondence import reverse_corr
 
 # First party modules #
 from plumbing.autopaths import FilePath
@@ -159,7 +159,7 @@ class ClusterTemplate(ReportTemplate):
         return table + "\n\n   : Summary information for all samples."
 
     # OTU table filtering #
-    def unwanted_taxa(self):       return andify(self.otu_table.unwanted_taxa)
+    def unwanted_taxa(self):        return andify(self.otu_table.unwanted_taxa)
     def otus_filtered(self):        return split_thousands(len(self.otu_table.results.centers))
     def otu_sizes_graph(self):
         caption = "Distribution of OTU sizes"
@@ -221,12 +221,11 @@ class ClusterTemplate(ReportTemplate):
     def alpha_diversity(self):
         return {'alpha_diversity_table': self.alpha_diversity_table(),
                 'down_sampled_to':       self.down_sampled_to()}
-    def down_sampled_to(self):
-        return split_thousands(min(sum(s.otu_counts) for s in self.samples))
+    def down_sampled_to(self): return split_thousands(self.cluster.down_to)
     def alpha_diversity_table(self):
         from skbio.diversity import alpha_diversity  as alphadiv
         from skbio.stats     import subsample_counts as subsample
-        k = min(sum(s.otu_counts) for s in self.samples)
+        k    = self.cluster.down_to
         info = OrderedDict((
             ('Name',     lambda s: "**" + s.short_name + "**"),
             ('Chao1',    lambda s: alphadiv('chao1',   subsample(s.otu_counts, k))),
@@ -273,3 +272,33 @@ class ClusterTemplate(ReportTemplate):
 
     # Beta-dispersion #
     pass
+
+    # Diversity regression #
+    def diversity_reg(self):
+        if not self.cluster.otu_table: return False
+        params = ('diversity_reg_metric', 'diversity_reg_down_to',
+                  'diversity_reg_chao1', 'diversity_reg_ace',
+                  'diversity_reg_shannon', 'diversity_reg_simpson',)
+        return {p:getattr(self, p) for p in params}
+
+    def diversity_reg_metric(self):
+        metric = self.cluster.graphs.diversity_reg.custom_metadata
+        return reverse_corr.get(metric, metric)
+    def diversity_reg_down_to(self): return split_thousands(self.cluster.down_to)
+
+    def diversity_reg_chao1(self):
+        caption = "Chao1 diversity sample comparison"
+        path = self.cluster.graphs.diversity_reg_chao1()
+        return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
+    def diversity_reg_ace(self):
+        caption = "Ace diversity sample comparison"
+        path = self.sample.graphs.diversity_reg_ace()
+        return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
+    def diversity_reg_shannon(self):
+        caption = "Shannon diversity sample comparison"
+        path = self.sample.graphs.diversity_reg_shannon()
+        return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
+    def diversity_reg_simpson(self):
+        caption = "Simpson diversity sample comparison"
+        path = self.sample.graphs.diversity_reg_simpson()
+        return str(ScaledFigure(path, caption, inspect.stack()[0][3]))

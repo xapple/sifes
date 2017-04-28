@@ -5,6 +5,7 @@ import sifes
 from sifes.location.seqenv_wrapper    import Seqenv
 from sifes.report.clusters            import ClusterReport
 from sifes.groups.aggregate           import Aggregate
+from sifes.groups                     import cluster_graphs
 from sifes.groups.cluster_graphs      import ClusterLocationMap
 from sifes.centering.uparse           import Uparse
 from sifes.taxonomy.crest             import Crest
@@ -24,6 +25,9 @@ from plumbing.cache import property_cached
 # Third party modules #
 import numpy
 from shell_command import shell_output
+
+# Constants #
+class Dummy(object): pass
 
 ###############################################################################
 class Cluster(Aggregate):
@@ -115,9 +119,19 @@ class Cluster(Aggregate):
         return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir) for rank,taxa in self.sub_taxa]
 
     @property_cached
+    def down_to(self):
+        """The number that we need to rarefy each sample so that diversity is comparable."""
+        return min(sum(s.otu_counts) for s in self.samples)
+
+    @property_cached
     def seqenv(self):
         """Will produce the isolation source linear combination predictions."""
         return Seqenv(self, self.p.seqenv_dir)
+
+    @property_cached
+    def unifrac_matrix(self):
+        """Will produce the UniFrac distance matrix."""
+        return UniFrac(self.otu_table, self.p.distances_dir)
 
     @property_cached
     def nmds_graph(self):
@@ -125,11 +139,6 @@ class Cluster(Aggregate):
          distance metric such as the Horn 1966 (adapted from Morisita 1959)" one,
          will place every sample on an ordination plot."""
         return GraphNMDS(self, self.p.graphs_dir)
-
-    @property_cached
-    def unifrac_matrix(self):
-        """Will produce the UniFrac distance matrix."""
-        return UniFrac(self.otu_table, self.p.distances_dir)
 
     @property_cached
     def locations_maps(self):
@@ -141,6 +150,17 @@ class Cluster(Aggregate):
             short_name = 'location_map_' + g.lower()
             maps.append(ClusterLocationMap(g, samples, self, short_name=short_name))
         return maps
+
+    @property_cached
+    def graphs(self):
+        """Sorry for the black magic. The result is an object whose attributes
+        are all the graphs found in cluster_graphs.py initialized with this
+        instance as only argument."""
+        result = Dummy()
+        for graph in cluster_graphs.__all__:
+            cls = getattr(cluster_graphs, graph)
+            setattr(result, cls.short_name, cls(self))
+        return result
 
     @property_cached
     def report(self):

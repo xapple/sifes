@@ -18,6 +18,7 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 from sifes.distribute.bundle         import Bundle
 from sifes.distribute.upload         import DropBoxRclone
 from sifes.location.seqenv_graphs    import SeqenvHeatmap
+from sifes.groups.cluster_graphs     import DiversityRegression
 
 # First party modules #
 from plumbing.timer     import Timer
@@ -49,4 +50,5 @@ sifes.groups.cluster.Cluster.default_taxonomy                  = 'qiime'
 sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'foraminifera'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'
 
-sifes.location.seqenv_graphs.SeqenvHeatmap.custom_metadata     = 'depth'
+sifes.location.seqenv_graphs.SeqenvHeatmap.custom_metadata      = 'depth'
+sifes.groups.cluster_graphs.DiversityRegression.custom_metadata = 'dist_exhaust'

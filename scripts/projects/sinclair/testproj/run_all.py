@@ -27,6 +27,7 @@ To get report:
     rsync -avz --update edna:/home/sinclair/SIFES/views/samples/sinclair/testproj/as1a/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/seqenv/graphs/seqenv_heatmap.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
+    rsync -avz --update edna:/home/sinclair/SIFES/views/projects/sinclair/testproj/cluster/testproj/graphs/diversity_reg_ace.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
 
 """
 

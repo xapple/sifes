@@ -94,6 +94,7 @@
 
 "depth":                "1.5",
 "boat_name":            "Dingui",
+"dist_exhaust":          "5",
 
 "sentinel":             "True"
 }

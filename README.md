@@ -102,6 +102,7 @@ Check that you have a working installation of R. Either the system version, or a
     $ pip install --user biom-format
     $ pip install --user future
     $ pip install --user scikit-bio==0.4.2
+    $ pip install --user seaborn
 
 And some extra first party ones:
 

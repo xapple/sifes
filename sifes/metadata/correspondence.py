@@ -81,6 +81,7 @@ corr = {
 
     u'Depth [m]':                            'depth',
     u'Boat name (vessel)':                   'boat_name',
+    u'Distance to exhaust [m]':              'dist_exhaust',
 }
 
 ###############################################################################

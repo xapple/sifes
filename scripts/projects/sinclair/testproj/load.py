@@ -18,6 +18,7 @@ from sifes.demultiplex.demultiplexer import Demultiplexer
 from sifes.distribute.bundle         import Bundle
 from sifes.distribute.upload         import DropBoxRclone
 from sifes.location.seqenv_graphs    import SeqenvHeatmap
+from sifes.groups.cluster_graphs     import DiversityRegression
 
 # First party modules #
 from plumbing.timer     import Timer
@@ -55,4 +56,5 @@ sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'
 
 sifes.groups.cluster.Cluster.sub_taxa                          = ((2,'Metazoa'),)
 
-sifes.location.seqenv_graphs.SeqenvHeatmap.custom_metadata     = 'depth'
+sifes.location.seqenv_graphs.SeqenvHeatmap.custom_metadata      = 'depth'
+sifes.groups.cluster_graphs.DiversityRegression.custom_metadata = 'dist_exhaust'

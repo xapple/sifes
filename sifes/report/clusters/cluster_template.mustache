@@ -25,7 +25,7 @@ Processing
 
 * Version `{{project_version}}` of the pipeline was used.
 
-* This document was generated at `{{now}}`.
+* This document was generated at `{{now}}` on `{{hostname}}`.
 
 {{#git}}
 * The exact git hash of the latest commit was: {{git_hash}}
@@ -169,3 +169,16 @@ Going back to the taxonomic classification, we can make also make a barstack foc
 
 -------
 {{/sub_taxa}}
+
+{{#diversity_reg}}
+Diversity regression
+--------------------
+Using the custom grouping of the samples to separate them and the '{{diversity_reg_metric}}' metric to order them, we can make the following plots with several different diversity estimators. The OTU counts are all rarefied down to a count of {{diversity_reg_down_to}} so that all metrics are comparable. Samples that are replicates will appear one above each other (thus giving a crude estimator of measure error),
+
+{{diversity_reg_chao1}}
+{{diversity_reg_ace}}
+{{diversity_reg_shannon}}
+{{diversity_reg_simpson}}
+
+-------
+{{/diversity_reg}}

@@ -1,14 +1,20 @@
 # Built-in modules #
+from functools import partial
 
 # Internal modules #
 from sifes.location.map_figure import MapFigure
 
 # First party modules #
+from plumbing.graphs import Graph
+from plumbing.common import uniquify_list
 
 # Third party modules #
+from matplotlib import pyplot
+from skbio.diversity import alpha_diversity  as alphadiv
+from skbio.stats     import subsample_counts as subsample
 
 # Constants #
-__all__ = ['ClusterLocationMap']
+__all__ = ['Chao1', 'Ace', 'Shannon', 'Simpson']
 
 ###############################################################################
 class ClusterLocationMap(MapFigure):
@@ -28,3 +34,51 @@ class ClusterLocationMap(MapFigure):
             self.add_marker(s.latitude, s.longitude, color=colors.index(s.attribute))
         # Do it #
         self.save_map(**kwargs)
+
+###############################################################################
+class DiversityRegression(Graph):
+    """Group samples and plot their alpha diversity along a metric."""
+
+    # Options #
+    custom_metadata  = 'depth'
+
+    def plot(self, **kwargs):
+        # The custom sample grouping #
+        groups = uniquify_list([s.grouping for s in self.parent.samples])
+        # Make as many subplots as there are groups #
+        self.fig, self.axes = pyplot.subplots(1, len(groups), sharex=True, sharey=True)
+        # Make each subplot #
+        for axe, group in zip(self.axes, groups): self.subplot(axe, group)
+        # Save it #
+        self.save_plot(self.fig, self.axes, **kwargs)
+
+    def subplot(self, axe, group):
+        samples = [s for s in self.parent.samples if s.grouping == group]
+        for s in samples:
+            x = float(s.info.get(self.custom_metadata))
+            y = float(self.div_fn(s, self.parent.down_to))
+            axe.plot(x, y, 'ko')
+
+    def div_fn(self, s, k):
+        return alphadiv(self.diversity_metric, subsample(s.otu_counts, k))
+
+###############################################################################
+class Chao1(DiversityRegression):
+    diversity_metric = 'chao1'
+    short_name       = 'diversity_reg_chao1'
+    description      = "Chao1 (bias-corrected version)"
+
+class Ace(DiversityRegression):
+    diversity_metric = 'ace'
+    short_name       = 'diversity_reg_ace'
+    description      = "Ace (Abundance-based Coverage Estimator)"
+
+class Shannon(DiversityRegression):
+    diversity_metric = 'shannon'
+    short_name       = 'diversity_reg_shannon'
+    description      = "Shannon (entropy of counts H, in bits)"
+
+class Simpson(DiversityRegression):
+    diversity_metric = 'simpson'
+    short_name       = 'diversity_reg_simpson'
+    description      = "Simpson (1 - dominance)"

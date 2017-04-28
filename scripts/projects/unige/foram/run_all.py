@@ -26,6 +26,10 @@ To get report:
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/report.pdf ~/Desktop/current_report.pdf; open ~/Desktop/current_report.pdf
     rsync -avz --update edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/seqenv/graphs/seqenv_heatmap.pdf ~/Desktop/current_graph.pdf; open ~/Desktop/current_graph.pdf
 
+To send the replicates picture:
+
+    rsync -avz ~/repos/desalt_manuscript/figures/sampling_strategy/figure.pdf edna:/home/sinclair/SIFES/views/projects/unige/foram/cluster/foram/report/replicates.pdf
+    rsync -avz ~/repos/desalt_manuscript/figures/sampling_strategy/figure.pdf warwick-node:/home/lucas/SIFES/views/projects/unige/foram/cluster/foram/report/replicates.pdf
 """
 
 import os

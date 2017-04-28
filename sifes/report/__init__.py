@@ -9,7 +9,7 @@ from pymarktex import Template
 from plumbing.common import pretty_now
 
 # Constants #
-ssh_header = "ssh://" + os.environ.get("FILESYSTEM_HOSTNAME", socket.getfqdn())
+ssh_header = "ssh://" + os.environ.get("FILESYSTEM_HOSTNAME", socket.gethostname())
 
 ###############################################################################
 class ReportTemplate(Template):
@@ -19,6 +19,7 @@ class ReportTemplate(Template):
     def project_url(self):       return sifes.url
     def project_version(self):   return sifes.__version__
     def now(self):               return pretty_now()
+    def hostname(self):          return socket.gethostname()
     def git(self):
         if not sifes.git_repo: return False
         return {'git_hash'  : sifes.git_repo.hash,
