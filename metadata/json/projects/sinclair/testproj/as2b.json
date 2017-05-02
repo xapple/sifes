@@ -94,7 +94,7 @@
 
 "depth":                "10",
 "boat_name":            "MedEx",
-"dist_exhaust":          "8",
+"dist_exhaust":         "545.16",
 
 "sentinel":             "True"
 }

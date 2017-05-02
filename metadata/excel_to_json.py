@@ -15,6 +15,7 @@ NB: The excel sheet must have an non-empty cell in the position (0,1)
 import sys, os, pandas, codecs, pystache
 
 # Internal modules #
+import sifes
 from sifes.metadata.correspondence import corr
 
 # Third party modules #

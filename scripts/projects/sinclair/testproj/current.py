@@ -21,4 +21,4 @@ execfile(home + "deploy/sifes/scripts/projects/sinclair/testproj/load.py")
 ###############################################################################
 #proj.cluster.seqenv.results.graphs.seqenv_heatmap(rerun=True)
 #print proj.cluster.report.generate()
-proj.cluster.graphs.diversity_reg_ace()
+proj.cluster.graphs.diversity_reg_ace(rerun=True)

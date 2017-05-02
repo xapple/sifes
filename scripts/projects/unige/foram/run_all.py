@@ -104,6 +104,10 @@ def otu_plot(p):
     p.cluster.reads.graphs.length_dist(rerun=True)
     for g in p.cluster.taxa_table.results.graphs.by_rank: g(rerun=True)
     #for g in p.cluster.locations_maps: g(rerun=True)
+    p.cluster.graphs.diversity_reg_chao1(rerun=True)
+    p.cluster.graphs.diversity_reg_ace(rerun=True)
+    p.cluster.graphs.diversity_reg_shannon(rerun=True)
+    p.cluster.graphs.diversity_reg_simpson(rerun=True)
     if len (p.cluster) < 2: return
     p.cluster.nmds_graph(rerun=True)
 with Timer(): otu_plot(proj)
