@@ -84,11 +84,11 @@ class DiversityRegression(Graph):
         # Add regression result #
         matplotlib.rc('text', usetex=True)
         text  = "\\centerline{\\textbf{Least-squares reg.}}\n"
-        text += "{\\raggedright \\textit{Residual stderr}: \\texttt{%i}}\n"
+        text += "{\\raggedright \\textit{Residual stderr}: \\texttt{%.2f}}\n"
         text += "{\\raggedright \\textit{R\\textsuperscript{2}:} \\texttt{%.2f}}\n"
-        text += "{\\raggedright \\textit{Slope}: \\texttt{%.2f}}"
+        text += "{\\raggedright \\textit{Slope}: \\texttt{%.2E}}"
         text  = text % (residual_std_error, r_value**2, slope)
-        anchor = AnchoredText(text, prop=dict(size=11), frameon=True, loc=2)
+        anchor = AnchoredText(text, prop=dict(size=11), frameon=True, loc=4)
         anchor.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
         axe.add_artist(anchor)
 

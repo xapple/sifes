@@ -282,7 +282,7 @@ class ClusterTemplate(ReportTemplate):
         return {p:getattr(self, p) for p in params}
 
     def diversity_reg_metric(self):
-        metric = self.cluster.graphs.diversity_reg.custom_metadata
+        metric = self.cluster.graphs.diversity_reg_chao1.custom_metadata
         return reverse_corr.get(metric, metric)
     def diversity_reg_down_to(self): return split_thousands(self.cluster.down_to)
 
@@ -292,13 +292,13 @@ class ClusterTemplate(ReportTemplate):
         return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
     def diversity_reg_ace(self):
         caption = "Ace diversity sample comparison"
-        path = self.sample.graphs.diversity_reg_ace()
+        path = self.cluster.graphs.diversity_reg_ace()
         return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
     def diversity_reg_shannon(self):
         caption = "Shannon diversity sample comparison"
-        path = self.sample.graphs.diversity_reg_shannon()
+        path = self.cluster.graphs.diversity_reg_shannon()
         return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
     def diversity_reg_simpson(self):
         caption = "Simpson diversity sample comparison"
-        path = self.sample.graphs.diversity_reg_simpson()
+        path = self.cluster.graphs.diversity_reg_simpson()
         return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
