@@ -10,7 +10,7 @@ home = os.environ.get('HOME', '~') + '/'
 execfile(home + "deploy/sifes/scripts/projects/unige/foram/load.py")
 
 ###############################################################################
-if True:
+if False:
     proj.cluster.graphs.diversity_reg_chao1(rerun=True)
     proj.cluster.graphs.diversity_reg_ace(rerun=True)
     proj.cluster.graphs.diversity_reg_shannon(rerun=True)
@@ -19,7 +19,7 @@ if True:
     with Timer(): proj.cluster.report.generate()
 
 ###############################################################################
-if True:
+if False:
     print("# Bundle and upload - 0h0x #")
     bundle = Bundle("desalt_37f", proj.samples)
     dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt 37F delivery')
@@ -33,3 +33,7 @@ if True:
         dbx_sync.run()
 
     print("Total delivery: %s" % bundle.base_dir.size)
+
+###############################################################################
+if True:
+    pass

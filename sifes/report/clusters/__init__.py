@@ -302,3 +302,16 @@ class ClusterTemplate(ReportTemplate):
         caption = "Simpson diversity sample comparison"
         path = self.cluster.graphs.diversity_reg_simpson()
         return str(ScaledFigure(path, caption, inspect.stack()[0][3]))
+
+    # Redundancy Analysis #
+    def redundancy_analysis(self):
+        params = ('rda_citation'
+                  'rda_heatmap')
+        return {p:getattr(self, p) for p in params}
+
+    def rda_citation(self):    return self.cluster.seqenv.long_name
+    def rda_heatmap(self):
+        caption = "Heatmap of most significant 'isolation source' controlled vocabulary"
+        path    = self.cluster.seqenv.results.graphs.seqenv_heatmap()
+        label   = "seqenv_heatmap"
+        return str(ScaledFigure(path, caption, label))
