@@ -82,6 +82,11 @@ corr = {
     u'Depth [m]':                            'depth',
     u'Boat name (vessel)':                   'boat_name',
     u'Distance to exhaust [m]':              'dist_exhaust',
+    u'Salinty [ppt]':                        'salinity',
+    u'Temperature [℃]':                      'temperature',
+    u'Grain size mode [µm]':                 'grain_size',
+    u'Luminescent Dissolved Oxygen [% Sat]': 'ldo_sat',
+
 }
 
 ###############################################################################

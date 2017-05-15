@@ -39,9 +39,9 @@ had3b
 had3c"""
 
 # Calculate distance to exhaust #
-exhausts = {'Ashqelon': (31.63212, 34.5167),
-            'Soreq':    (31.94186, 34.68862),
-            'Hadera':   (32.46502, 34.882583)}
+exhausts = {'Ashqelon': (31.63212,  34.5167),
+            'Soreq':    (31.941850, 34.687533),
+            'Hadera':   (32.46502,  34.882583)}
 
 # Loop #
 names = set(s.short_name for s in proj)
