@@ -59,11 +59,11 @@
 "primers": {
         "name":    "V1V2 nSSU rDNA (18S rDNA)",
         "sense":   "5' to 3'",
-        "forward": {"name": "SSUFO4", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
-        "reverse": {"name": "SSUR22", "sequence": "CCTGCTGCCTTCCTTRGA"}
+        "forward": {"name": "SSUF04", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "SSUR22mod", "sequence": "CCTGCTGCCTTCCTTRGA"}
 },
 
-
+"dna_after":     ["30", "ng/µl"],
 "phix_spiking":   "0.01",
 
 "library_strategy":     "AMPLICON",
@@ -94,7 +94,11 @@
 
 "depth":                "18",
 "boat_name":            "MedEx",
-"dist_exhaust":         "0",
+"dist_exhaust":         "102.78",
+"salinity":             "40.8",
+"temperature":          "24.88",
+"grain_size":           "160.36",
+"ldo_sat":              "99.74",
 
 "sentinel":             "True"
 }

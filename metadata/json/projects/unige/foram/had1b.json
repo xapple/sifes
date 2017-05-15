@@ -95,6 +95,10 @@
 "depth":                "3.8",
 "boat_name":            "Dingui",
 "dist_exhaust":         "0",
+"salinity":             "41.04",
+"temperature":          "25.24",
+"grain_size":           "237.71",
+"ldo_sat":              "105.6",
 
 "sentinel":             "True"
 }

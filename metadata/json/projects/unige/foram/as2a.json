@@ -95,6 +95,10 @@
 "depth":                "10",
 "boat_name":            "MedEx",
 "dist_exhaust":         "545.16",
+"salinity":             "39.6",
+"temperature":          "24.87",
+"grain_size":           "209.975",
+"ldo_sat":              "99.7",
 
 "sentinel":             "True"
 }

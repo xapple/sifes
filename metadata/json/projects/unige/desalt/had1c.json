@@ -59,11 +59,11 @@
 "primers": {
         "name":    "V1V2 nSSU rDNA (18S rDNA)",
         "sense":   "5' to 3'",
-        "forward": {"name": "SSUFO4", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
-        "reverse": {"name": "SSUR22", "sequence": "CCTGCTGCCTTCCTTRGA"}
+        "forward": {"name": "SSUF04", "sequence": "GCTTGTCTCAAAGATTAAGCC"},
+        "reverse": {"name": "SSUR22mod", "sequence": "CCTGCTGCCTTCCTTRGA"}
 },
 
-
+"dna_after":     ["20.2", "ng/µl"],
 "phix_spiking":   "0.01",
 
 "library_strategy":     "AMPLICON",
@@ -95,6 +95,10 @@
 "depth":                "3.8",
 "boat_name":            "Dingui",
 "dist_exhaust":         "0",
+"salinity":             "41.04",
+"temperature":          "25.24",
+"grain_size":           "237.71",
+"ldo_sat":              "105.6",
 
 "sentinel":             "True"
 }
