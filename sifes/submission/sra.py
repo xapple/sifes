@@ -183,8 +183,8 @@ class SampleSRA(object):
         # depth #
         line += ["1.5"] # [self.s.info['organism']] # [default_bio["depth"]]
         # env_biome, env_feature, env_material #
-        line += [self.s.info['env_biome']] #[default_bio["env_biome"]]
-        line += [self.s.info['env_feature']] #[default_bio["env_feature"]]
+        line += [self.s.info['env_biome']]    #[default_bio["env_biome"]]
+        line += [self.s.info['env_feature']]  #[default_bio["env_feature"]]
         line += [self.s.info['env_material']] #[default_bio["env_material"]]
         # geo_loc_name
         line += ["%s: %s" % (self.s.info['country'], ascii(self.s.info['location']))]

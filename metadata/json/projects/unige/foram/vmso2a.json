@@ -76,10 +76,10 @@
 "forward_read_length":  "151",
 "reverse_read_length":  "151",
 
-
-
-
-
+"organism":      "marine sediment metagenome",
+"env_biome":     "temperate mediterranean sea biome",
+"env_feature":   "marine sub-littoral zone",
+"env_material":  "shallow marine sediment",
 
 "date":         "2016-11-15 00:00:00",
 "latitude":     ["31.94068", "N"],
@@ -87,9 +87,9 @@
 "country":      "Israel",
 "location":     "Near Palmahim",
 
+"design_description": "Sediments were grabbed from a boat in the vincinty of the desalination plants, and sterile spoons used for sampling. The standard Illumina Truseq PCR free kit protocol was used, and the Nano setting was chosen with the MiSeq regent kit V2.",
 
-
-
+"bioproject":   "PRJNA386776",
 
 
 "depth":                "19",
