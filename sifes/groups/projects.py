@@ -2,12 +2,12 @@
 
 # Internal modules #
 from sifes.groups.aggregate import Aggregate
+from sifes.submission.sra   import LumpSRA
 from sifes.groups.lump      import Lump
 import sifes
 
 # First party modules #
-from plumbing.processes import prll_map
-from plumbing.timer     import Timer
+from plumbing.cache     import property_cached
 
 # Third party modules #
 
@@ -16,6 +16,11 @@ class Projects(Lump):
     """A collection of projects."""
     def __init__(self, name="all_projects", *args, **kwargs):
         super(self.__class__,self).__init__(name, *args, **kwargs)
+
+    @property_cached
+    def sra(self):
+        """Use this object to automate the submission to the SRA."""
+        return LumpSRA(self)
 
 ###############################################################################
 class Project(Aggregate):
@@ -33,8 +38,3 @@ class Project(Aggregate):
 
     @property
     def organization(self): return self.first.info.get('organization', '')
-
-    def run_analysis(self):
-        print "Join reads"
-        with Timer(): prll_map(lambda s: s.joiner.run(cpus=1), self)
-        for s in self: print s.short_name, s.joiner.results.unassembled_percent

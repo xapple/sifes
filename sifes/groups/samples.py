@@ -8,6 +8,7 @@ from sifes.joining.qiime_join   import QiimeJoin
 from sifes.joining.mothur_join  import MothurJoin
 from sifes.filtering.seq_filter import SeqFilter
 from sifes.groups               import sample_graphs
+from sifes.submission.sra       import SampleSRA
 
 # First party modules #
 from plumbing.autopaths import FilePath, DirectoryPath, AutoPaths
@@ -153,6 +154,11 @@ class Sample(object):
             cls = getattr(sample_graphs, graph)
             setattr(result, cls.short_name, cls(self))
         return result
+
+    @property_cached
+    def sra(self):
+        """An object to help generating the spreadsheets for SRA submission."""
+        return SampleSRA(self)
 
     @property_cached
     def report(self):

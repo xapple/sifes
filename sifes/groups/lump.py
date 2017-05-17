@@ -14,6 +14,7 @@ class Lump(object):
     """Put several Aggregates objects (or Projects objects) together."""
 
     all_paths = """
+    /sra/
     """
 
     def __repr__(self): return '<%s object "%s" with %i children>' % \
