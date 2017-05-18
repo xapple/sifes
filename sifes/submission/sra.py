@@ -8,12 +8,10 @@ Don't add any BioSamples at this step.
 2) Then submit the BioSamples (use the first TSV):
 https://submit.ncbi.nlm.nih.gov/subs/biosample/
 
+4) Use the FTP credentials to upload the data.
+
 3) Next, make a new submission here (use the second TSV):
 https://submit.ncbi.nlm.nih.gov/subs/sra/
-
-4) You can't finish the submission, you will have an option
-to go back to the submission list and create a preload folder.
-Use the FTP credentials to upload the data.
 
 5) Finish the submission
 
@@ -29,6 +27,7 @@ Example usage:
     foram  = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram/")
     lump = Projects("brine_disposal", [desalt, foram])
     lump.sra.write_bio_tsv()
+    for s in tqdm(lump.samples): s.sra.upload_to_sra()
     lump.sra.write_sra_tsv()
 """
 
@@ -86,7 +85,7 @@ header_sra =  [
     'bioproject_accession',
     'biosample_accession',
     'library_ID',
-    'title/short description',
+    'title',
     'library_strategy',
     'library_source',
     'library_selection',
@@ -98,6 +97,7 @@ header_sra =  [
     'alignment_software',
     'forward_read_length',
     'reverse_read_length',
+    'filetype',
     'filetype1',
     'filename1',
     'MD5_checksum1',
@@ -137,13 +137,13 @@ class SampleSRA(object):
                       verbose = True):
         """They have an FTP site where you should drop the files first."""
         # Print #
-        if verbose: print self.s.short_name + ' (' + self.s.name + ')'
+        if verbose: print self.s.short_name + ' (' + self.s.long_name + ')'
         # Connect #
         if verbose: print "Connecting..."
         self.ftp = FTPHost(address, usrname, passwrd)
         # Test #
-        assert self.s.fastq.fwd.count_bytes > 36
-        assert self.s.fastq.rev.count_bytes > 36
+        assert self.s.pair.fwd.count_bytes > 36
+        assert self.s.pair.rev.count_bytes > 36
         # Change directory #
         if verbose: print "Changing directories..."
         self.ftp.chdir(dirctry)
@@ -154,9 +154,9 @@ class SampleSRA(object):
         self.ftp.chdir(default_bio['bioproject_id'])
         # Upload #
         if verbose: print "Uploading forward..."
-        self.ftp.upload(self.s.fastq.fwd, self.base_name.format("forward"))
+        self.ftp.upload(self.s.pair.fwd, self.base_name.format("forward"))
         if verbose: print "Uploading reverse..."
-        self.ftp.upload(self.s.fastq.rev, self.base_name.format("reverse"))
+        self.ftp.upload(self.s.pair.rev, self.base_name.format("reverse"))
         # Return #
         self.ftp.close()
 
@@ -187,9 +187,9 @@ class SampleSRA(object):
         line += [self.s.info['depth']]
         line += ['-' + self.s.info['depth']]
         # env_biome, env_feature, env_material #
-        line += [self.s.info['env_biome']]    #[default_bio["env_biome"]]
-        line += [self.s.info['env_feature']]  #[default_bio["env_feature"]]
-        line += [self.s.info['env_material']] #[default_bio["env_material"]]
+        line += [self.s.info['env_biome']]    # [default_bio["env_biome"]]
+        line += [self.s.info['env_feature']]  # [default_bio["env_feature"]]
+        line += [self.s.info['env_material']] # [default_bio["env_material"]]
         # geo_loc_name
         line += ["%s: %s" % (self.s.info['country'], ascii(self.s.info['location']))]
         # lat_lon
@@ -210,37 +210,36 @@ class SampleSRA(object):
         """
         # project accession
         bioproj = self.s.info['bioproject']
-        if bioproj and bioproj != "PRJNAXXXXXX":  line = [bioproj]
-        else:                                     line = [default_bio['bioproject_id']]
+        line = [bioproj]
         # sample accession
         line += [self.s.info['biosample']]
         # library id
-        line += [self.s.short_name]
+        line += [self.s.project_short_name + '_' + self.s.short_name]
         # description
         machine = 'Illumina MiSeq' if 'machine' not in self.s.__dict__ else self.s.machine
         desc = "Sample '%s' (code %s) sampled on %s and run on a %s"
-        desc += " -- run number %i, pool number %i, barcode number %i."
-        line += [desc % (self.s.long_name, self.s.short_name, self.s.info['date'],
-                         machine, self.s.pool.run_num, self.s.pool.num, self.s.num)]
+        line += [desc % (self.s.long_name, self.s.short_name, self.s.info['date'], machine)]
         # library_strategy
         line += [self.s.info['library_strategy']]  # [default_sra['library_strategy']]
         line += [self.s.info['library_source']]    # [default_sra['library_source']]
         line += [self.s.info['library_selection']] # [default_sra['library_selection']]
-        line += [default_sra['library_layout']]    # [self.s.info['library_layout']]
+        line += [self.s.info['library_layout']]    #
         line += [self.s.info['platform']]          # [default_sra['platform']]
         line += [self.s.info['instrument_model']]  # [default_sra['instrument_model']]
         # design_description
-        line += [self.s.pool.info['design_description']]
+        line += [self.s.info['design_description']]
         # reference_genome_assembly
         line += ['', '']
-        # forward_read_length
+        # read_length
         line += [str(self.s.info['forward_read_length']), str(self.s.info['reverse_read_length'])]
+        # general filetype
+        line += ['fastq']
         # forward
         line += [default_sra['forward_filetype'], self.base_name.format("forward")]
-        line += [self.s.fastq.fwd.md5]
+        line += [self.s.info['fwd_md5']] # [self.s.pair.fwd.md5]
         # reverse
         line += [default_sra['reverse_filetype'], self.base_name.format("reverse")]
-        line += [self.s.fastq.rev.md5]
+        line += [self.s.info['rev_md5']] # [self.s.pair.rev.md5]
         # return
         return line
 
