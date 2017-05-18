@@ -90,7 +90,7 @@
 "design_description": "Sediments were grabbed from a boat in the vincinty of the desalination plants, and sterile spoons used for sampling. The standard Illumina Truseq PCR free kit protocol was used, and the `Standard` setting was chosen with the MiSeq regent kit V2.",
 
 "bioproject":   "PRJNA386776",
-
+"biosample":    "SAMN07139197",
 
 "depth":                "18",
 "boat_name":            "MedEx",

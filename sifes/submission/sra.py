@@ -8,10 +8,8 @@ Don't add any BioSamples at this step.
 2) Then submit the BioSamples (use the first TSV):
 https://submit.ncbi.nlm.nih.gov/subs/biosample/
 
-3) Next, make a new submission here (second TSV):
+3) Next, make a new submission here (use the second TSV):
 https://submit.ncbi.nlm.nih.gov/subs/sra/
-NB: You have to modify the second TSV to add the freshly made
-sample accession numbers.
 
 4) You can't finish the submission, you will have an option
 to go back to the submission list and create a preload folder.
@@ -25,11 +23,13 @@ http://trace.ncbi.nlm.nih.gov/Traces/sra_sub/sub.cgi?login=pda
 
 Example usage:
 
-    from illumitag.helper.sra import MakeSpreadsheet
-    make_tsv = MakeSpreadsheet(cluster)
-    make_tsv.write_bio_tsv()
-    for s in tqdm(project): s.sra.upload_to_sra()
-    make_tsv.write_sra_tsv()
+    import sifes
+    from sifes.groups.projects import Projects
+    desalt = sifes.load("~/deploy/sifes/metadata/json/projects/unige/desalt/")
+    foram  = sifes.load("~/deploy/sifes/metadata/json/projects/unige/foram/")
+    lump = Projects("brine_disposal", [desalt, foram])
+    lump.sra.write_bio_tsv()
+    lump.sra.write_sra_tsv()
 """
 
 # Built-in modules #
@@ -61,11 +61,14 @@ header_bio = [
     'isolation_source',
     '*collection_date',
     '*depth',
+    '*elevation',
     '*env_biome',
     '*env_feature',
     '*env_material',
     '*geo_loc_name',
     '*lat_lon',
+    'primers',
+    'biological_replicate',
 ]
 
 default_bio = {
@@ -165,11 +168,11 @@ class SampleSRA(object):
         You can add `from plumbing.common import gps_deg_to_float`
         """
         # sample_name #
-        line = [self.s.short_name]
+        line = [self.s.project_short_name + '_' + self.s.short_name]
         # description #
-        line += [self.s.long_name]
+        line += [self.s.project_long_name + ' ' + self.s.long_name]
         # bioproject_id #
-        line += [default_bio['bioproject_id']] # self.s.info['bioproject']
+        line += [self.s.info['bioproject']] or [default_bio['bioproject_id']]
         # sample_title #
         line += ["Sample '%s' (%s)" % (self.s.short_name, self.s.long_name)]
         # organism #
@@ -179,9 +182,10 @@ class SampleSRA(object):
         # isolation_source #
         line += [default_bio["isolation_source"]]
         # collection_date #
-        line += [self.s.info['date']]
-        # depth #
-        line += ["1.5"] # [self.s.info['organism']] # [default_bio["depth"]]
+        line += [self.s.info['date'].split(' ')[0]]
+        # depth and elevation #
+        line += [self.s.info['depth']]
+        line += ['-' + self.s.info['depth']]
         # env_biome, env_feature, env_material #
         line += [self.s.info['env_biome']]    #[default_bio["env_biome"]]
         line += [self.s.info['env_feature']]  #[default_bio["env_feature"]]
@@ -192,8 +196,9 @@ class SampleSRA(object):
         coords = (float(self.s.info['latitude'][0]),  # Latitude
                   float(self.s.info['longitude'][0])) # Longitude
         line += ['{:7.6f} N {:7.6f} E'.format(*coords)]
-        # Custom extra line #
-        line += [self.s.long_name]
+        # Custom extra lines #
+        line += [self.s.info.get('primers')['name']]
+        line += [self.s.info.get('replicate_id') + self.s.short_name[-1]]
         # Return #
         return line
 
@@ -204,7 +209,7 @@ class SampleSRA(object):
             make_tsv.write_sra_tsv()
         """
         # project accession
-        bioproj = self.s.pool.info['bioproject']
+        bioproj = self.s.info['bioproject']
         if bioproj and bioproj != "PRJNAXXXXXX":  line = [bioproj]
         else:                                     line = [default_bio['bioproject_id']]
         # sample accession
@@ -256,24 +261,26 @@ class LumpSRA(object):
         self.samples = lump.samples
         # Auto paths #
         self.base_dir = self.lump.p.sra_dir
-        self.p = AutoPaths(self.base_dir, self.all_paths)
+        self.p        = AutoPaths(self.base_dir, self.all_paths)
 
     def write_bio_tsv(self, path=None):
         """Will write the TSV required by the NCBI for the creation of 'BioSample' objects
         (first TSV)."""
         header  = '\t'.join(header_bio) + '\n'
         content = '\n'.join('\t'.join(map(str, s.sra.biosample_line)) for s in self.samples)
-        if path is None: self.p.biosample.write(header+content, 'utf-8')
-        else:
-            with codecs.open(path, 'w', encoding='utf-8') as handle:
-                handle.write(header+content)
+        if path is None: path = self.p.biosample
+        with codecs.open(path, 'w', encoding='utf-8') as handle:
+            handle.write(header+content)
+        # Message #
+        print "Wrote TSV at '%s'" % path
 
     def write_sra_tsv(self, path=None):
         """Will write the appropriate TSV for the SRA submission in the cluster directory
         (second TSV). Sometimes you need to set the encoding to `windows-1252`."""
         header  = '\t'.join(header_sra) + '\n'
         content = '\n'.join('\t'.join(map(str,s.sra.sra_line)) for s in self.samples)
-        if path is None: self.p.sra.write(header+content, 'utf-8')
-        else:
-            with codecs.open(path, 'w', encoding='utf-8') as handle:
-                handle.write(header+content)
+        if path is None: path = self.p.sra
+        with codecs.open(path, 'w', encoding='utf-8') as handle:
+            handle.write(header+content)
+        # Message #
+        print "Wrote TSV at '%s'" % path
