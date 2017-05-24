@@ -126,7 +126,7 @@ class SampleSRA(object):
 
     def __init__(self, sample):
         self.s = sample
-        self.base_name = '%s_%s_{}_reads.fastq.gz'
+        self.base_name = '%s_%s_{}_reads.fastq'
         self.base_name = self.base_name % (self.s.project_short_name, self.s.short_name)
 
     def upload_to_sra(self,
