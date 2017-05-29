@@ -41,10 +41,11 @@ class TaxaTable(object):
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.result_dir)
     def __nonzero__(self): return bool(self.p.taxa_table_phylum)
 
-    def __init__(self, otu_table, taxonomy, result_dir):
+    def __init__(self, otu_table, taxonomy, cluster, result_dir):
         # Attributes #
         self.otu_table  = otu_table
         self.taxonomy   = taxonomy
+        self.cluster    = cluster
         self.result_dir = result_dir
         # Short cuts #
         self.rank_names  = self.taxonomy.results.rank_names
@@ -103,6 +104,7 @@ class TaxaTableResults(object):
     def __init__(self, table):
         self.table      = table
         self.p          = table.p
+        self.cluster    = table.cluster
         self.base_dir   = table.base_dir
         self.rank_names = table.rank_names
 

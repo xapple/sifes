@@ -27,7 +27,7 @@ from tqdm import tqdm
 
 ###############################################################################
 class Demultiplexer(object):
-    """A demultiplexer for when you have one barcode on each side"""
+    """A demultiplexer for when you have one barcode on each side."""
 
     # Attributes #
     short_name = "demultiplexer"

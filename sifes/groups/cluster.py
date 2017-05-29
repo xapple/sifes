@@ -111,7 +111,7 @@ class Cluster(Aggregate):
     @property_cached
     def taxa_table(self):
         """Will produce the taxonomy-based tables."""
-        return TaxaTable(self.otu_table, self.taxonomy, self.p.taxa_table_dir)
+        return TaxaTable(self.otu_table, self.taxonomy, self, self.p.taxa_table_dir)
 
     @property_cached
     def sub_taxa_tables(self):

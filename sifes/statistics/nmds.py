@@ -17,9 +17,10 @@ class GraphNMDS(Graph):
         # Run via R #
         self.run_via_R()
         # Data #
-        x     = self.coords['NMDS1'].values
-        y     = self.coords['NMDS2'].values
-        names = self.coords['NMDS1'].keys()
+        x      = self.coords['NMDS1'].values
+        y      = self.coords['NMDS2'].values
+        names  = self.coords['NMDS1'].keys()
+        labels = [self.parent[k].info.get('short_label', '').replace(' ','') for k in names]
         # Make scatter #
         fig  = pyplot.figure()
         axes = fig.add_subplot(111)
@@ -29,7 +30,7 @@ class GraphNMDS(Graph):
         axes.set_ylabel('Dimension 2')
         # Add annotations #
         for i in range(len(names)):
-            pyplot.annotate(names[i], size=9, xy = (x[i], y[i]), xytext = (10, 0),
+            pyplot.annotate(labels[i] or names[i], size=9, xy = (x[i], y[i]), xytext = (10, 0),
                             textcoords = 'offset points', ha = 'left', va = 'center',
                             bbox = dict(boxstyle = 'round,pad=0.2', fc = 'yellow', alpha = 0.3))
         # Save it #

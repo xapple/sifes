@@ -22,13 +22,15 @@ class TaxaBarstack(Graph):
     left          = 0.04
     right         = 0.98
     legend_anchor = -0.15
-    x_label       = 'Sample short names'
+    #x_label       = 'Sample short names'
     y_label       = 'Relative abundances in percent'
 
     def plot(self, **kwargs):
         # Data #
         taxa_table = self.parent.taxa_tables_by_rank[self.base_rank]
         self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
+        # If we have short labels, use those for the names on the X axis #
+        self.frame = self.frame.rename(lambda x: self.parent.cluster[x].info.get('short_label', '').replace(' ',''))
         # Special case where there is only one taxa e.g. only 'Bacteria' #
         if len(self.frame.columns) < 2 : colors = 'gray'
         else:                            colors = cool_colors

@@ -128,7 +128,7 @@ with Timer(): prll_map(lambda s: s.report.generate(), proj)
 
 ###############################################################################
 print("# Bundle and upload - 0h0x #")
-bundle = Bundle("desalt_37f", proj.samples)
+bundle   = Bundle("desalt_37f", proj.samples)
 dbx_sync = DropBoxRclone(bundle.base_dir, '/Desalt 37F delivery')
 
 with Timer():
