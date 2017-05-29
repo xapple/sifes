@@ -38,10 +38,6 @@ class Uparse(object):
     /sorted.fasta
     /centers.fasta
     /readmap.uc
-    /taxonomy_silva/
-    /taxonomy_fw/
-    /taxonomy_unite/
-    /taxonomy_rdp/
     /graphs/
     """
 
@@ -67,14 +63,14 @@ class Uparse(object):
         if threshold is None: threshold = self.threshold
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
-        # Identity #
+        # Identity cutoff in percent #
         identity = (100 - threshold) / 100
         # Dereplicate (uparse version 32-bit version can run out of memory) #
         sh.usearch8("--derep_fulllength", self.reads,
                     '-fastaout', self.derep,
                     '-sizeout',
                     '-threads', cpus)
-        # Order by size and kill singletons #
+        # Order by size and kill singletons (likely chimeras) #
         sh.usearch8("--sortbysize", self.derep,
                     '-fastaout',    self.sorted,
                     '-minsize',     2,
@@ -87,7 +83,7 @@ class Uparse(object):
         # Rename the centers #
         self.centers.rename_with_num('OTU-')
         # Check that we don't have a file size problem at this point #
-        # assert self.reads.count_bytes < 2**32
+        assert self.reads.count_bytes < 2**32
         # Map the reads back to the centers #
         sh.usearch8("-usearch_global", self.reads,
                     '-db',             self.centers,

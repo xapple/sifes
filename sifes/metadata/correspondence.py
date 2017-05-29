@@ -29,6 +29,7 @@ corr = {
     u'Custom barcode':                       'custom_barcode',
     u'Multiplexed in':                       'multiplexed_in',
     u'Pool barcode':                         'pool_barcode',
+    u'Label (less than 10 characters)':      'short_label',
 
     u'Header barcode':                       'header_barcode',
     u'Header rev. comp.':                    'header_rev_comp',
