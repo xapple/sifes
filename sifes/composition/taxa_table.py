@@ -124,7 +124,7 @@ class TaxaTableResults(object):
         for i, rank_name in enumerate(self.rank_names):
             attributes = dict(base_rank  = i,
                               label      = rank_name,
-                              short_name ='taxa_barstack_' + rank_name.lower())
+                              short_name = 'taxa_barstack_' + rank_name.lower())
             graph = type("Composition" + rank_name, (TaxaBarstack,), attributes)(self)
             setattr(result, graph.short_name, graph)
             result.by_rank.append(graph)

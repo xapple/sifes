@@ -22,7 +22,7 @@ class TaxaBarstack(Graph):
     left          = 0.04
     right         = 0.98
     legend_anchor = -0.15
-    #x_label       = 'Sample short names'
+    x_label       = '' #'Sample short names'
     y_label       = 'Relative abundances in percent'
 
     def plot(self, **kwargs):

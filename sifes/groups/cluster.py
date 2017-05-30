@@ -116,7 +116,7 @@ class Cluster(Aggregate):
     @property_cached
     def sub_taxa_tables(self):
         """Will produce the sub taxa tables."""
-        return [SubTaxaTable(self.taxa_table, rank, taxa, self.p.sub_taxa_dir) for rank,taxa in self.sub_taxa]
+        return [SubTaxaTable(self.taxa_table, rank, taxa, self, self.p.sub_taxa_dir) for rank,taxa in self.sub_taxa]
 
     @property_cached
     def down_to(self):

@@ -15,11 +15,12 @@ class SubTaxaTable(TaxaTable):
     """Takes only a specific phylum or clade and makes focused taxa tables and
     associated graphs, throwing away all other phyla or clades."""
 
-    def __init__(self, taxa_table, filter_rank, filter_name, result_dir):
+    def __init__(self, taxa_table, filter_rank, filter_name, cluster, result_dir):
         # Attributes #
         self.taxa_table  = taxa_table
         self.filter_rank = filter_rank
         self.filter_name = filter_name
+        self.cluster     = cluster
         self.result_dir  = result_dir
         # Short cuts #
         self.rank_names  = self.taxa_table.rank_names
