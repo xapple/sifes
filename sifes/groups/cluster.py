@@ -141,6 +141,11 @@ class Cluster(Aggregate):
         return GraphNMDS(self, self.p.graphs_dir)
 
     @property_cached
+    def redundancy(self):
+        """Will produce the Redundancy Analysis (RDA)."""
+        return RedundancyAnalysis(self)
+
+    @property_cached
     def locations_maps(self):
         """Make as many maps as there are custom groupings."""
         maps   = []
