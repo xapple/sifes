@@ -8,6 +8,7 @@ from sifes.groups.aggregate           import Aggregate
 from sifes.groups                     import cluster_graphs
 from sifes.groups.cluster_graphs      import ClusterLocationMap
 from sifes.centering.uparse           import Uparse
+from sifes.statistics.redundancy      import RedundancyAnalysis
 from sifes.taxonomy.crest             import Crest
 from sifes.taxonomy.rdp               import Rdp
 from sifes.taxonomy.mothur_classify   import MothurClassify
@@ -51,6 +52,7 @@ class Cluster(Aggregate):
     /sub_taxa/
     /distances/
     /seqenv/
+    /redundancy/
     /graphs/
     /report/report.pdf
     /report/replicates.pdf
@@ -143,7 +145,7 @@ class Cluster(Aggregate):
     @property_cached
     def redundancy(self):
         """Will produce the Redundancy Analysis (RDA)."""
-        return RedundancyAnalysis(self)
+        return RedundancyAnalysis(self, self.p.redundancy_dir)
 
     @property_cached
     def locations_maps(self):

@@ -6,3 +6,6 @@
 import os
 home = os.environ.get('HOME', '~') + '/'
 execfile(home + "deploy/sifes/scripts/projects/unige/desalt/load.py")
+
+
+proj.cluster.redundancy.run()

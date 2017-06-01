@@ -87,6 +87,9 @@ with Timer(): proj.cluster.taxa_table.run()
 print("# Run seqenv - 1h38 #")
 with Timer(): proj.cluster.seqenv.run(cleanup=True)
 
+print("# Run redundancy - 0h00 #")
+proj.cluster.redundancy.run()
+
 print("# Make sample graphs - 0h05 #")
 def sample_plots(s):
     s.graphs.chao1(rerun=True)

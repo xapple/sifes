@@ -36,4 +36,5 @@ if False:
 
 ###############################################################################
 if True:
-    pass
+    print("# Run redundancy - 0h00 #")
+    proj.cluster.redundancy.run()
