@@ -1,4 +1,4 @@
-#!/usr/bin/env R
+answer_anova#!/usr/bin/env R
 
 # Lib
 library(vegan)
@@ -33,5 +33,5 @@ answer_be = bioenv(response_norm, explanatory_numeric)
 answer_be
 
 # Test 3: ANOVA #
-answer_anova = r = adonis(response_norm ~ explanatory$salinity    * explanatory$custom_grouping)
-answer_anova = r = adonis(response_norm ~ explanatory$custom_grouping * explanatory$temperature)
+answer_anova = r = adonis(response_norm ~ explanatory$custom_grouping * explanatory$salinity)
+#answer_anova = r = adonis(response_norm ~ explanatory$custom_grouping * explanatory$temperature)
