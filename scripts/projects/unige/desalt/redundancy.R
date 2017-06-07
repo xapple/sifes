@@ -1,4 +1,4 @@
-answer_anova#!/usr/bin/env R
+#!/usr/bin/env R
 
 # Lib
 library(vegan)
@@ -15,7 +15,7 @@ explanatory_struct  = explanatory[,c("custom_grouping", "custom_attribute", "rep
 
 # Response and normalization #
 response      = read.table('/Users/sinclair/Desktop/response.tsv',    header=TRUE, sep='\t', row.names='X')
-response_norm = response / rowSums(response)
+response_norm = response / rowSums(response) # Possilbit?? de prendre le log(1+x), Anscombe
 
 # Distance matrices
 #response_dist_moris = vegdist(response,      index="morisita")
@@ -33,5 +33,5 @@ answer_be = bioenv(response_norm, explanatory_numeric)
 answer_be
 
 # Test 3: ANOVA #
-answer_anova = r = adonis(response_norm ~ explanatory$custom_grouping * explanatory$salinity)
-#answer_anova = r = adonis(response_norm ~ explanatory$custom_grouping * explanatory$temperature)
+answer_anova = adonis(response_norm ~ explanatory$custom_grouping * explanatory$salinity)
+#answer_anova = adonis(response_norm ~ explanatory$custom_grouping * explanatory$temperature)
