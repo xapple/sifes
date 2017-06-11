@@ -46,6 +46,7 @@ sifes.filtering.seq_filter.SeqFilter.search_for_region = "GACAG"
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (4, 5, 6)
 
+sifes.groups.cluster.Cluster.default_centering                 = 'swarm'
 sifes.groups.cluster.Cluster.default_taxonomy                  = 'qiime'
 sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'foraminifera'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'foraminifera'

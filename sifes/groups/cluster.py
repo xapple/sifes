@@ -8,6 +8,7 @@ from sifes.groups.aggregate           import Aggregate
 from sifes.groups                     import cluster_graphs
 from sifes.groups.cluster_graphs      import ClusterLocationMap
 from sifes.centering.uparse           import Uparse
+from sifes.centering.swarm            import Swarm
 from sifes.statistics.redundancy      import RedundancyAnalysis
 from sifes.taxonomy.crest             import Crest
 from sifes.taxonomy.rdp               import Rdp
@@ -35,7 +36,8 @@ class Cluster(Aggregate):
     """Analyzes a group of samples."""
 
     # Parameters #
-    default_taxonomy = "mothur"
+    default_centering = "uparse"
+    default_taxonomy  = "mothur"
     read_count_cutoff_factor = 0.01
 
     # Options #
@@ -92,8 +94,11 @@ class Cluster(Aggregate):
 
     @property_cached
     def centering(self):
-        """Will cluster the sequences at 97% and pick centers."""
-        return Uparse(self.reads, self.p.centers_dir)
+        """Will cluster the sequences at e.g. 97% and pick centers."""
+        choices = {'uparse': (Uparse, (self.reads, self.p.centers_dir)),
+                   'swarm':  (Swarm,  (self.reads, self.p.centers_dir))}
+        cls, params = choices.get(self.default_centering)
+        return cls(*params)
 
     @property_cached
     def taxonomy(self):

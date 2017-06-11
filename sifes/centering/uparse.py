@@ -58,7 +58,7 @@ class Uparse(object):
 
     def run(self, threshold=None, cpus=1):
         # Message #
-        print "Making OTUs on '%s'" % self.reads
+        print "Making OTUs on '%s' with '%s'" % (self.reads, self.short_name)
         # Optional threshold #
         if threshold is None: threshold = self.threshold
         # Number of cores #
@@ -91,7 +91,7 @@ class Uparse(object):
                     '-id',             identity,
                     '-uc',             self.readmap,
                     '-threads',        cpus)
-        # Check #
+        # Checks #
         assert len(self.reads) == len(self.derep)
         assert len(self.reads) == len(self.readmap)
 
