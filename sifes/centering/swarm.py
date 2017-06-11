@@ -30,11 +30,14 @@ class Swarm(object):
 
     all_paths = """
     /centers.fasta
+    /details.txt
     /statistics.txt
+    /stdout.txt
+    /stderr.txt
     /graphs/
     """
 
-    def __repr__(self): return '<%s object of %s>' % (self.__class__.__name__, self.parent)
+    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.reads)
     def __nonzero__(self): return bool(self.p.readmap)
 
     def __init__(self, reads, out_dir):
@@ -54,11 +57,13 @@ class Swarm(object):
         # Check version #
         assert "Swarm " + self.version in sh.swarm('-v').stderr
         # Launch #
-        sh.swarm('--output-file',     self.centers,
+        sh.swarm('--output-file',     self.p.details,
+                 '--seeds',           self.centers,
                  '--threads',         cpus,
                  '--statistics-file', self.p.statistics,
                  '--usearch-abundance',
-                 self.reads)
+                 self.reads,
+                 _out=self.p.stdout, _err=self.p.stderr)
         # Rename the centers #
         #self.centers.rename_with_num('OTU-')
         # Map the reads back to the centers #

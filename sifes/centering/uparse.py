@@ -41,7 +41,7 @@ class Uparse(object):
     /graphs/
     """
 
-    def __repr__(self): return '<%s object of %s>' % (self.__class__.__name__, self.parent)
+    def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.reads)
     def __nonzero__(self): return bool(self.p.readmap)
 
     def __init__(self, reads, out_dir):
