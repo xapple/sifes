@@ -52,6 +52,6 @@ for n in sl.split('\n'):
     s = proj[n]
     exhaust  = exhausts[s.grouping]
     location = (float(s.info['latitude'][0]), float(s.info['longitude'][0]))
-    result = vincenty(exhaust, location)
+    result   = vincenty(exhaust, location)
     print "%.2f" % result.meters
 
