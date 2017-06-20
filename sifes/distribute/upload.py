@@ -14,7 +14,8 @@ home = os.environ.get('HOME', '~') + '/'
 
 ###############################################################################
 class DropBoxRclone(object):
-    """Expects that your dropbox is configured in rclone with the name "prod"."""
+    """Expects that your dropbox is configured in rclone with the name "prod"
+    Check with `$ rclone listremotes -l`."""
 
     def __init__(self, input_dir, output_dir):
         self.input_dir  = input_dir.rstrip('/')
@@ -26,11 +27,11 @@ class DropBoxRclone(object):
 
     def run(self):
         """Just rclone it"""
-        self.stdout = subprocess.check_call('rclone ' + ' '.join(self.command), shell=True)
+        self.stdout = subprocess.check_call('rclone --copy-links ' + ' '.join(self.command), shell=True)
 
 ###############################################################################
 class DropBoxSync(object):
-    """Expects that your drop box is mounted at ~/Dropbox and then uses rsync.
+    """Expects that your dropbox is mounted at ~/Dropbox and then uses rsync locally.
     Don't forget to start the daemon:
         $ dropbox.py start
     """
@@ -42,7 +43,8 @@ class DropBoxSync(object):
         self.output_dir = output_dir
 
     def run(self):
-        """Just rsync it"""
+        """Just rsync it and let the other script do the work."""
+        assert "already running" in sh.Command("dropbox.py")("status")
         print sh.rsync('-a', self.input_dir, home + 'Dropbox/' + self.output_dir)
 
 ###############################################################################
@@ -52,7 +54,7 @@ class DropBoxUpload(object):
 
     def __init__(self, input_dir, output_dir='/Micans V6 analysis delivery'):
         from dropbox.client import DropboxClient
-        self.dbx = DropboxClient(dropbox_token)
+        self.dbx = DropboxClient(self.dropbox_token)
         self.input_dir  = input_dir
         self.output_dir = output_dir
 
