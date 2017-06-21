@@ -2,7 +2,7 @@
 from __future__ import division
 
 # Built-in modules #
-import multiprocessing, re
+import multiprocessing, re, base64, hashlib
 from collections import defaultdict
 
 # Internal modules #
@@ -39,6 +39,7 @@ class Swarm(object):
     /statistics.txt
     /stdout.txt
     /stderr.txt
+    /counts.tsv
     /graphs/
     """
 
@@ -53,8 +54,7 @@ class Swarm(object):
         self.p = AutoPaths(self.base_dir, self.all_paths)
         # Files #
         self.derep    = SizesFASTA(self.p.derep)
-        self.sorted   = SizesFASTA(self.p.sorted)
-        self.clusters = SizesFASTA(self.p.clusters)
+        self.clusters = FASTA(self.p.clusters)
         self.centers  = FASTA(self.p.centers)
 
     def run(self, cpus=None, verbose=True):
@@ -64,16 +64,16 @@ class Swarm(object):
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check version #
         assert "Swarm " + self.version in sh.swarm('-v').stderr
-        # Dereplicate #
-        sh.usearch8("--derep_fulllength", self.reads,
-                    '-fastaout',          self.derep,
-                    '-sizeout',
-                    '-threads', cpus)
-        # Order by size and kill singletons (likely chimeras) #
-        sh.usearch8("--sortbysize", self.derep,
-                    '-fastaout',    self.sorted,
-                    '-minsize',     2,
-                    '-threads',     cpus)
+        # Dereplicate sequences, but remember everything along the way #
+        unique_seqs = defaultdict(list)
+        for read in self.reads: unique_seqs[str(read.seq)] += [read.id]
+        # Write the result to a file #
+        self.derep.create()
+        hash = lambda x: base64.b32encode(hashlib.sha1(x).digest())[0:10]
+        for seq, samples in unique_seqs.items():
+            if len(samples) == 1: continue
+            self.derep.add_str(seq, hash(seq), len(samples))
+        self.derep.close()
         # Launch #
         sh.swarm('--output-file',     self.p.details,
                  '--seeds',           self.clusters,
@@ -81,10 +81,27 @@ class Swarm(object):
                  '--statistics-file', self.p.statistics,
                  '--fastidious',      # link nearby low-abundance swarms
                  '--usearch-abundance',
-                 self.sorted,
+                 self.derep,
                  _out=self.p.stdout, _err=self.p.stderr)
         # Rename the centers #
         self.clusters.rename_with_num('OTU-', self.centers)
+        # Use the information in 'details.txt' to get the final counts #
+        result = defaultdict(lambda: defaultdict(int))
+        # Loop #
+        for i, line in enumerate(self.p.details):
+            target = 'OTU-%i' % i
+            for item in line.split():
+                hash, size = re.findall("\A(\w+);size=(\d+);\Z", item)[0]
+                read_ids   = unique_seqs[hash]
+                print read_ids #TODO empty
+                for read_id in read_ids:
+                    result[target][read_id.split(':')[0]] += 1
+        # Return #
+        result = pandas.DataFrame(result)
+        result = result.fillna(0)
+        result = result.astype(int)
+        result = result.reindex_axis(sorted(result.columns, key=natural_sort), axis=1)
+        result.to_csv(self.p.counts.path, sep='\t', encoding='utf-8')
 
     @property_cached
     def results(self):
@@ -105,18 +122,4 @@ class SwarmResults(object):
 
     @property_cached
     def cluster_counts_table(self):
-        """We just need to read the file 'details.txt' to build this table."""
-        # Put results in a dict of dicts #
-        result = defaultdict(lambda: defaultdict(int))
-        # Loop #
-        for i, line in enumerate(self.p.details):
-            target = 'OTU-%i' % i
-            for item in line.split():
-                sample_name, num, size = re.findall("\A(\w+):(\d+);size=(\d+);\Z", item)
-                result[target][sample_name] += int(size)
-        # Return #
-        result = pandas.DataFrame(result)
-        result = result.fillna(0)
-        result = result.astype(int)
-        result = result.reindex_axis(sorted(result.columns, key=natural_sort), axis=1)
-        return result
+        return pandas.io.parsers.read_csv(self.p.counts.path, sep='\t', index_col=0, encoding='utf-8')
