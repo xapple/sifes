@@ -50,7 +50,7 @@ sifes.filtering.seq_filter.SeqFilter.max_read_length   = 450 - 8 - 8 - 21 - 18
 sifes.groups.samples.Sample.default_joiner = 'pandaseq'
 sifes.report.clusters.ClusterReport.default_taxa_graph_levels  = (1, 2, 3)
 
-sifes.groups.cluster.Cluster.default_centering                 = 'uparse'
+sifes.groups.cluster.Cluster.default_centering                 = 'swarm'
 sifes.groups.cluster.Cluster.default_taxonomy                  = 'qiime'
 sifes.taxonomy.qiime_classify.QiimeClassify.default_database   = 'pr_two'
 sifes.taxonomy.mothur_classify.MothurClassify.default_database = 'pr_two'

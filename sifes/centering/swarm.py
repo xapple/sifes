@@ -2,17 +2,19 @@
 from __future__ import division
 
 # Built-in modules #
-import multiprocessing
+import multiprocessing, re
+from collections import defaultdict
 
 # Internal modules #
 
 # First party modules #
+from plumbing.common    import natural_sort
 from plumbing.autopaths import AutoPaths, FilePath
 from plumbing.cache     import property_cached, LazyString
 from fasta              import FASTA, SizesFASTA
 
 # Third party modules #
-import sh
+import sh, pandas
 
 # Constants #
 
@@ -29,7 +31,10 @@ class Swarm(object):
     version    = '2.1.13'
 
     all_paths = """
+    /derep.fasta
+    /sorted.fasta
     /centers.fasta
+    /clusters.fasta
     /details.txt
     /statistics.txt
     /stdout.txt
@@ -46,31 +51,40 @@ class Swarm(object):
         # Paths #
         self.base_dir = out_dir + self.short_name + '/'
         self.p = AutoPaths(self.base_dir, self.all_paths)
-        # Output file #
-        self.centers = FASTA(self.p.centers)
+        # Files #
+        self.derep    = SizesFASTA(self.p.derep)
+        self.sorted   = SizesFASTA(self.p.sorted)
+        self.clusters = SizesFASTA(self.p.clusters)
+        self.centers  = FASTA(self.p.centers)
 
-    def run(self, cpus=1, verbose=True):
+    def run(self, cpus=None, verbose=True):
         # Message #
         if verbose: print "Making OTUs on '%s' with '%s'" % (self.reads, self.short_name)
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check version #
         assert "Swarm " + self.version in sh.swarm('-v').stderr
+        # Dereplicate #
+        sh.usearch8("--derep_fulllength", self.reads,
+                    '-fastaout',          self.derep,
+                    '-sizeout',
+                    '-threads', cpus)
+        # Order by size and kill singletons (likely chimeras) #
+        sh.usearch8("--sortbysize", self.derep,
+                    '-fastaout',    self.sorted,
+                    '-minsize',     2,
+                    '-threads',     cpus)
         # Launch #
         sh.swarm('--output-file',     self.p.details,
-                 '--seeds',           self.centers,
+                 '--seeds',           self.clusters,
                  '--threads',         cpus,
                  '--statistics-file', self.p.statistics,
+                 '--fastidious',      # link nearby low-abundance swarms
                  '--usearch-abundance',
-                 self.reads,
+                 self.sorted,
                  _out=self.p.stdout, _err=self.p.stderr)
         # Rename the centers #
-        #self.centers.rename_with_num('OTU-')
-        # Map the reads back to the centers #
-        #pass
-        # Checks #
-        #assert len(self.reads) == len(self.xxx)
-        #assert len(self.reads) == len(self.xxx)
+        self.clusters.rename_with_num('OTU-', self.centers)
 
     @property_cached
     def results(self):
@@ -91,4 +105,18 @@ class SwarmResults(object):
 
     @property_cached
     def cluster_counts_table(self):
-        pass
+        """We just need to read the file 'details.txt' to build this table."""
+        # Put results in a dict of dicts #
+        result = defaultdict(lambda: defaultdict(int))
+        # Loop #
+        for i, line in enumerate(self.p.details):
+            target = 'OTU-%i' % i
+            for item in line.split():
+                sample_name, num, size = re.findall("\A(\w+):(\d+);size=(\d+);\Z", item)
+                result[target][sample_name] += int(size)
+        # Return #
+        result = pandas.DataFrame(result)
+        result = result.fillna(0)
+        result = result.astype(int)
+        result = result.reindex_axis(sorted(result.columns, key=natural_sort), axis=1)
+        return result

@@ -67,7 +67,7 @@ class Uparse(object):
         identity = (100 - threshold) / 100
         # Dereplicate (uparse version 32-bit version can run out of memory) #
         sh.usearch8("--derep_fulllength", self.reads,
-                    '-fastaout', self.derep,
+                    '-fastaout',          self.derep,
                     '-sizeout',
                     '-threads', cpus)
         # Order by size and kill singletons (likely chimeras) #
