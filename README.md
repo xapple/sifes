@@ -136,4 +136,4 @@ Don't forget to rehash the binary links at the end:
 ## Flowchart
 Below is drawn the flowchart describing the data processing along all the steps of `sifes`:
 
-![Flowchart](/../master/documentation/flowcharts/pipeline_overview.png?raw=true "Flowchart")
+![Flowchart](/../master/documentation/flowchart.png?raw=true "Flowchart")
