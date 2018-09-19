@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
       name             = 'sifes',
       version          = '2.0.1',
-      description      = 'Pipeline for microbial environmental sequencing',
+      description      = 'Species Identification From Environmental Sequencing.',
       long_description = open('README.md').read(),
       license          = 'Proprietary software, all rights reserved.',
       url              = 'http://github.com/xapple/sifes/',
