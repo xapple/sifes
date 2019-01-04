@@ -276,8 +276,10 @@ class LumpSRA(object):
     def write_sra_tsv(self, path=None):
         """Will write the appropriate TSV for the SRA submission in the cluster directory
         (second TSV). Sometimes you need to set the encoding to `windows-1252`."""
+        # Content #
         header  = '\t'.join(header_sra) + '\n'
         content = '\n'.join('\t'.join(map(str,s.sra.sra_line)) for s in self.samples)
+        # Write it #
         if path is None: path = self.p.sra
         with codecs.open(path, 'w', encoding='utf-8') as handle:
             handle.write(header+content)
