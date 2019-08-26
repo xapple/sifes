@@ -1,3 +1,3 @@
-* Fix the legend on the large taxonomy plots (no more than 20, all other grouped into others)
+* Fix the legend on the large taxonomy plots (no more than 20, all others grouped into category 'others')
 
-* Double check that the unwanted taxa are spelled similar in the database
+* Double check that the unwanted taxa are spelled similarly in the databases

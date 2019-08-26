@@ -4,8 +4,6 @@ The acronym `sifes` stands for **S**pecies **I**​dentification **F**​rom **E
 
 This project is a python pipeline handling the analysis -- from start to finish -- of microbial amplicon sequencing data (e.g. 16S rRNA or other regions).
 
-This source code is propriety of Lucas Sinclair <lucas@envonautics.com>, co-founder of Envonautics Ltd. (https://www.envonautics.com)
-
 ## Introduction
 
 At first, the main focus when developing `sifes` was to test the functioning of the new protocol we developed in our lab when switching from 454 to Illumina sequencers and to check the coherence and validity of the results obtained. Thus, the pipeline built fits our current needs and is designed to be easily used by the bioinformaticians in our company to quickly analyze the amplicon data that lots of researchers are generating.
@@ -46,73 +44,16 @@ Here you will edit either your ``~/.bashrc`` or ``~/.bash_profile`` to add a ref
     $ vim ~/.bash_profile
     export PYTHONPATH="$HOME/repos/sifes/":$PYTHONPATH
 
-#### Step 3A: Install your own version of python
-Your system probably comes with a version of python installed. But the variations from system to system are too great to rely on any available python. We strongly suggest to just install our own version in your home directory.
+#### Step 3: Check installation
 
-For this we will be using this excellent project: https://github.com/yyuu/pyenv
-
-To install it you may use this sister project: https://github.com/yyuu/pyenv-installer
-
-Basically you just need to type this command:
-
-    $ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
-
-These lines go into your `.bash_profile`:
-
-    $ vim ~/.bash_profile
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-
-Relaunch your shell and type these commands to get the right version of python now:
-
-    pyenv install 2.7.11
-    pyenv rehash
-    pyenv global 2.7.11
-
-#### Step 3B: Install your own version of R
+Check that you have a working installation of Python 3.
 
 Check that you have a working installation of R. Either the system version, or a user version.
 
-#### Step 4: Install all required python packages
-`sifes` uses many third party python libraries. You can get them by running these commands:
+#### Step 4: Check you have all the required R dependencies
+`sifes` will use some R packages that need to be installed. If you do not have them already, please install them:
 
-    $ pip install --user numpy
-    $ pip install --user scipy
-    $ pip install --user biopython
-    $ pip install --user sh
-    $ pip install --user decorator
-    $ pip install --user threadpool
-    $ pip install --user patsy
-    $ pip install --user matplotlib
-    $ pip install --user pandas
-    $ pip install --user statsmodels
-    $ pip install --user ipython
-    $ pip install --user scikit-learn
-    $ pip install --user rpy2
-    $ pip install --user brewer2mpl
-    $ pip install --user regex
-    $ pip install --user ftputil
-    $ pip install --user names
-    $ pip install --user shell_command
-    $ pip install --user pystache
-    $ pip install --user tabulate
-    $ pip install --user tqdm
-    $ pip install --user humanfriendly
-    $ pip install --user biom-format
-    $ pip install --user future
-    $ pip install --user scikit-bio==0.4.2
-    $ pip install --user seaborn
-
-And some extra first party ones:
-
-    $ pip install --user plumbing
-    $ pip install --user fasta
-    $ pip install --user pymarktex
-
-Don't forget to rehash the binary links at the end:
-
-    $ pyenv rehash
+    $ R install 'vegan'
 
 #### Step 5: Check you have all the required executables
 `sifes` will search for several different binaries as it processes your data. Please check all of these are available in your `$PATH`:
@@ -123,15 +64,6 @@ Don't forget to rehash the binary links at the end:
     $ which fastqc
     $ which blastn
     $ which classify
-
-#### Step 6: Check you have all the required R dependencies
-`sifes` will use some R packages that need to be installed. If you do not have them already, please install them:
-
-    $ R install 'vegan'
-
-#### Step 8: Start typing python commands to analyze your data
-
-    $ ipython -i -c "import sifes"
 
 ## Flowchart
 Below is drawn the flowchart describing the data processing along all the steps of `sifes`:

@@ -7,14 +7,14 @@
 \#*
 .#*
 ._*
-~$*
-.~lock*
 
-# Build #
-illumitag.egg-info/
+# IDE files #
+/.idea
 
-# PyCharm #
-/.idea/
+# Distribution #
+/build/
+/dist/
+/sifes.egg-info/
 
-# Pandaseq specific #
-bin/linux/.libs
+# Testing #
+/.pytest_cache/
