@@ -5,6 +5,7 @@ setup(
     version          = '2.0.1',
     description      = 'sifes can analyze DNA data and performs species identification from environmental sequencing.',
     long_description = open('README.md').read(),
+    long_description_content_type = 'text/markdown',
     license          = 'Proprietary software, all rights reserved.',
     url              = 'http://github.com/xapple/sifes/',
     author           = 'Lucas Sinclair',
