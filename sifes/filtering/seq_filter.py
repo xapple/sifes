@@ -6,12 +6,13 @@ from collections import Counter
 
 # First party modules #
 from fasta import FASTA
-from plumbing.autopaths import AutoPaths
-from plumbing.cache     import property_cached
+from autopaths.auto_paths import AutoPaths
+from plumbing.cache       import property_cached
 
 ###############################################################################
 class SeqFilter(object):
-    """- Filter primers:
+    """
+       - Filter primers:
           * Check that the primers are found where they should be found.
           * Check that the primers have the sequence they should have.
        - Filter based on N bases.
@@ -68,7 +69,7 @@ class SeqFilter(object):
 
     def run(self, verbose=False):
         # Message #
-        if verbose: print "Filtering sample '%s'" % self.sample_name
+        if verbose: print("Filtering sample '%s'" % self.sample_name)
         # Primers #
         self.primer_filter()
         # N bases #
@@ -114,13 +115,13 @@ class SeqFilter(object):
             for r in reads:
                 if self.min_read_length > 0:
                     if len(r.seq) < self.min_read_length:
-                        if verbose: print "Discard"
+                        if verbose: print("Discard")
                         continue
                 if self.max_read_length > 0:
                     if len(r.seq) > self.max_read_length:
-                        if verbose: print "Discard"
+                        if verbose: print("Discard")
                         continue
-                if verbose: print "Keep"
+                if verbose: print("Keep")
                 yield r
         self.length_fasta.write(good_len_iterator(self.n_base_fasta))
 

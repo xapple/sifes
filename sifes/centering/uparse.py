@@ -8,10 +8,10 @@ import multiprocessing
 from sifes.centering import UClusterFile
 
 # First party modules #
-from plumbing.common    import natural_sort
-from plumbing.autopaths import AutoPaths, FilePath
-from plumbing.cache     import property_cached, LazyString
-from fasta              import FASTA, SizesFASTA
+from plumbing.common      import natural_sort
+from autopaths.auto_paths import AutoPaths
+from plumbing.cache       import property_cached, LazyString
+from fasta                import FASTA, SizesFASTA
 
 # Third party modules #
 import sh, pandas
@@ -58,7 +58,7 @@ class Uparse(object):
 
     def run(self, threshold=None, cpus=1):
         # Message #
-        print "Making OTUs on '%s' with '%s'" % (self.reads, self.short_name)
+        print("Making OTUs on '%s' with '%s'" % (self.reads, self.short_name))
         # Optional threshold #
         if threshold is None: threshold = self.threshold
         # Number of cores #

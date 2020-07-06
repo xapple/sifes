@@ -12,7 +12,7 @@ setup(
     author_email     = 'lucas.sinclair@me.com',
     packages         = find_packages(),
     classifiers      = ['Topic :: Scientific/Engineering :: Bio-Informatics'],
-    requires         = ['plumbing', 'fasta', 'pymarktex', 'sh', 'biopython', 'matplotlib',
+    requires         = ['plumbing', 'fasta', 'pymarktex', 'autopaths', 'sh', 'biopython', 'matplotlib',
                         'threadpool', 'patsy', 'pandas', 'statsmodels', 'rpy2',
                         'scikit-learn', 'rpy2', 'brewer2mpl', 'regex', 'ftputil',
                         'names', 'shell_command', 'pystache', 'tabulate', 'tqdm',

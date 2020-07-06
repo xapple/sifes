@@ -8,9 +8,9 @@ from collections import defaultdict
 from sifes.composition.taxa_table_graphs import TaxaBarstack
 
 # First party modules #
-from plumbing.autopaths import AutoPaths, FilePath, DirectoryPath
-from plumbing.cache     import property_cached
-from plumbing.common    import prepend_to_file
+from autopaths.auto_paths import AutoPaths
+from plumbing.cache       import property_cached
+from plumbing.common      import prepend_to_file
 
 # Third party modules #
 import pandas
@@ -57,7 +57,7 @@ class TaxaTable(object):
 
     def run(self, verbose=False):
         # Message #
-        if verbose: print "Making all taxa tables in '%s'" % self.base_dir
+        if verbose: print("Making all taxa tables in '%s'" % self.base_dir)
         # Make directory #
         self.base_dir.create_if_not_exists()
         # Do it #
