@@ -61,7 +61,7 @@ class Cluster(Aggregate):
     """
 
     def __nonzero__(self):
-        """When we havn't run anything yet, return False."""
+        """When we haven't run anything yet, return False."""
         return bool(self.reads)
 
     def __init__(self, name, samples, out_dir=None):
@@ -84,9 +84,11 @@ class Cluster(Aggregate):
         self.reads = FASTA(self.p.all_reads)
 
     def combine_reads(self):
-        """This is the first method you should call. It will combine all the
-        reads of all the samples of this cluster into one big FASTA file."""
-        print "Combining all reads for cluster '%s' (%i samples)" % (self.name, len(self.samples))
+        """
+        This is the first method you should call. It will combine all the
+        reads of all the samples of this cluster into one big FASTA file.
+        """
+        print("Combining all reads for cluster '%s' (%i samples)" % (self.name, len(self.samples)))
         paths = [sample.filter.results.clean for sample in self]
         shell_output('cat %s > %s' % (' '.join(paths), self.reads))
         assert sum([len(s.filter.results.clean) for s in self]) == self.reads.count
@@ -165,9 +167,11 @@ class Cluster(Aggregate):
 
     @property_cached
     def graphs(self):
-        """Sorry for the black magic. The result is an object whose attributes
+        """
+        Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in cluster_graphs.py initialized with this
-        instance as only argument."""
+        instance as only argument.
+        """
         result = Dummy()
         for graph in cluster_graphs.__all__:
             cls = getattr(cluster_graphs, graph)

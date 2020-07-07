@@ -22,9 +22,11 @@ from fasta.primers      import TwoPrimers
 
 ###############################################################################
 class Sample(object):
-    """Consists of either two FASTA files or two FASTQ files.
+    """
+    Consists of either two FASTA files or two FASTQ files.
     It's a bunch of paired sequences all coming from the same particular
-    IRL lab sample. Might or might not correspond to an Illumina MID."""
+    IRL lab sample. Might or might not correspond to an Illumina MID.
+    """
 
     default_joiner = 'pandaseq'
 
@@ -43,7 +45,6 @@ class Sample(object):
 
     def __repr__(self):         return '<%s object "%s">' % (self.__class__.__name__, self.short_name)
     def __str__(self):          return self.short_name
-    def __iter__(self):         return iter(self.children)
     def __len__(self):          return self.pair.count
 
     def __init__(self, json_path=None, raw_files_must_exist=False, info=None):

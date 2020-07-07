@@ -50,7 +50,7 @@ class MothurJoin(object):
         """The make contigs command.
         http://www.mothur.org/wiki/Make.contigs"""
         # Message #
-        print "Joining sample '%s'" % self.sample_name
+        print("Joining sample '%s'" % self.sample_name)
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Check input #
