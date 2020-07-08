@@ -10,11 +10,12 @@ import sifes
 from sifes.report import ReportTemplate
 
 # First party modules #
-from plumbing.autopaths import FilePath, DirectoryPath
-from plumbing.common    import split_thousands
-from plumbing.cache     import property_cached, property_pickled
-from pymarktex          import Document
-from pymarktex.figures  import ScaledFigure, DualFigure
+from autopaths.file_path import FilePath
+from autopaths.dir_path  import DirectoryPath
+from plumbing.common     import split_thousands
+from plumbing.cache      import property_cached, property_pickled
+from pymarktex           import Document
+from pymarktex.figures   import ScaledFigure, DualFigure
 
 # Third party modules #
 import pandas
@@ -43,7 +44,7 @@ class SampleReport(Document):
 
     def generate(self, verbose=False):
         # Message #
-        if verbose: print "Making report for sample '%s'" % self.sample.short_name
+        if verbose: print("Making report for sample '%s'" % self.sample.short_name)
         # Make sure the cache directory exists #
         self.cache_dir.create_if_not_exists()
         # Dynamic templates #
@@ -56,13 +57,13 @@ class SampleReport(Document):
         self.copy_base.directory.create(safe=True)
         shutil.copy(self.output_path, self.copy_base)
         # Message #
-        if verbose: print "Report for sample '%s' is done." % self.sample.short_name
+        if verbose: print("Report for sample '%s' is done." % self.sample.short_name)
         # Return #
         return self.output_path
 
 ###############################################################################
 class SampleTemplate(ReportTemplate):
-    """All the parameters to be rendered in the markdown template"""
+    """All the parameters to be rendered in the markdown template."""
     delimiters = (u'{{', u'}}')
 
     def __repr__(self): return '<%s object on %s>' % (self.__class__.__name__, self.parent)
