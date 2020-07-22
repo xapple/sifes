@@ -50,7 +50,6 @@ class DropBoxSync(object):
 ###############################################################################
 class DropBoxUpload(object):
     """Uses this: http://dropbox-sdk-python.readthedocs.io/en/master/"""
-    dropbox_token = "_WV-ZSiONaAAAAAAAAAAINlmCV5smn1f7rwFV-g8aibak73Pu6Rhu1rA2z1Z--Om"
 
     def __init__(self, input_dir, output_dir='/Micans V6 analysis delivery'):
         from dropbox.client import DropboxClient

@@ -166,10 +166,10 @@ class SampleTemplate(ReportTemplate):
     def filtering(self):
         if not self.sample.filter: return False
         params = ('primer_max_dist', 'mismatches_allowed', 'primer_discard',
-                  'primer_left', 'n_base_discard', 'n_base_left',
-                  'min_read_length', 'max_read_length', 'length_discard',
-                  'length_left', 'percent_remaining',
-                  'region_nucleotides', 'region_discard', 'region_left',
+                  'primer_left',     'n_base_discard',     'n_base_left',
+                  'min_read_length', 'max_read_length',    'length_discard',
+                  'length_left',     'percent_remaining',  'region_nucleotides',
+                  'region_discard',  'region_left',
                   )
         return {p:getattr(self, p) for p in params}
 

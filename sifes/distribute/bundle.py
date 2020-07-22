@@ -61,9 +61,11 @@ class Bundle(Aggregate):
             p.cluster.taxa_table.base_dir.copy(taxa_dir)
 
     def add_samples(self):
-        """In some cases, for instance when the samples are originally multiplexed in
+        """
+        In some cases, for instance when the samples are originally multiplexed in
         FASTQ files, it can be useful to include the original raw FASTQ files of
-        each sample to the bundle."""
+        each sample to the bundle.
+        """
         for s in self:
             # Directories #
             sample_dir = DirectoryPath(self.p.samples_dir + s.short_name)

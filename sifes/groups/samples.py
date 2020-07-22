@@ -146,9 +146,11 @@ class Sample(object):
 
     @property_cached
     def graphs(self):
-        """Sorry for the black magic. The result is an object whose attributes
+        """
+        Sorry for the black magic. The result is an object whose attributes
         are all the graphs found in taxa_table_graphs.py initialized with this
-        instance as only argument."""
+        instance as only argument.
+        """
         class Graphs(object): pass
         result = Graphs()
         for graph in sample_graphs.__all__:

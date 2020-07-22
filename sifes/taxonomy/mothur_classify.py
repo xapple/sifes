@@ -38,7 +38,7 @@ class MothurClassify(Classify):
 
     def run(self, cpus=None, bootstrap_cutoff=None):
         # Message #
-        print self.message
+        print(self.message)
         # Number of cores #
         if cpus is None: cpus = min(multiprocessing.cpu_count(), 32)
         # Bootstrap cutoff #

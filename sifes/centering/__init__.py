@@ -10,8 +10,10 @@ import sh
 
 ###############################################################################
 class UClusterFile(FilePath):
-    """A special format outputted by UPARSE
+    """
+    A special format outputted by UPARSE
     An example line:
+
     H       1474    422     97.6    +       0       0       422M    run4_pool1_sample1_read2        OTU-1474
 
     The corresponding legend:

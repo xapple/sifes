@@ -56,8 +56,10 @@ class OtuTable(object):
         self.make_filtered_centers()
 
     def make_otu_table(self):
-        """Ask the counts from the OTU making class and do some modifications.
-        OTUs are columns and sample names are rows."""
+        """
+        Ask the counts from the OTU making class and do some modifications.
+        OTUs are columns and sample names are rows.
+        """
         # Main objects #
         cluster_table = self.centering.results.cluster_counts_table.copy()
         assignments   = self.taxonomy.results.assignments
@@ -79,8 +81,10 @@ class OtuTable(object):
         prepend_to_file(self.p.norm, 'X')
 
     def make_filtered_centers(self):
-        """Regenerate the centers file with only the OTUs that haven't been
-        filtered out previously."""
+        """
+        Regenerate the centers file with only the OTUs that haven't been
+        filtered out previously.
+        """
         self.otus_to_keep = [otu for otu in self.results.otu_table]
         def filter_otus(seqs):
             for seq in seqs:

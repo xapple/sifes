@@ -128,7 +128,7 @@ class SeqFilter(object):
     # Region #
     def region_filter(self):
         """Useful when you want to pick-out just a conserved region."""
-        def good_region_iterator(reads, verbose=False):
+        def good_region_iterator(reads):
             regex = re.compile(self.search_for_region)
             for r in reads:
                 match = regex.search(str(r.seq))
