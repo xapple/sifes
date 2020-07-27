@@ -13,7 +13,7 @@ import sh
 
 ###############################################################################
 class MothurClassify(Classify):
-    """A wrapper to mothur classify"""
+    """A wrapper to mothur classify."""
 
     # Attributes #
     short_name    = 'mothur_classify'
@@ -135,7 +135,7 @@ class MothurClassifyResults(object):
 
     @property_cached
     def count_unassigned(self):
-        """How many did not get a prediction at each level"""
+        """Will count how many did not get a prediction at each level."""
         return [sum((1 for x in self.assignments.values() if x[0] == 'unknown')),      # Domain
                 sum((1 for x in self.assignments.values() if 'unclassified' in x[1])), # Phylum
                 sum((1 for x in self.assignments.values() if 'unclassified' in x[2])), # Class
@@ -147,7 +147,7 @@ class MothurClassifyResults(object):
 
     @property_cached
     def count_assigned(self):
-        """How many got a prediction at each level"""
+        """Will count how many did get a prediction at each level."""
         minus_unassigned = lambda u: len(self.assignments) - u
         return map(minus_unassigned, self.count_unassigned)
 
