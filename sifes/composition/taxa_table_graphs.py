@@ -12,9 +12,9 @@ from matplotlib import pyplot
 ################################################################################
 class TaxaBarstack(Graph):
     """Distribution of named taxa by sample (at different ranks)."""
+
     base_rank     = -1
     short_name    = 'taxa_barstack'
-
     width         = 16.0
     height        = 10.0
     bottom        = 0.35
@@ -28,7 +28,7 @@ class TaxaBarstack(Graph):
     def plot(self, **kwargs):
         # Data #
         taxa_table = self.parent.taxa_tables_by_rank[self.base_rank]
-        self.frame = taxa_table.apply(lambda x: 100*x/x.sum(), axis=1)
+        self.frame = taxa_table.apply(lambda x: 100 * x / x.sum(), axis=1)
         # If we have short labels, use those for the names on the X axis #
         self.frame = self.frame.rename(lambda x: self.parent.cluster[x].info.get('short_label', '').replace(' ',''))
         # Special case where there is only one taxa e.g. only 'Bacteria' #

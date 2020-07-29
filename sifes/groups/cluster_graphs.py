@@ -2,7 +2,6 @@
 from __future__ import division
 
 # Built-in modules #
-from functools import partial
 
 # Internal modules #
 from sifes.location.map_figure     import MapFigure

@@ -59,7 +59,6 @@ class OtuSumsPerSample(Graph):
         # Make hist #
         fig = pyplot.figure()
         axes = self.frame.hist(color='gray', bins=40)
-        fig = pyplot.gcf()
         # Save it #
         self.save_plot(fig, axes, **kwargs)
         pyplot.close(fig)
@@ -77,7 +76,6 @@ class SampleSumsPerOtu(Graph):
         # Make hist #
         fig = pyplot.figure()
         axes = self.frame.plot(kind='bar', color='gray')
-        fig = pyplot.gcf()
         axes.set_xlabel('Number of samples an OTU appears in (max. %i)' % self.parent.otu_table.shape[0])
         # Save it #
         self.save_plot(fig, axes, **kwargs)

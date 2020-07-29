@@ -144,9 +144,12 @@ class Cluster(Aggregate):
 
     @property_cached
     def nmds_graph(self):
-        """Non-metric multidimensional scaling. Using the information in the OTU table and a
-         distance metric such as the Horn 1966 (adapted from Morisita 1959)" one,
-         will place every sample on an ordination plot."""
+        """
+        Stands for Non-metric multidimensional scaling.
+        Using the information in the OTU table along with a distance metric
+        such as the one invented by Horn 1966 (adapted from Morisita 1959)
+        we can place every sample on an ordination plot.
+        """
         return GraphNMDS(self, self.p.graphs_dir)
 
     @property_cached

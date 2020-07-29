@@ -12,8 +12,10 @@ from plumbing.cache     import property_cached
 
 ###############################################################################
 class SubTaxaTable(TaxaTable):
-    """Takes only a specific phylum or clade and makes focused taxa tables and
-    associated graphs, throwing away all other phyla or clades."""
+    """
+    Takes only a specific phylum or clade and makes focused taxa tables and
+    associated graphs, throwing away all other phyla or clades.
+    """
 
     def __init__(self, taxa_table, filter_rank, filter_name, cluster, result_dir):
         # Attributes #
@@ -31,7 +33,10 @@ class SubTaxaTable(TaxaTable):
 
     @property_cached
     def otu_df(self):
-        """We just need to fake a new self.otu_df property and we are golden."""
+        """
+        We just need to inherit from the TaxaTable class and fake a
+        different self.otu_df property for everything to work properly
+        """
         # Main objects #
         otu_df       = self.taxa_table.otu_df.copy()
         assignments  = self.taxa_table.taxonomy.results.assignments

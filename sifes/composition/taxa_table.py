@@ -20,7 +20,10 @@ class Dummy(object): pass
 
 ###############################################################################
 class TaxaTable(object):
-    """Takes the otu table and assignments to make taxa tables."""
+    """
+    Takes the OTU table along with the taxonomic assignment results to
+    generate taxa tables at different ranks.
+    """
 
     # Attributes #
     short_name = 'taxa_table'
@@ -117,8 +120,10 @@ class TaxaTableResults(object):
 
     @property_cached
     def graphs(self):
-        """The result is an object whose attributes are all the graphs initialized with
-        this instance as only argument. The graphs are also in a list."""
+        """
+        The result is an object whose attributes are all the graphs initialized with
+        this instance as only argument. The graphs are also in a list.
+        """
         result = Dummy()
         result.by_rank = []
         for i, rank_name in enumerate(self.rank_names):
