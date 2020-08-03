@@ -38,10 +38,10 @@ class GraphNMDS(Graph):
         pyplot.close(fig)
 
     def run_via_R(self):
-        # Module on demand #
+        # Import needed rpy2 objects #
         from rpy2 import robjects   as ro
         from rpy2 import rinterface as ri
-        # Disable stdout writing #
+        # Record output and don't display it #
         self.stdout = []
         self.stderr = []
         def add_to_stdout(line): self.stdout.append(line)

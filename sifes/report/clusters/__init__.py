@@ -44,7 +44,7 @@ class ClusterReport(Document):
 
     def generate(self):
         # Message #
-        print "Making report for cluster '%s'" % self.cluster.name
+        print("Making report for cluster '%s'" % self.cluster.name)
         # Dynamic templates #
         self.markdown = unicode(self.template)
         # Render to latex #
