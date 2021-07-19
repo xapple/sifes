@@ -14,8 +14,10 @@ home = os.environ.get('HOME', '~') + '/'
 
 ###############################################################################
 class DropBoxRclone(object):
-    """Expects that your dropbox is configured in rclone with the name "prod"
-    Check with `$ rclone listremotes -l`."""
+    """
+    Expects that your dropbox is configured in rclone with the name "prod"
+    Check with `$ rclone listremotes -l`.
+    """
 
     def __init__(self, input_dir, output_dir):
         self.input_dir  = input_dir.rstrip('/')
